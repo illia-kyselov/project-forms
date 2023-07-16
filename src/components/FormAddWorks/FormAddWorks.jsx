@@ -1,6 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-const FormAddWorks = () => {
+const FormAddWorks = ({ handleRemoveForm }) => {
+  const [options, setOptions] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/dict_work");
+      const data = await response.json();
+      setOptions(data);
+    } catch (error) {
+      console.error("Error fetching data", error);
+    }
+  };
+
+  const [isChecked, setIsChecked] = useState(true);
+
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+  };
+
   return (
     <form className="second-form">
       <div className="form-input_container-second">
@@ -9,7 +31,13 @@ const FormAddWorks = () => {
       </div>
       <div className="form-input_container-second">
         <p className="second-form-input_title">Тип виконаних робіт</p>
-        <select className="second-form-input"></select>
+        <select className="second-form-input">
+          {options.map((option) => (
+            <option key={option.name_wrk} value={option.name_wrk}>
+              {option.name_wrk}
+            </option>
+          ))}
+        </select>
       </div>
       <div>
         <p className="second-form-input_title">Наявність документа в БД</p>
@@ -17,7 +45,8 @@ const FormAddWorks = () => {
           type="checkbox"
           name="Наявність документа в БД"
           className="second-form-input second-form-input-radio"
-          checked
+          checked={isChecked}
+          onChange={handleCheckboxChange}
         />
       </div>
       <div className="form-input_container-second">
@@ -30,12 +59,7 @@ const FormAddWorks = () => {
       </div>
       <div className="form-input_container-second">
         <p className="second-form-input_title">Адреса</p>
-        <input
-          type="text"
-          value="NULL"
-          className="second-form-input"
-          placeholder="Адреса"
-        />
+        <input type="text" className="second-form-input" placeholder="Адреса" />
       </div>
       <div className="form-input_container-second">
         <p className="second-form-input_title">Дата виконання робіт</p>
@@ -57,6 +81,11 @@ const FormAddWorks = () => {
       <div className="form-input_container-second">
         <p className="second-form-input_title">uuid</p>
         <input type="text" className="second-form-input" placeholder="uuid" />
+      </div>
+      <div className="second-form-button">
+        <button className="button-escape" onClick={handleRemoveForm}>
+          Скасувати
+        </button>
       </div>
     </form>
   );

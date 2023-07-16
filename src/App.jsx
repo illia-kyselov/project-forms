@@ -10,10 +10,15 @@ function App() {
     setShowSecondForm(true);
   };
 
+  const handleRemoveForm = (e) => {
+    e.preventDefault();
+    setShowSecondForm(false);
+  }
+
   return (
     <div className="App">
       <MainForm handleAddFormClick={handleAddFormClick} />
-      {showSecondForm && <FormAddWorks />}
+      {showSecondForm && <FormAddWorks handleRemoveForm={handleRemoveForm} />}
     </div>
   );
 }
