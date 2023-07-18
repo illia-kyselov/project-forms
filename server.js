@@ -1,8 +1,11 @@
 const express = require("express");
 const { Client } = require("pg");
+const cors = require("cors");
 
 const app = express();
 const port = 3001;
+
+app.use(cors());
 
 const client = new Client({
   user: "postgres",
@@ -41,6 +44,19 @@ app.get("/dict_work", (req, res) => {
       res.status(500).send("Error executing query");
     } else {
       const data = result.rows.map((row) => row.name_wrk);
+      res.json(data);
+    }
+  });
+});
+
+app.get("/dict_geform", (req, res) => {
+  const query = "SELECT id_gform FROM exploitation.dict_geform";
+  client.query(query, (err, result) => {
+    if (err) {
+      console.error("Error executing query", err);
+      res.status(500).send("Error executing query");
+    } else {
+      const data = result.rows.map((row) => row.id_gform);
       res.json(data);
     }
   });

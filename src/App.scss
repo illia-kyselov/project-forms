@@ -87,6 +87,7 @@
 
   .second-form-button {
     display: flex;
+    flex-direction: row;
     justify-content: flex-end;
   }
 }
@@ -120,4 +121,16 @@
     box-shadow: none;
     transform: translateY(0);
   }
+}
+
+.LeafletMapContainer {
+  overflow: auto;
+  resize: both;
+  width: 100%;
+  height: 100vh;
+}
+
+.LeafletMap {
+  width: 100%;
+  height: 100%;
 }

@@ -8,14 +8,14 @@ const MainForm = ({ handleAddFormClick }) => {
   });
 
   useEffect(() => {
-    fetch("http://localhost:3001/dict_work")
+    fetch("http://localhost:3001/doc_plg")
       .then((response) => response.json())
       .then((data) => {
         if (data.length > 0) {
           const { objectid, num_disl, pro_name } = data[0];
           setFormData({
-            objectid: objectid ? objectid.toString() : "",
-            num_disl: num_disl ? num_disl.toString() : "",
+            objectid: objectid || "",
+            num_disl: num_disl || "",
             pro_name: pro_name || "",
           });
         }

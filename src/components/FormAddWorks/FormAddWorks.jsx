@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 
-const FormAddWorks = ({ handleRemoveForm }) => {
+const FormAddWorks = ({ handleRemoveForm, handleAddInfo }) => {
   const [options, setOptions] = useState([]);
+  const [isChecked, setIsChecked] = useState(true);
 
   useEffect(() => {
     fetchData();
@@ -17,8 +18,6 @@ const FormAddWorks = ({ handleRemoveForm }) => {
     }
   };
 
-  const [isChecked, setIsChecked] = useState(true);
-
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };
@@ -33,8 +32,8 @@ const FormAddWorks = ({ handleRemoveForm }) => {
         <p className="second-form-input_title">Тип виконаних робіт</p>
         <select className="second-form-input">
           {options.map((option) => (
-            <option key={option.name_wrk} value={option.name_wrk}>
-              {option.name_wrk}
+            <option key={option} value={option}>
+              {option}
             </option>
           ))}
         </select>
@@ -72,17 +71,18 @@ const FormAddWorks = ({ handleRemoveForm }) => {
       </div>
       <div className="form-input_container-second">
         <p className="second-form-input_title">Особа яка фіксувала роботи</p>
-        <input
-          type="text"
-          className="second-form-input"
-          placeholder="Особа яка фіксувала роботи"
-        />
+        <select className="second-form-input">
+
+        </select>
       </div>
       <div className="form-input_container-second">
         <p className="second-form-input_title">uuid</p>
         <input type="text" className="second-form-input" placeholder="uuid" />
       </div>
       <div className="second-form-button">
+        <button className="button-escape button-addInfo" onClick={handleAddInfo}>
+          Додати інфо про дз
+        </button>
         <button className="button-escape" onClick={handleRemoveForm}>
           Скасувати
         </button>

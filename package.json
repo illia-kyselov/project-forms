@@ -8,10 +8,12 @@
     "@testing-library/user-event": "^13.5.0",
     "assert": "^2.0.0",
     "buffer": "^6.0.3",
+    "cors": "^2.8.5",
     "dgram": "^1.0.1",
     "dns": "^0.2.2",
     "express": "^4.18.2",
     "fs": "^0.0.1-security",
+    "leaflet": "^1.9.4",
     "net": "^1.0.2",
     "node-sass": "^7.0.3",
     "os": "^0.1.2",
@@ -19,6 +21,8 @@
     "pg": "^8.11.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-leaflet": "^4.2.1",
+    "react-leaflet-cluster": "^2.1.0",
     "react-scripts": "5.0.1",
     "stream": "^0.0.2",
     "tls": "^0.0.1",
@@ -37,19 +41,13 @@
       "react-app/jest"
     ]
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
   "devDependencies": {
+    "@types/leaflet": "^1.9.3",
     "dgram-browserify": "^0.0.13",
     "os-browserify": "^0.3.0"
   }
