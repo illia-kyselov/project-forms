@@ -1,118 +1,58 @@
-import React, { useRef, useState } from "react";
-import Leaflet from "leaflet"
-import "leaflet/dist/leaflet.css"
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet"
-import markerIcon from "leaflet/dist/images/marker-icon.png"
-import markerShadow from "leaflet/dist/images/marker-shadow.png"
-import markerRetina from "leaflet/dist/images/marker-icon-2x.png"
+import React, { useEffect, useState } from "react";
+import { MapContainer, TileLayer, Polygon, Popup } from "react-leaflet";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 
-Leaflet.Icon.Default.mergeOptions({
-  iconRetinaUrl: markerRetina,
-  iconUrl: markerIcon,
-  shadowUrl: markerShadow
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png").default,
+  iconUrl: require("leaflet/dist/images/marker-icon.png").default,
+  shadowUrl: require("leaflet/dist/images/marker-shadow.png").default
 });
 
-const MapComponent = () => {
-  const mapRef = useRef();
+const LeafletMap = () => {
   const zoom = 5;
   const containerStyle = {
     width: "100%",
     height: "500px"
-  }
+  };
   const center = {
     lat: 48.3794,
     lng: 31.1656
-  }
-  // const initialMarkers = [
-  //   {
-  //     position: {
-  //       lat: 28.625485,
-  //       lng: 79.821091
-  //     },
-  //     draggable: true
-  //   },
-  //   {
-  //     position: {
-  //       lat: 28.625293,
-  //       lng: 79.817926
-  //     },
-  //     draggable: false
-  //   },
-  //   {
-  //     position: {
-  //       lat: 28.625182,
-  //       lng: 79.81464
-  //     },
-  //     draggable: true
-  //   },
-  // ];
+  };
 
-  // const [markers, setMarkers] = useState(initialMarkers);
+  const [polygons, setPolygons] = useState([]);
 
-  const mapClicked = async (event) => {
-    console.log(event.latlng.lat, event.latlng.lng)
-  }
-
-  const markerClicked = (marker, index) => {
-    console.log(marker.position.lat, marker.position.lng)
-  }
-
-  const markerDragEnd = (event, index) => {
-    console.log(event.lat, event.lng)
-  }
+  useEffect(() => {
+    fetch("/doc_plg")
+      .then((response) => response.json())
+      .then((data) => {
+        setPolygons(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching polygons data", error);
+      });
+  }, []);
 
   return (
-    <MapContainer
-      style={containerStyle}
-      center={center}
-      zoom={zoom}
-      // scrollWheelZoom={false}
-      ref={mapRef}
-    >
+    <MapContainer style={containerStyle} center={center} zoom={zoom}>
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <MapContent
-        onClick={mapClicked}
-      />
-      {/* {markers.map((marker, index) => (
-        <MarkerContent
-          key={index}
-          position={marker.position}
-          draggable={marker.draggable}
-          onMarkerClick={event => markerClicked(marker, index)}
-          onDragEnd={event => markerDragEnd(event, index)}
-        />
-      ))} */}
+      {polygons.map((polygon) => (
+        <Polygon
+          key={polygon.objectid}
+          positions={polygon.geom.coordinates}
+          pathOptions={{ color: "purple" }}
+        >
+          <Popup>{polygon.pro_name}</Popup>
+        </Polygon>
+      ))}
     </MapContainer>
   );
 };
 
-const MapContent = ({ onClick }) => {
-  const map = useMapEvents({
-    click: event => onClick(event)
-  })
-  return null;
-}
+export default LeafletMap;
 
-const MarkerContent = (props) => {
-  const markerRef = useRef();
-  const { position, draggable, onMarkerClick, onDragEnd } = props;
-
-  return <Marker
-    position={position}
-    draggable={draggable}
-    eventHandlers={{
-      click: event => onMarkerClick(event),
-      dragend: () => onDragEnd(markerRef.current.getLatLng())
-    }}
-    ref={markerRef}
-  >
-    <Popup>
-      <b>{position.lat}, {position.lng}</b>
-    </Popup>
-  </Marker>
-}
-
-export default MapComponent;

@@ -25,16 +25,23 @@ app.listen(port, () => {
 });
 
 app.get("/doc_plg", (req, res) => {
-  const query = "SELECT objectid, num_disl, pro_name FROM exploitation.doc_plg";
+  const query = "SELECT objectid, num_disl, pro_name, ST_AsText(geom) AS geom FROM exploitation.doc_plg";
   client.query(query, (err, result) => {
     if (err) {
       console.error("Error executing query", err);
       res.status(500).send("Error executing query");
     } else {
-      res.json(result.rows);
+      const data = result.rows.map((row) => ({
+        objectid: row.objectid,
+        num_disl: row.num_disl,
+        pro_name: row.pro_name,
+        geom: parsePolygon(row.geom),
+      }));
+      res.json(data);
     }
   });
 });
+
 
 app.get("/dict_work", (req, res) => {
   const query = "SELECT name_wrk FROM exploitation.dict_work";
@@ -62,3 +69,15 @@ app.get("/dict_geform", (req, res) => {
   });
 });
 
+
+function parsePolygon(geom) {
+  const polygonString = geom.replace(/^POLYGON\s*\(/i, "").replace(/\)$/, "");
+  const coordinates = polygonString.split(",").map((pair) => {
+    const [lng, lat] = pair.trim().split(" ");
+    return [parseFloat(lat), parseFloat(lng)];
+  });
+  return {
+    type: "Polygon",
+    coordinates: [coordinates],
+  };
+}
