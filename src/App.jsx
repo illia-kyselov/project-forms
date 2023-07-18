@@ -32,9 +32,9 @@ function App() {
 
   return (
     <div className="App">
-      <LeafletMap />
+      <LeafletMap setShowSecondForm={setShowSecondForm} />
 
-      <MainForm handleAddFormClick={handleAddFormClick} />
+      {/* <MainForm handleAddFormClick={handleAddFormClick} /> */}
       {showSecondForm &&
         <FormAddWorks
           handleRemoveForm={handleRemoveForm}
