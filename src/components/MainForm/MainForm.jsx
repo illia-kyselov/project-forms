@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const MainForm = ({ handleAddFormClick }) => {
+const MainForm = ({ handleAddFormClick, selectedPolygon }) => {
   const [formData, setFormData] = useState({
     objectid: "",
     num_disl: "",
@@ -8,22 +8,21 @@ const MainForm = ({ handleAddFormClick }) => {
   });
 
   useEffect(() => {
-    fetch("http://localhost:3001/doc_plg")
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.length > 0) {
-          const { objectid, num_disl, pro_name } = data[0];
-          setFormData({
-            objectid: objectid || "",
-            num_disl: num_disl || "",
-            pro_name: pro_name || "",
-          });
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data", error);
+    if (selectedPolygon) {
+      const { objectid, num_disl, pro_name } = selectedPolygon;
+      setFormData({
+        objectid: objectid || "",
+        num_disl: num_disl || "",
+        pro_name: pro_name || "",
       });
-  }, []);
+    } else {
+      setFormData({
+        objectid: "",
+        num_disl: "",
+        pro_name: "",
+      });
+    }
+  }, [selectedPolygon]);
 
   return (
     <form className="form">

@@ -8,7 +8,7 @@ import LeafletMap from "./components/LeafletMap/LeafletMap";
 function App() {
   const [showSecondForm, setShowSecondForm] = useState(false);
   const [showAddInfoForm, setShowAddInfoForm] = useState(false);
-
+  const [selectedPolygon, setSelectedPolygon] = useState(null);
 
   const handleAddFormClick = (e) => {
     e.preventDefault();
@@ -18,29 +18,45 @@ function App() {
   const handleRemoveForm = (e) => {
     e.preventDefault();
     setShowSecondForm(false);
-  }
+  };
 
   const handleAddInfo = (e) => {
     e.preventDefault();
     setShowAddInfoForm(true);
-  }
+  };
 
   const handleRemoveInfo = (e) => {
     e.preventDefault();
     setShowAddInfoForm(false);
-  }
+  };
+
+  const handlePolygonClick = (objectid) => {
+    fetch(`http://localhost:3001/doc_plg/${objectid}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.length > 0) {
+          setSelectedPolygon(data[0]);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching polygon data", error);
+      });
+  };
 
   return (
     <div className="App">
-      <LeafletMap setShowSecondForm={setShowSecondForm} />
+      <LeafletMap handlePolygonClick={handlePolygonClick} />
 
-      <MainForm handleAddFormClick={handleAddFormClick} />
-      {showSecondForm &&
+      <MainForm
+        handleAddFormClick={handleAddFormClick}
+        selectedPolygon={selectedPolygon}
+      />
+      {showSecondForm && (
         <FormAddWorks
           handleRemoveForm={handleRemoveForm}
           handleAddInfo={handleAddInfo}
         />
-      }
+      )}
       {showAddInfoForm && <FormAddInfo handleRemoveInfo={handleRemoveInfo} />}
     </div>
   );

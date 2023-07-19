@@ -11,7 +11,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require("leaflet/dist/images/marker-shadow.png").default,
 });
 
-const LeafletMap = () => {
+const LeafletMap = ({ handlePolygonClick }) => {
   const zoom = 17;
   const containerStyle = {
     width: "100%",
@@ -44,6 +44,11 @@ const LeafletMap = () => {
       });
   }, []);
 
+  const handleClick = (e, polygon) => {
+    e.target.openPopup();
+    handlePolygonClick(polygon.objectid);
+  };
+
   return (
     <MapContainer center={center} zoom={zoom} style={containerStyle}>
       <TileLayer
@@ -55,6 +60,9 @@ const LeafletMap = () => {
           key={polygon.objectid}
           positions={polygon.geom.coordinates}
           pathOptions={{ color: "purple" }}
+          eventHandlers={{
+            click: (e) => handleClick(e, polygon),
+          }}
         >
           <Popup>{polygon.pro_name}</Popup>
         </Polygon>

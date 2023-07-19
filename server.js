@@ -43,6 +43,20 @@ app.get("/doc_plg", (req, res) => {
   });
 });
 
+app.get("/doc_plg/:objectid", (req, res) => {
+  const objectid = req.params.objectid;
+  const query = `SELECT objectid, num_disl, pro_name FROM exploitation.doc_plg WHERE objectid = '${objectid}'`;
+  client.query(query, (err, result) => {
+    if (err) {
+      console.error("Error executing query", err);
+      res.status(500).send("Error executing query");
+    } else {
+      const data = result.rows;
+      res.json(data);
+    }
+  });
+});
+
 app.get("/dict_work", (req, res) => {
   const query = "SELECT name_wrk FROM exploitation.dict_work";
   client.query(query, (err, result) => {
