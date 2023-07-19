@@ -10,7 +10,8 @@
   background-color: #012c87;
   border-radius: 5px;
   color: #f8f5f5;
-  width: max-content;
+  width: 310px;
+  height: max-content;
   margin: 50px;
 
   .form__title {
@@ -65,12 +66,12 @@
 .second-form {
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
   padding: 10px;
   background-color: #012c87;
   border-radius: 5px;
   color: #f8f5f5;
   width: max-content;
+  height: max-content;
   margin: 50px;
 
   .second-form-input_title {
@@ -80,6 +81,7 @@
 
   .form-input_container-second {
     display: flex;
+    flex-shrink: 0;
     align-items: center;
     margin-bottom: 10px;
     justify-content: space-between;
@@ -138,4 +140,9 @@
 .LeafletMap .blur {
   filter: blur(4px);
   pointer-events: none;
+}
+
+.components-container {
+  display: flex;
+  flex-direction: row;
 }

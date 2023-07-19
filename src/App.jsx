@@ -47,17 +47,19 @@ function App() {
     <div className="App">
       <LeafletMap handlePolygonClick={handlePolygonClick} />
 
-      <MainForm
-        handleAddFormClick={handleAddFormClick}
-        selectedPolygon={selectedPolygon}
-      />
-      {showSecondForm && (
-        <FormAddWorks
-          handleRemoveForm={handleRemoveForm}
-          handleAddInfo={handleAddInfo}
+      <div className="components-container">
+        <MainForm
+          handleAddFormClick={handleAddFormClick}
+          selectedPolygon={selectedPolygon}
         />
-      )}
-      {showAddInfoForm && <FormAddInfo handleRemoveInfo={handleRemoveInfo} />}
+        {showSecondForm && (
+          <FormAddWorks
+            handleRemoveForm={handleRemoveForm}
+            handleAddInfo={handleAddInfo}
+          />
+        )}
+        {showAddInfoForm && <FormAddInfo handleRemoveInfo={handleRemoveInfo} />}
+      </div>
     </div>
   );
 }

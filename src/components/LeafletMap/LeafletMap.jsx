@@ -42,7 +42,7 @@ const LeafletMap = ({ handlePolygonClick }) => {
       .catch((error) => {
         console.error("Error fetching polygons data", error);
       });
-  }, []);
+  }, []);         
 
   const handleClick = (e, polygon) => {
     e.target.openPopup();
