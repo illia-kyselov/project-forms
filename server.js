@@ -25,7 +25,8 @@ app.listen(port, () => {
 });
 
 app.get("/doc_plg", (req, res) => {
-  const query = "SELECT objectid, num_disl, pro_name, ST_AsText(geom) AS geom FROM exploitation.doc_plg";
+  const query =
+    "SELECT objectid, num_disl, pro_name, ST_AsText(geom) AS geom FROM exploitation.doc_plg";
   client.query(query, (err, result) => {
     if (err) {
       console.error("Error executing query", err);
@@ -41,7 +42,6 @@ app.get("/doc_plg", (req, res) => {
     }
   });
 });
-
 
 app.get("/dict_work", (req, res) => {
   const query = "SELECT name_wrk FROM exploitation.dict_work";
@@ -68,7 +68,6 @@ app.get("/dict_geform", (req, res) => {
     }
   });
 });
-
 
 function parsePolygon(geom) {
   const polygonString = geom.replace(/^POLYGON\s*\(/i, "").replace(/\)$/, "");
