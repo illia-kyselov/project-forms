@@ -1,6 +1,7 @@
 const express = require("express");
 const { Client } = require("pg");
 const cors = require("cors");
+const wellknown = require("wellknown");
 
 const app = express();
 const port = 3001;
@@ -80,8 +81,8 @@ app.get("/dz", (req, res) => {
     } else {
       const data = result.rows.map((row) => ({
         id: row.id,
-        geom: row.geom,
-        geom_local: row.geom_local,
+        geom: parseMultiPoint(row.geom),
+        geom_local: parseMultiPoint(row.geom_local),
         id_znk: row.id_znk,
         topocode: row.topocode,
       }));
@@ -126,4 +127,26 @@ function parsePolygon(geom) {
     type: "Polygon",
     coordinates: [coordinates],
   };
+}
+
+function parseMultiPoint(geom) {
+  try {
+    const parsedGeom = wellknown(geom);
+    if (
+      parsedGeom.type === "MultiPoint" &&
+      Array.isArray(parsedGeom.coordinates)
+    ) {
+      const coordinates = parsedGeom.coordinates.map(([x, y, z]) => [y, x]);
+      return {
+        type: "MultiPoint",
+        coordinates: coordinates,
+      };
+    } else {
+      console.error("Invalid MultiPoint data:", parsedGeom);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error parsing MultiPoint:", error);
+    return null;
+  }
 }

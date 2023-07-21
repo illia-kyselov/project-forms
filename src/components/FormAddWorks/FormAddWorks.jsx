@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
 
-const FormAddWorks = ({ handleRemoveForm, handleAddInfo, objectIdValue  }) => {
+const FormAddWorks = ({ handleRemoveForm, handleAddInfo, objectid }) => {
   const [options, setOptions] = useState([]);
   const [isChecked, setIsChecked] = useState(true);
+  const [formObjectId, setFormObjectId] = useState("");
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    setFormObjectId(objectid);
+  }, [objectid]);
 
   const fetchData = async () => {
     try {
@@ -50,7 +55,8 @@ const FormAddWorks = ({ handleRemoveForm, handleAddInfo, objectIdValue  }) => {
           type="text"
           className="second-form-input"
           placeholder="Документ"
-          value={objectIdValue}
+          value={formObjectId}
+          readOnly
         />
       </div>
       <div className="form-input_container-second">

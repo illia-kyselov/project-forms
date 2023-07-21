@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const MainForm = ({ handleAddFormClick, selectedPolygon }) => {
+const MainForm = ({ handleAddFormClick, selectedPolygon, onObjectidChange  }) => {
   const [formData, setFormData] = useState({
     objectid: "",
     num_disl: "",
@@ -14,7 +14,9 @@ const MainForm = ({ handleAddFormClick, selectedPolygon }) => {
         objectid: objectid || "",
         num_disl: num_disl || "",
         pro_name: pro_name || "",
+        
       });
+      onObjectidChange(objectid);
     } else {
       setFormData({
         objectid: "",
@@ -22,7 +24,7 @@ const MainForm = ({ handleAddFormClick, selectedPolygon }) => {
         pro_name: "",
       });
     }
-  }, [selectedPolygon]);
+  }, [onObjectidChange, selectedPolygon]);
 
   return (
     <form className="form">

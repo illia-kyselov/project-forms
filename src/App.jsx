@@ -11,11 +11,7 @@ function App() {
   const [showAddInfoForm, setShowAddInfoForm] = useState(false);
   const [selectedPolygon, setSelectedPolygon] = useState(null);
   const [showAddElements, setShowAddElements] = useState(false);
-  const [formData, setFormData] = useState({
-    objectid: "",
-    num_disl: "",
-    pro_name: "",
-  });
+  const [objectid, setObjectid] = useState(""); // Add objectid state
 
   const handleAddFormClick = (e) => {
     e.preventDefault();
@@ -53,6 +49,7 @@ function App() {
       .then((data) => {
         if (data.length > 0) {
           setSelectedPolygon(data[0]);
+          setObjectid(objectid);
         }
       })
       .catch((error) => {
@@ -68,12 +65,13 @@ function App() {
         <MainForm
           handleAddFormClick={handleAddFormClick}
           selectedPolygon={selectedPolygon}
+          onObjectidChange={(value) => setObjectid(value)}
         />
         {showSecondForm && (
           <FormAddWorks
             handleRemoveForm={handleRemoveForm}
             handleAddInfo={handleAddInfo}
-            objectIdValue={formData.objectid}
+            objectid={objectid}
           />
         )}
         {showAddInfoForm && (

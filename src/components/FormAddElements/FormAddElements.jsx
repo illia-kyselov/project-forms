@@ -35,7 +35,7 @@ const FormAddElements = ({ handleRemoveElements }) => {
         />
       </div>
       <div className="form-input_container-second">
-        <p className="second-form-input_title">Форма ДЗ</p>
+        <p className="second-form-input_title">Елемент</p>
         <select className="second-form-input">
           {elements.map((element) => (
             <option key={element} value={element}>
