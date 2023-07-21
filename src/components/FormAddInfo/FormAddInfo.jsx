@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const FormAddInfo = ({ handleRemoveInfo }) => {
+const FormAddInfo = ({ handleRemoveInfo, handleAddElements }) => {
   const [gForms, setGForms] = useState([]);
   useEffect(() => {
     fetchData();
@@ -18,10 +18,6 @@ const FormAddInfo = ({ handleRemoveInfo }) => {
 
   return (
     <form className="second-form">
-      <div className="form-input_container-second">
-        <p className="second-form-input_title">fid</p>
-        <input type="text" className="second-form-input" placeholder="fid" />
-      </div>
       <div className="form-input_container-second">
         <p className="second-form-input_title">Наявність ДЗ в БД</p>
         <input
@@ -68,6 +64,12 @@ const FormAddInfo = ({ handleRemoveInfo }) => {
         <input type="text" className="second-form-input" placeholder="uuid" />
       </div>
       <div className="second-form-button">
+        <button
+          className="button-escape button-addInfo"
+          onClick={handleAddElements}
+        >
+          Додати елементи
+        </button>
         <button className="button-escape" onClick={handleRemoveInfo}>
           Скасувати
         </button>

@@ -4,11 +4,18 @@ import FormAddWorks from "./components/FormAddWorks/FormAddWorks";
 import MainForm from "./components/MainForm/MainForm";
 import FormAddInfo from "./components/FormAddInfo/FormAddInfo";
 import LeafletMap from "./components/LeafletMap/LeafletMap";
+import FormAddElements from "./components/FormAddElements/FormAddElements";
 
 function App() {
   const [showSecondForm, setShowSecondForm] = useState(false);
   const [showAddInfoForm, setShowAddInfoForm] = useState(false);
   const [selectedPolygon, setSelectedPolygon] = useState(null);
+  const [showAddElements, setShowAddElements] = useState(false);
+  const [formData, setFormData] = useState({
+    objectid: "",
+    num_disl: "",
+    pro_name: "",
+  });
 
   const handleAddFormClick = (e) => {
     e.preventDefault();
@@ -28,6 +35,16 @@ function App() {
   const handleRemoveInfo = (e) => {
     e.preventDefault();
     setShowAddInfoForm(false);
+  };
+
+  const handleAddElements = (e) => {
+    e.preventDefault();
+    setShowAddElements(true);
+  };
+
+  const handleRemoveElements = (e) => {
+    e.preventDefault();
+    setShowAddElements(false);
   };
 
   const handlePolygonClick = (objectid) => {
@@ -56,9 +73,18 @@ function App() {
           <FormAddWorks
             handleRemoveForm={handleRemoveForm}
             handleAddInfo={handleAddInfo}
+            objectIdValue={formData.objectid}
           />
         )}
-        {showAddInfoForm && <FormAddInfo handleRemoveInfo={handleRemoveInfo} />}
+        {showAddInfoForm && (
+          <FormAddInfo
+            handleRemoveInfo={handleRemoveInfo}
+            handleAddElements={handleAddElements}
+          />
+        )}
+        {showAddElements && (
+          <FormAddElements handleRemoveElements={handleRemoveElements} />
+        )}
       </div>
     </div>
   );

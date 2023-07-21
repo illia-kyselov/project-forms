@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const FormAddWorks = ({ handleRemoveForm, handleAddInfo }) => {
+const FormAddWorks = ({ handleRemoveForm, handleAddInfo, objectIdValue  }) => {
   const [options, setOptions] = useState([]);
   const [isChecked, setIsChecked] = useState(true);
 
@@ -24,10 +24,6 @@ const FormAddWorks = ({ handleRemoveForm, handleAddInfo }) => {
 
   return (
     <form className="second-form">
-      <div className="form-input_container-second">
-        <p className="second-form-input_title">fid</p>
-        <input type="text" className="second-form-input" placeholder="fid" />
-      </div>
       <div className="form-input_container-second">
         <p className="second-form-input_title">Тип виконаних робіт</p>
         <select className="second-form-input">
@@ -54,6 +50,7 @@ const FormAddWorks = ({ handleRemoveForm, handleAddInfo }) => {
           type="text"
           className="second-form-input"
           placeholder="Документ"
+          value={objectIdValue}
         />
       </div>
       <div className="form-input_container-second">
@@ -72,7 +69,7 @@ const FormAddWorks = ({ handleRemoveForm, handleAddInfo }) => {
       <div className="form-input_container-second">
         <p className="second-form-input_title">Особа яка фіксувала роботи</p>
         <select className="second-form-input">
-
+          <option value="Шевченко Тарас">Шевченко Тарас</option>
         </select>
       </div>
       <div className="form-input_container-second">
@@ -80,7 +77,10 @@ const FormAddWorks = ({ handleRemoveForm, handleAddInfo }) => {
         <input type="text" className="second-form-input" placeholder="uuid" />
       </div>
       <div className="second-form-button">
-        <button className="button-escape button-addInfo" onClick={handleAddInfo}>
+        <button
+          className="button-escape button-addInfo"
+          onClick={handleAddInfo}
+        >
           Додати інфо про дз
         </button>
         <button className="button-escape" onClick={handleRemoveForm}>

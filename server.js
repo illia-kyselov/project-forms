@@ -70,6 +70,26 @@ app.get("/dict_work", (req, res) => {
   });
 });
 
+app.get("/dz", (req, res) => {
+  const query =
+    "SELECT id, geom, geom_local, id_znk, topocode FROM exploitation.dz";
+  client.query(query, (err, result) => {
+    if (err) {
+      console.error("Error executing query", err);
+      res.status(500).send("Error executing query");
+    } else {
+      const data = result.rows.map((row) => ({
+        id: row.id,
+        geom: row.geom,
+        geom_local: row.geom_local,
+        id_znk: row.id_znk,
+        topocode: row.topocode,
+      }));
+      res.json(data);
+    }
+  });
+});
+
 app.get("/dict_geform", (req, res) => {
   const query = "SELECT id_gform FROM exploitation.dict_geform";
   client.query(query, (err, result) => {
@@ -78,6 +98,19 @@ app.get("/dict_geform", (req, res) => {
       res.status(500).send("Error executing query");
     } else {
       const data = result.rows.map((row) => row.id_gform);
+      res.json(data);
+    }
+  });
+});
+
+app.get("/dict_elmnts", (req, res) => {
+  const query = "SELECT name_elm FROM exploitation.dict_elmnts";
+  client.query(query, (err, result) => {
+    if (err) {
+      console.error("Error executing query", err);
+      res.status(500).send("Error executing query");
+    } else {
+      const data = result.rows.map((row) => row.name_elm);
       res.json(data);
     }
   });
