@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Polygon, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Polygon, Popup, Marker } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+
+import markerImage from "../../img/1.39z.png";
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -11,6 +13,12 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require("leaflet/dist/images/marker-shadow.png").default,
 });
 
+const customIcon = new L.Icon({
+  iconUrl: markerImage,
+  iconRetinaUrl: markerImage,
+  iconSize: [50, 50],
+  iconAngle: 100,
+});
 const LeafletMap = ({ handlePolygonClick }) => {
   const zoom = 17;
   const containerStyle = {
@@ -23,6 +31,7 @@ const LeafletMap = ({ handlePolygonClick }) => {
   };
 
   const [polygons, setPolygons] = useState([]);
+  const [markers, setMarkers] = useState([]);
 
   useEffect(() => {
     fetch("http://localhost:3001/doc_plg")
@@ -44,10 +53,35 @@ const LeafletMap = ({ handlePolygonClick }) => {
       });
   }, []);
 
+  useEffect(() => {
+    fetch("http://localhost:3001/dz")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Data from API:", data); // Выводим данные из БД в консоль для отладки
+        const scaledMarkers = data.map((marker) => ({
+          ...marker,
+          geom_local: {
+            ...marker.geom_local,
+            coordinates: marker.geom_local.coordinates.map((coordinate) => [
+              coordinate[1] / 1000000, // Поменяли местами широту и долготу
+              coordinate[0] / 1000000, // Поменяли местами широту и долготу
+            ]),
+          },
+        }));
+        console.log("Scaled markers:", scaledMarkers); // Выводим обработанные данные в консоль для отладки
+        setMarkers(scaledMarkers);
+      })
+      .catch((error) => {
+        console.error("Error fetching marker data", error);
+      });
+  }, []);
+
   const handleClick = (e, polygon) => {
     e.target.openPopup();
     handlePolygonClick(polygon.objectid);
   };
+
+  const markerCoordinates = [50.386210371411906, 30.467462361037526];
 
   return (
     <MapContainer center={center} zoom={zoom} style={containerStyle}>
@@ -67,6 +101,19 @@ const LeafletMap = ({ handlePolygonClick }) => {
           <Popup>{polygon.pro_name}</Popup>
         </Polygon>
       ))}
+      {markers.map((marker) => (
+        <React.Fragment key={marker.id}>
+          {marker.geom_local.type === "MultiPoint" &&
+            marker.geom_local.coordinates.map((coordinate, index) => (
+              <Marker
+                key={`${marker.id}_${index}`}
+                position={[coordinate[1], coordinate[0]]}
+                icon={customIcon}
+              />
+            ))}
+        </React.Fragment>
+      ))}
+      <Marker position={markerCoordinates} icon={customIcon} />
     </MapContainer>
   );
 };
