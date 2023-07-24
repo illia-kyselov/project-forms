@@ -38,6 +38,7 @@ const MainForm = ({ handleAddFormClick, selectedPolygon, onObjectidChange  }) =>
           onChange={(e) =>
             setFormData({ ...formData, objectid: e.target.value })
           }
+          readOnly
         />
       </div>
       <div className="form-input_container">

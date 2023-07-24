@@ -74,8 +74,6 @@ const LeafletMap = ({ handlePolygonClick }) => {
     handlePolygonClick(polygon.objectid);
   };
 
-  const markerCoordinates = [50.386210371411906, 30.467462361037526];
-
   return (
     <MapContainer center={center} zoom={zoom} style={containerStyle}>
       <TileLayer
@@ -99,7 +97,6 @@ const LeafletMap = ({ handlePolygonClick }) => {
           <Popup>{marker.id}</Popup>
         </Marker>
       ))}
-      <Marker position={markerCoordinates} icon={customIcon} />
     </MapContainer>
   );
 };
