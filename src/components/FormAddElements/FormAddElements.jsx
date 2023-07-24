@@ -26,7 +26,7 @@ const FormAddElements = ({ handleRemoveElements }) => {
           className="second-form-input"
         />
       </div>
-      <div>
+      <div className="form-input_container-second">
         <p className="second-form-input_title">Ідентифікатор таблиці ДЗ</p>
         <input
           type="text"

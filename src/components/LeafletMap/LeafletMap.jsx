@@ -57,7 +57,6 @@ const LeafletMap = ({ handlePolygonClick }) => {
     fetch("http://localhost:3001/dz")
       .then((response) => response.json())
       .then((data) => {
-        console.log("Data from API:", data);
         const dzMarkers = data.map((marker) => ({
           id: marker.id,
           coordinates: marker.geom.coordinates[0],

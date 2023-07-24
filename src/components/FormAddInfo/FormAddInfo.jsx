@@ -26,7 +26,7 @@ const FormAddInfo = ({ handleRemoveInfo, handleAddElements }) => {
           className="second-form-input second-form-input-radio"
         />
       </div>
-      <div>
+      <div className="form-input_container-second">
         <p className="second-form-input_title">Ідентифікатор ДЗ в БД</p>
         <input
           type="text"
