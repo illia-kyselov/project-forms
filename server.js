@@ -1,8 +1,6 @@
 const express = require("express");
 const { Client } = require("pg");
 const cors = require("cors");
-const wellknown = require("wellknown");
-const wkx = require("wkx");
 
 const app = express();
 const port = 3001;
@@ -72,6 +70,23 @@ app.get("/dict_work", (req, res) => {
   });
 });
 
+app.get("/dz", (req, res) => {
+  const query = "SELECT id, id_znk, topocode FROM exploitation.dz";
+  client.query(query, (err, result) => {
+    if (err) {
+      console.error("Error executing query", err);
+      res.status(500).send("Error executing query");
+    } else {
+      const data = result.rows.map((row) => ({
+        id: row.id,
+        id_znk: row.id_znk,
+        topocode: row.topocode,
+      }));
+      res.json(data);
+    }
+  });
+});
+
 app.get("/dict_geform", (req, res) => {
   const query = "SELECT id_gform FROM exploitation.dict_geform";
   client.query(query, (err, result) => {
@@ -108,44 +123,4 @@ function parsePolygon(geom) {
     type: "Polygon",
     coordinates: [coordinates],
   };
-}
-
-app.get("/dz", (req, res) => {
-  const query =
-    "SELECT id, geom, geom_local, id_znk, topocode FROM exploitation.dz";
-  client.query(query, (err, result) => {
-    if (err) {
-      console.error("Error executing query", err);
-      res.status(500).send("Error executing query");
-    } else {
-      const data = result.rows.map((row) => ({
-        id: row.id,
-        geom: parseMultiPoint(row.geom),
-        geom_local: parseMultiPoint(row.geom_local),
-        id_znk: row.id_znk,
-        topocode: row.topocode,
-      }));
-      res.json(data);
-    }
-  });
-});
-
-function parseMultiPoint(geom) {
-  try {
-    const geomBuffer = Buffer.from(geom, "hex");
-    console.log("Geom buffer:", geomBuffer);
-    const parsedGeom = wkx.Geometry.parse(geomBuffer).toGeoJSON();
-    if (
-      parsedGeom &&
-      parsedGeom.type === "Point" &&
-      Array.isArray(parsedGeom.coordinates)
-    ) {
-      const [lat, lng] = parsedGeom.coordinates;
-      parsedGeom.coordinates = [lng, lat]; // Swap the order to [lng, lat]
-    }
-    return parsedGeom;
-  } catch (error) {
-    console.error("Error parsing MultiPoint:", error);
-    return null;
-  }
 }
