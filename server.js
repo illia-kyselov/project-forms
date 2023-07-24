@@ -1,6 +1,7 @@
 const express = require("express");
 const { Client } = require("pg");
 const cors = require("cors");
+const pgp = require("pg-promise")();
 
 const app = express();
 const port = 3001;
@@ -70,23 +71,6 @@ app.get("/dict_work", (req, res) => {
   });
 });
 
-app.get("/dz", (req, res) => {
-  const query = "SELECT id, id_znk, topocode FROM exploitation.dz";
-  client.query(query, (err, result) => {
-    if (err) {
-      console.error("Error executing query", err);
-      res.status(500).send("Error executing query");
-    } else {
-      const data = result.rows.map((row) => ({
-        id: row.id,
-        id_znk: row.id_znk,
-        topocode: row.topocode,
-      }));
-      res.json(data);
-    }
-  });
-});
-
 app.get("/dict_geform", (req, res) => {
   const query = "SELECT id_gform FROM exploitation.dict_geform";
   client.query(query, (err, result) => {
@@ -123,4 +107,32 @@ function parsePolygon(geom) {
     type: "Polygon",
     coordinates: [coordinates],
   };
+}
+
+app.get("/dz", (req, res) => {
+  const query =
+    "SELECT id, ST_AsGeoJSON(geom) AS geom, id_znk, topocode FROM exploitation.dz";
+  client.query(query, (err, result) => {
+    if (err) {
+      console.error("Error executing query", err);
+      res.status(500).send("Error executing query");
+    } else {
+      const data = result.rows.map((row) => ({
+        id: row.id,
+        geom: swapCoordinates(JSON.parse(row.geom)),
+        id_znk: row.id_znk,
+      }));
+      res.json(data);
+    }
+  });
+});
+
+function swapCoordinates(geoJSON) {
+  if (geoJSON && geoJSON.coordinates) {
+    const swappedCoordinates = geoJSON.coordinates.map((coordinates) => {
+      return [coordinates[1], coordinates[0]];
+    });
+    geoJSON.coordinates = swappedCoordinates;
+  }
+  return geoJSON;
 }

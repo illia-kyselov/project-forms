@@ -57,19 +57,12 @@ const LeafletMap = ({ handlePolygonClick }) => {
     fetch("http://localhost:3001/dz")
       .then((response) => response.json())
       .then((data) => {
-        console.log("Data from API:", data); // Выводим данные из БД в консоль для отладки
-        const scaledMarkers = data.map((marker) => ({
-          ...marker,
-          geom_local: {
-            ...marker.geom_local,
-            coordinates: marker.geom_local.coordinates.map((coordinate) => [
-              coordinate[1] / 1000000, // Поменяли местами широту и долготу
-              coordinate[0] / 1000000, // Поменяли местами широту и долготу
-            ]),
-          },
+        console.log("Data from API:", data);
+        const dzMarkers = data.map((marker) => ({
+          id: marker.id,
+          coordinates: marker.geom.coordinates[0],
         }));
-        console.log("Scaled markers:", scaledMarkers); // Выводим обработанные данные в консоль для отладки
-        setMarkers(scaledMarkers);
+        setMarkers(dzMarkers);
       })
       .catch((error) => {
         console.error("Error fetching marker data", error);
@@ -102,16 +95,9 @@ const LeafletMap = ({ handlePolygonClick }) => {
         </Polygon>
       ))}
       {markers.map((marker) => (
-        <React.Fragment key={marker.id}>
-          {marker.geom_local.type === "MultiPoint" &&
-            marker.geom_local.coordinates.map((coordinate, index) => (
-              <Marker
-                key={`${marker.id}_${index}`}
-                position={[coordinate[1], coordinate[0]]}
-                icon={customIcon}
-              />
-            ))}
-        </React.Fragment>
+        <Marker key={marker.id} position={marker.coordinates} icon={customIcon}>
+          <Popup>{marker.id}</Popup>
+        </Marker>
       ))}
       <Marker position={markerCoordinates} icon={customIcon} />
     </MapContainer>
