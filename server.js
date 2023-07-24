@@ -24,6 +24,8 @@ app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
+//takes
+
 app.get("/doc_plg", (req, res) => {
   const query =
     "SELECT objectid, num_disl, pro_name, ST_AsText(geom) AS geom FROM exploitation.doc_plg";
@@ -96,18 +98,6 @@ app.get("/dict_elmnts", (req, res) => {
   });
 });
 
-function parsePolygon(geom) {
-  const polygonString = geom.replace(/^POLYGON\s*\(/i, "").replace(/\)$/, "");
-  const coordinates = polygonString.split(",").map((pair) => {
-    const [lng, lat] = pair.trim().split(" ");
-    return [parseFloat(lat), parseFloat(lng)];
-  });
-  return {
-    type: "Polygon",
-    coordinates: [coordinates],
-  };
-}
-
 app.get("/dz", (req, res) => {
   const query =
     "SELECT id, ST_AsGeoJSON(geom) AS geom, id_znk, topocode FROM exploitation.dz";
@@ -126,6 +116,18 @@ app.get("/dz", (req, res) => {
   });
 });
 
+function parsePolygon(geom) {
+  const polygonString = geom.replace(/^POLYGON\s*\(/i, "").replace(/\)$/, "");
+  const coordinates = polygonString.split(",").map((pair) => {
+    const [lng, lat] = pair.trim().split(" ");
+    return [parseFloat(lat), parseFloat(lng)];
+  });
+  return {
+    type: "Polygon",
+    coordinates: [coordinates],
+  };
+}
+
 function swapCoordinates(geoJSON) {
   if (geoJSON && geoJSON.coordinates) {
     const swappedCoordinates = geoJSON.coordinates.map((coordinates) => {
@@ -135,3 +137,107 @@ function swapCoordinates(geoJSON) {
   }
   return geoJSON;
 }
+
+//push
+
+app.post("/odr_proekty_plg", (req, res) => {
+  const formData = req.body;
+
+  const query = `
+    INSERT INTO odr_pro_plg (id_plg, id_odr_pr_list, doc_fold)
+    VALUES ($1, $2, $3)
+  `;
+
+  const values = [formData.id_plg, formData.id_odr_pr_list, formData.doc_fold];
+
+  client.query(query, values, (err, result) => {
+    if (err) {
+      console.error("Error inserting data into database", err);
+      res.status(500).send("Error inserting data into database");
+    } else {
+      res.json({ message: "Data successfully inserted into database" });
+    }
+  });
+});
+
+app.post("/work_table", (req, res) => {
+  const formData = req.body;
+
+  const query = `
+    INSERT INTO work_table (type_work, is_doc, id_doc, address, date_work, pers_work, uuid)
+    VALUES ($1, $2, $3, $4, $5, $6, $7)
+  `;
+
+  const values = [
+    formData.type_work,
+    formData.is_doc,
+    formData.id_doc,
+    formData.address,
+    formData.date_work,
+    formData.pers_work,
+    formData.uuid,
+  ];
+
+  client.query(query, values, (err, result) => {
+    if (err) {
+      console.error("Error inserting data into database", err);
+      res.status(500).send("Error inserting data into database");
+    } else {
+      res.json({ message: "Data successfully inserted into database" });
+    }
+  });
+});
+
+app.post("/expl_dz", (req, res) => {
+  const formData = req.body;
+
+  const query = `
+    INSERT INTO expl_dz (is_dz, id_expl_dz, num_dz, dz_form, id_disl_dz, uuid)
+    VALUES ($1, $2, $3, $4, $5, $6)
+  `;
+
+  const values = [
+    formData.is_dz,
+    formData.id_expl_dz,
+    formData.num_dz,
+    formData.dz_form,
+    formData.id_disl_dz,
+    formData.uuid,
+  ];
+
+  client.query(query, values, (err, result) => {
+    if (err) {
+      console.error("Error inserting data into database", err);
+      res.status(500).send("Error inserting data into database");
+    } else {
+      res.json({ message: "Data successfully inserted into database" });
+    }
+  });
+});
+
+app.post("/dict_elmnts", (req, res) => {
+  const formData = req.body;
+
+  const query = `
+    INSERT INTO dict_elmnts (id_elmts, tab_dz_id, name_elmnt, cnt_elmnt, uuid, uid)
+    VALUES ($1, $2, $3, $4, $5, $6)
+  `;
+
+  const values = [
+    formData.id_elmts,
+    formData.tab_dz_id,
+    formData.name_elmnt,
+    formData.cnt_elmnt,
+    formData.uuid,
+    formData.uid,
+  ];
+
+  client.query(query, values, (err, result) => {
+    if (err) {
+      console.error("Error inserting data into database", err);
+      res.status(500).send("Error inserting data into database");
+    } else {
+      res.json({ message: "Data successfully inserted into database" });
+    }
+  });
+});

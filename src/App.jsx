@@ -11,7 +11,7 @@ function App() {
   const [showAddInfoForm, setShowAddInfoForm] = useState(false);
   const [selectedPolygon, setSelectedPolygon] = useState(null);
   const [showAddElements, setShowAddElements] = useState(false);
-  const [objectid, setObjectid] = useState(""); // Add objectid state
+  const [objectid, setObjectid] = useState("");
 
   const handleAddFormClick = (e) => {
     e.preventDefault();

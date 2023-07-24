@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 
 const FormAddInfo = ({ handleRemoveInfo, handleAddElements }) => {
   const [gForms, setGForms] = useState([]);
+  const [isChecked, setIsChecked] = useState(true);
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -16,14 +18,20 @@ const FormAddInfo = ({ handleRemoveInfo, handleAddElements }) => {
     }
   };
 
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+  };
+
   return (
     <form className="second-form">
       <div className="form-input_container-second">
-        <p className="second-form-input_title">Наявність ДЗ в БД</p>
+        <p className="second-form-input_title" >Наявність ДЗ в БД</p>
         <input
           type="checkbox"
           name="Наявність ДЗ в БД"
           className="second-form-input second-form-input-radio"
+          checked={isChecked}
+          onChange={handleCheckboxChange}
         />
       </div>
       <div className="form-input_container-second">
