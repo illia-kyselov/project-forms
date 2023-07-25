@@ -83,7 +83,7 @@
     font-size: 16px;
     font-weight: 600;
     line-height: normal;
-    margin: 20px auto 0;
+    margin: 0 auto 0;
 
     &:disabled {
       pointer-events: none;
@@ -134,7 +134,6 @@
 
 .button-escape {
   background-color: #fff;
-  border: 2px solid #1a1a1a;
   border-radius: 15px;
   box-sizing: border-box;
   color: #1a1a1a;
@@ -187,4 +186,8 @@
 
 .button-submit {
   background-color: #1ab394;
+}
+
+.button-submit:active  {
+  background-color: #068b71;
 }

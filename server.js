@@ -192,7 +192,7 @@ app.post("/expl_dz", (req, res) => {
   const formData = req.body;
 
   const query = `
-    INSERT INTO expl_dz (is_dz, id_expl_dz, num_dz, dz_form, id_disl_dz, uuid)
+    INSERT INTO exploitation.expl_dz (is_dz, id_expl_dz, num_dz, dz_form, id_disl_dz, uuid)
     VALUES ($1, $2, $3, $4, $5, $6)
   `;
 
@@ -215,21 +215,21 @@ app.post("/expl_dz", (req, res) => {
   });
 });
 
-app.post("/dict_elmnts", (req, res) => {
+app.post("/elements", (req, res) => {
   const formData = req.body;
 
   const query = `
-    INSERT INTO dict_elmnts (id_elmts, tab_dz_id, name_elmnt, cnt_elmnt, uuid, uid)
+    INSERT INTO exploitation.elements (id_elmts, tab_dz_id, name_elmns, cnt_elmnt, uuid, uid)
     VALUES ($1, $2, $3, $4, $5, $6)
   `;
 
   const values = [
-    formData.id_elmts,
-    formData.tab_dz_id,
-    formData.name_elmnt,
-    formData.cnt_elmnt,
+    formData.fid,
+    formData.tableId,
+    formData.element,
+    formData.quantity,
     formData.uuid,
-    formData.uid,
+    formData.dztab_uuid,
   ];
 
   client.query(query, values, (err, result) => {
