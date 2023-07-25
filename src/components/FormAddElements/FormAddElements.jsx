@@ -65,7 +65,7 @@ const FormAddElements = ({ handleRemoveElements }) => {
         />
       </div>
       <div className="second-form-button">
-        <button className="button-submit button-escape" disabled>Відправити всі поля</button>
+        <button className="button-submit button-escape">Відправити всі поля</button>
         <button className="button-escape" onClick={handleRemoveElements}>
           Скасувати
         </button>

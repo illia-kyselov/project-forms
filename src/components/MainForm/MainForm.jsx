@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 
-const MainForm = ({ handleAddFormClick, selectedPolygon, onObjectidChange  }) => {
+const MainForm = ({
+  handleAddFormClick,
+  selectedPolygon,
+  onObjectidChange,
+}) => {
   const [formData, setFormData] = useState({
     objectid: "",
     num_disl: "",
@@ -14,49 +18,41 @@ const MainForm = ({ handleAddFormClick, selectedPolygon, onObjectidChange  }) =>
         objectid: objectid || "",
         num_disl: num_disl || "",
         pro_name: pro_name || "",
-        
       });
       onObjectidChange(objectid);
-    } else {
-      setFormData({
-        objectid: "",
-        num_disl: "",
-        pro_name: "",
-      });
     }
   }, [onObjectidChange, selectedPolygon]);
 
   return (
     <form className="form">
       <h1 className="form__title">Основні атрибути:</h1>
-      <div className="form-input_container">
-        <p className="form-input_title">ObjectId:</p>
+      <div className="form__group">
+        <label className="form-input_title">ObjectId:</label>
         <input
+          className="form__input"
           type="text"
-          placeholder="ObjectId"
           value={formData.objectid}
           onChange={(e) =>
             setFormData({ ...formData, objectid: e.target.value })
           }
-          readOnly
         />
       </div>
-      <div className="form-input_container">
-        <p className="form-input_title">Num_disl:</p>
+      <div className="form__group">
+        <label className="form-input_title">Num_disl:</label>
         <input
+          className="form__input"
           type="text"
-          placeholder="Num_disl"
           value={formData.num_disl}
           onChange={(e) =>
             setFormData({ ...formData, num_disl: e.target.value })
           }
         />
       </div>
-      <div className="form-input_container">
-        <p className="form-input_title">ProName:</p>
+      <div className="form__group">
+        <label className="form-input_title">ProName:</label>
         <input
+          className="form__input"
           type="text"
-          placeholder="ProName"
           value={formData.pro_name}
           onChange={(e) =>
             setFormData({ ...formData, pro_name: e.target.value })
