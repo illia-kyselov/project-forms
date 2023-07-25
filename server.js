@@ -139,12 +139,11 @@ function swapCoordinates(geoJSON) {
 }
 
 //push
-
 app.post("/odr_proekty_plg", (req, res) => {
   const formData = req.body;
 
   const query = `
-    INSERT INTO odr_pro_plg (id_plg, id_odr_pr_list, doc_fold)
+    INSERT INTO exploitation.odr_pro_plg (id_plg, id_odr_pr_list, doc_fold)
     VALUES ($1, $2, $3)
   `;
 
@@ -164,7 +163,7 @@ app.post("/work_table", (req, res) => {
   const formData = req.body;
 
   const query = `
-    INSERT INTO work_table (type_work, is_doc, id_doc, address, date_work, pers_work, uuid)
+    INSERT INTO exploitation.work_table (type_work, is_doc, id_doc, address, date_work, pers_work, uuid)
     VALUES ($1, $2, $3, $4, $5, $6, $7)
   `;
 

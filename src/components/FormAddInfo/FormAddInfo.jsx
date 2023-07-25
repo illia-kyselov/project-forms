@@ -23,62 +23,56 @@ const FormAddInfo = ({ handleRemoveInfo, handleAddElements }) => {
   };
 
   return (
-    <form className="second-form">
-      <div className="form-input_container-second">
-        <p className="second-form-input_title" >Наявність ДЗ в БД</p>
+    <form className="form">
+      <div className="form__group form__group-radio">
+        <p className="form-input_title">
+          Наявність ДЗ в БД:
+        </p>
         <input
           type="checkbox"
           name="Наявність ДЗ в БД"
-          className="second-form-input second-form-input-radio"
+          className="form__input form__input-radio"
           checked={isChecked}
           onChange={handleCheckboxChange}
         />
       </div>
-      <div className="form-input_container-second">
-        <p className="second-form-input_title">Ідентифікатор ДЗ в БД</p>
-        <input
-          type="text"
-          className="second-form-input"
-          placeholder="Ідентифікатор ДЗ в БД"
-        />
+      <div className="form__group">
+        <p className="form-input_title">Ідентифікатор ДЗ в БД:</p>
+        <input type="text" className="form__input" />
       </div>
-      <div className="form-input_container-second">
-        <p className="second-form-input_title">Номер ДЗ</p>
-        <input
-          type="text"
-          className="second-form-input"
-          placeholder="Номер ДЗ"
-        />
+      <div className="form__group">
+        <p className="form-input_title">Номер ДЗ:</p>
+        <input type="text" className="form__input" />
       </div>
-      <div className="form-input_container-second">
-        <p className="second-form-input_title">Форма ДЗ</p>
-        <select className="second-form-input">
+      <div className="form__group">
+        <p className="form-input_title">Форма ДЗ:</p>
+        <select className="form__input form__input-select">
           {gForms.map((gForm) => (
-            <option key={gForm} value={gForm}>
+            <option key={gForm} value={gForm} className="form__input-option">
               {gForm}
             </option>
           ))}
         </select>
       </div>
-      <div className="form-input_container-second">
-        <p className="second-form-input_title">Ідентифікатор з таблиці робіт</p>
-        <input
-          className="second-form-input"
-          placeholder="Ідентифікатор з таблиці робіт"
-        />
+      <div className="form__group">
+        <p className="form-input_title">Ідентифікатор з таблиці робіт:</p>
+        <input className="form__input" />
       </div>
-      <div className="form-input_container-second">
-        <p className="second-form-input_title">uuid</p>
-        <input type="text" className="second-form-input" placeholder="uuid" />
+      <div className="form__group">
+        <p className="form-input_title">uuid:</p>
+        <input type="text" className="form__input" />
       </div>
-      <div className="second-form-button">
+      <div className="form__button-container">
         <button
-          className="button-escape button-addInfo"
+          className="form__button form__button-addForm"
           onClick={handleAddElements}
         >
           Додати елементи
         </button>
-        <button className="button-escape" onClick={handleRemoveInfo}>
+        <button
+          className="form__button button-escape"
+          onClick={handleRemoveInfo}
+        >
           Скасувати
         </button>
       </div>

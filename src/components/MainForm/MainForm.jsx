@@ -59,9 +59,14 @@ const MainForm = ({
           }
         />
       </div>
-      <button className="form__button" onClick={handleAddFormClick}>
-        Додати роботи
-      </button>
+      <div className="form__button-container">
+        <button
+          className="form__button form__button-addForm"
+          onClick={handleAddFormClick}
+        >
+          Додати роботи
+        </button>
+      </div>
     </form>
   );
 };

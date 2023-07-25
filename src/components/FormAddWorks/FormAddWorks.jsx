@@ -28,68 +28,71 @@ const FormAddWorks = ({ handleRemoveForm, handleAddInfo, objectid }) => {
   };
 
   return (
-    <form className="second-form">
-      <div className="form-input_container-second">
-        <p className="second-form-input_title">Тип виконаних робіт</p>
-        <select className="second-form-input">
+    <form className="form">
+      <div className="form__group">
+        <label className="form-input_title">Тип виконаних робіт:</label>
+        <select className="form__input form__input-select">
           {options.map((option) => (
-            <option key={option} value={option}>
+            <option key={option} value={option} className="form__input-option">
               {option}
             </option>
           ))}
         </select>
       </div>
-      <div>
-        <p className="second-form-input_title">Наявність документа в БД</p>
+      <div className="form__group form__group-radio">
+        <label className="form-input_title">
+          Наявність документа в БД:
+        </label>
         <input
           type="checkbox"
           name="Наявність документа в БД"
-          className="second-form-input second-form-input-radio"
+          className="form__input form__input-radio"
           checked={isChecked}
           onChange={handleCheckboxChange}
         />
       </div>
-      <div className="form-input_container-second">
-        <p className="second-form-input_title">Документ</p>
+      <div className="form__group">
+        <label className="form-input_title">Документ:</label>
         <input
           type="text"
-          className="second-form-input"
-          placeholder="Документ"
+          className="form__input"
           value={formObjectId}
           readOnly
         />
       </div>
-      <div className="form-input_container-second">
-        <p className="second-form-input_title">Адреса</p>
-        <input type="text" className="second-form-input" placeholder="Адреса" />
+      <div className="form__group">
+        <label className="form-input_title">Адреса:</label>
+        <input type="text" className="form__input" />
       </div>
-      <div className="form-input_container-second">
-        <p className="second-form-input_title">Дата виконання робіт</p>
+      <div className="form__group">
+        <label className="form-input_title">Дата виконання робіт:</label>
         <input
           type="datetime-local"
           id="additionalDatetime"
-          className="second-form-input"
-          placeholder="Дата виконання робіт"
+          className="form__input"
         />
       </div>
-      <div className="form-input_container-second">
-        <p className="second-form-input_title">Особа яка фіксувала роботи</p>
-        <select className="second-form-input">
+      <div className="form__group">
+        <label className="form-input_title">Особа яка фіксувала роботи:</label>
+        <select className="form__input">
           <option value="Шевченко Тарас">Шевченко Тарас</option>
         </select>
       </div>
-      <div className="form-input_container-second">
-        <p className="second-form-input_title">uuid</p>
-        <input type="text" className="second-form-input" placeholder="uuid" />
+      <div className="form__group">
+        <label className="form-input_title">uuid:</label>
+        <input type="text" className="form__input" />
       </div>
-      <div className="second-form-button">
+      <div className="form__button-container">
         <button
-          className="button-escape button-addInfo"
+          className="form__button form__button-addForm"
           onClick={handleAddInfo}
         >
           Додати інфо про дз
         </button>
-        <button className="button-escape" onClick={handleRemoveForm}>
+        <button
+          className="form__button button-escape"
+          onClick={handleRemoveForm}
+        >
           Скасувати
         </button>
       </div>

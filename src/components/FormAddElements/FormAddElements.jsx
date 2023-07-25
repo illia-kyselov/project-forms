@@ -63,82 +63,84 @@ const FormAddElements = ({ handleRemoveElements }) => {
   };
 
   return (
-    <form className="second-form" onSubmit={handleSubmitElements}>
-      <div className="form-input_container-second">
-        <p className="second-form-input_title">fid</p>
+    <form className="form" onSubmit={handleSubmitElements}>
+      <div className="form__group">
+        <label className="form-input_title">fid:</label>
         <input
           type="text"
           name="fid"
-          placeholder="fid"
-          className="second-form-input"
+          className="form__input"
           onChange={handleChange}
           required
         />
       </div>
-      <div className="form-input_container-second">
-        <p className="second-form-input_title">Ідентифікатор таблиці ДЗ</p>
+      <div className="form__group">
+        <label className="form-input_title">Ідентифікатор таблиці ДЗ:</label>
         <input
           type="text"
           name="tableId"
-          className="second-form-input"
-          placeholder="Ідентифікатор таблиці ДЗ"
+          className="form__input"
           onChange={handleChange}
           required
         />
       </div>
-      <div className="form-input_container-second">
-        <p className="second-form-input_title">Елемент</p>
+      <div className="form__group">
+        <label className="form-input_title">Елемент:</label>
         <select
-          className="second-form-input"
+          className="form__input form__input-select"
           name="element"
           onChange={handleChange}
           required
         >
           {elements.map((element) => (
-            <option key={element} value={element}>
+            <option
+              key={element}
+              value={element}
+              className="form__input-option"
+            >
               {element}
             </option>
           ))}
         </select>
       </div>
-      <div className="form-input_container-second">
-        <p className="second-form-input_title">Кількість елементів</p>
+      <div className="form__group">
+        <label className="form-input_title">Кількість елементів:</label>
         <input
           type="number"
           name="quantity"
-          className="second-form-input"
-          placeholder="Кількість елементів"
+          className="form__input"
           onChange={handleChange}
           required
         />
       </div>
-      <div className="form-input_container-second">
-        <p className="second-form-input_title">uuid</p>
+      <div className="form__group">
+        <label className="form-input_title">uuid:</label>
         <input
           type="text"
-          className="second-form-input"
-          placeholder="uuid"
+          className="form__input"
           name="uuid"
           onChange={handleChange}
           required
         />
       </div>
-      <div className="form-input_container-second">
-        <p className="second-form-input_title">dztab_uuid</p>
+      <div className="form__group">
+        <label className="form-input_title">dztab_uuid:</label>
         <input
           type="text"
-          className="second-form-input"
-          placeholder="dztab_uuid"
+          className="form__input"
           name="dztab_uuid"
           onChange={handleChange}
           required
         />
       </div>
-      <div className="second-form-button">
-        <button className="button-submit button-escape" type="submit">
+      <div className="form__button-container">
+        <button className="form__button button-submit" type="submit">
           Відправити всі поля
         </button>
-        <button className="button-escape" onClick={handleRemoveElements}>
+        <button
+          className="form__button button-escape"
+          onClick={handleRemoveElements}
+        >
           Скасувати
         </button>
       </div>

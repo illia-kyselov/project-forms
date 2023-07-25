@@ -16,7 +16,6 @@
   width: 310px;
   height: max-content;
 
-
   .form__title {
     margin: 0 0 32px 0;
     letter-spacing: 1px;
@@ -35,15 +34,27 @@
     transition: 0.3s;
   }
 
+  .form__input-option {
+    background-color: #90a8da;
+  }
+
+  .form__input-option:checked {
+    background-color: #012c87;
+  }
+
   .form__input:focus {
     border-bottom: 1px solid #1a73a8;
   }
 
-  .form__input, .form__button {
+  .form__input-radio {
+    width: min-content;
+  }
+
+  .form__input,
+  .form__button {
     letter-spacing: 1px;
     font-size: 16px;
   }
-
 
   .form__group {
     margin-bottom: 32px;
@@ -52,8 +63,12 @@
   .form-input_title {
     top: 0;
     z-index: -1;
-    color: #f8f5f5;
+    color: #bdb9b9;
     transition: 0.3s;
+  }
+
+  .form-input_title-radio {
+    margin-bottom: 32px;
   }
 
   input {
@@ -65,6 +80,8 @@
   .form-input_title {
     display: inline;
     margin-right: 10px;
+    letter-spacing: 1px;
+    font-weight: normal;
   }
 
   .form__button {
@@ -99,36 +116,38 @@
       transform: translateY(0);
     }
   }
-}
 
-.second-form {
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  background-color: #012c87;
-  border-radius: 5px;
-  color: #f8f5f5;
-  width: max-content;
-  height: max-content;
-  margin: 50px;
-
-  .second-form-input_title {
-    display: inline;
-    margin-right: 10px;
-  }
-
-  .form-input_container-second {
+  .form__button-container {
     display: flex;
-    flex-shrink: 0;
-    align-items: center;
-    margin-bottom: 10px;
-    justify-content: space-between;
-  }
+    justify-content: space-around;
+    gap: 15px;
 
-  .second-form-button {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
+    .button-submit {
+      background-color: #1ab394;
+      opacity: 90%;
+    }
+
+    .button-submit:active {
+      background-color: #068b71;
+    }
+
+    .button-escape {
+      background-color: #ff9595;
+      opacity: 90%;
+    }
+
+    .button-escape:active {
+      background-color: #ff7373;
+    }
+
+    .form__button-addForm {
+      background-color: #ffffd0;
+      opacity: 95%;
+    }
+
+    .form__button-addForm:active {
+      background-color: #ffffa9;
+    }
   }
 }
 
@@ -182,12 +201,4 @@
 .components-container {
   display: flex;
   flex-direction: row;
-}
-
-.button-submit {
-  background-color: #1ab394;
-}
-
-.button-submit:active  {
-  background-color: #068b71;
 }
