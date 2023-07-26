@@ -143,7 +143,7 @@ app.post("/odr_proekty_plg", (req, res) => {
   const formData = req.body;
 
   const query = `
-    INSERT INTO exploitation.odr_pro_plg (id_plg, id_odr_pr_list, doc_fold)
+    INSERT INTO exploitation.odr_proekty_plg (id_plg, id_odr_pr_list, doc_fold)
     VALUES ($1, $2, $3)
   `;
 

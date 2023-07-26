@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 
-const FormAddElements = ({ handleRemoveElements }) => {
+const FormAddElements = ({
+  handleRemoveElements,
+  handleSubmitElements,
+  handleChange,
+}) => {
   const [elements, setElements] = useState([]);
   useEffect(() => {
     fetchData();
@@ -13,52 +17,6 @@ const FormAddElements = ({ handleRemoveElements }) => {
       setElements(data);
     } catch (error) {
       console.error("Error fetching data", error);
-    }
-  };
-
-  const [formData, setFormData] = useState({
-    fid: "",
-    tableId: "",
-    element: "",
-    quantity: 0,
-    uuid: "",
-    dztab_uuid: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]:
-        name === "element"
-          ? e.target.options[e.target.selectedIndex].text
-          : value,
-    }));
-  };
-
-  const handleSubmitElements = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch("http://localhost:3001/elements", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      const data = await response.json();
-      console.log(data);
-      setFormData({
-        fid: "",
-        tableId: "",
-        element: "",
-        quantity: 0,
-        uuid: "",
-        dztab_uuid: "",
-      });
-      window.location.reload();
-    } catch (error) {
-      console.error("Error sending data", error);
     }
   };
 

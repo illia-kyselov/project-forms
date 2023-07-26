@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 
-const FormAddInfo = ({ handleRemoveInfo, handleAddElements }) => {
+const FormAddInfo = ({
+  handleRemoveInfo,
+  handleAddElements,
+  handleChangeFormInfo,
+}) => {
   const [gForms, setGForms] = useState([]);
   const [isChecked, setIsChecked] = useState(true);
 
@@ -20,14 +24,13 @@ const FormAddInfo = ({ handleRemoveInfo, handleAddElements }) => {
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
+    handleChangeFormInfo({ name: "Наявність ДЗ в БД", value: !isChecked });
   };
 
   return (
     <form className="form">
       <div className="form__group form__group-radio">
-        <p className="form-input_title">
-          Наявність ДЗ в БД:
-        </p>
+        <p className="form-input_title">Наявність ДЗ в БД:</p>
         <input
           type="checkbox"
           name="Наявність ДЗ в БД"
@@ -38,11 +41,19 @@ const FormAddInfo = ({ handleRemoveInfo, handleAddElements }) => {
       </div>
       <div className="form__group">
         <p className="form-input_title">Ідентифікатор ДЗ в БД:</p>
-        <input type="text" className="form__input" />
+        <input
+          type="text"
+          className="form__input"
+          onChange={handleChangeFormInfo}
+        />
       </div>
       <div className="form__group">
         <p className="form-input_title">Номер ДЗ:</p>
-        <input type="text" className="form__input" />
+        <input
+          type="text"
+          className="form__input"
+          onChange={handleChangeFormInfo}
+        />
       </div>
       <div className="form__group">
         <p className="form-input_title">Форма ДЗ:</p>
@@ -56,11 +67,15 @@ const FormAddInfo = ({ handleRemoveInfo, handleAddElements }) => {
       </div>
       <div className="form__group">
         <p className="form-input_title">Ідентифікатор з таблиці робіт:</p>
-        <input className="form__input" />
+        <input className="form__input" onChange={handleChangeFormInfo} />
       </div>
       <div className="form__group">
         <p className="form-input_title">uuid:</p>
-        <input type="text" className="form__input" />
+        <input
+          type="text"
+          className="form__input"
+          onChange={handleChangeFormInfo}
+        />
       </div>
       <div className="form__button-container">
         <button
