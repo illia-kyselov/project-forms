@@ -102,10 +102,10 @@ function App() {
           handleAddInfo={handleAddInfo}
           objectid={objectid}
         />
-        <MainForm
+        {/* <MainForm
           selectedPolygon={selectedPolygon}
           onObjectidChange={(value) => setObjectid(value)}
-        />
+        /> */}
 
         {showAddInfoForm && (
           <FormAddInfo

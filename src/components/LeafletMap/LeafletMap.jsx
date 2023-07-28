@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from "react";
-import {
-  MapContainer,
-  TileLayer,
-  Polygon,
-  Popup,
-  Marker,
-  useMap,
-} from "react-leaflet";
+import { MapContainer, TileLayer, Polygon, Popup, Marker } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-
 import markerImage from "../../img/1.39z.png";
 
 delete L.Icon.Default.prototype._getIconUrl;
@@ -42,6 +34,8 @@ const LeafletMap = ({ handlePolygonClick }) => {
   const [markers, setMarkers] = useState([]);
   const [selectedPolygonId, setSelectedPolygonId] = useState(null);
   const [filteredMarkers, setFilteredMarkers] = useState([]);
+  const [mapBounds, setMapBounds] = useState(null);
+  const [filteredPolygons, setFilteredPolygons] = useState([]);
 
   useEffect(() => {
     fetch("http://localhost:3001/doc_plg")
@@ -111,47 +105,63 @@ const LeafletMap = ({ handlePolygonClick }) => {
     e.target.openPopup();
     handlePolygonClick(polygon.objectid);
     setSelectedPolygonId(polygon.objectid);
+
+    // Filter markers when a polygon is clicked
+    const polygonCoordinates = polygon.geom.coordinates;
+    filterMarkersWithinPolygon(polygonCoordinates);
+  };
+
+  const handleMoveEnd = () => {
+    if (mapBounds) {
+      // Filter polygons based on map bounds
+      const polygonsInView = polygons.filter((polygon) =>
+        isPolygonWithinMapBounds(polygon)
+      );
+      setFilteredPolygons(polygonsInView);
+
+      // Filter markers based on whether they are within the bounds of the map
+      setFilteredMarkers(filterMarkersByMapBounds(polygonsInView));
+    }
+  };
+
+  const filterMarkersByMapBounds = (polygonsInView) => {
+    return markers.filter((marker) =>
+      polygonsInView.some((polygon) =>
+        isPointWithinPolygon(marker, polygon.geom.coordinates)
+      )
+    );
+  };
+
+  const isPolygonWithinMapBounds = (polygon) => {
+    if (!mapBounds) return true; // Show all polygons before the map initializes
+    const polygonBounds = L.polygon(polygon.geom.coordinates).getBounds();
+    return mapBounds.intersects(polygonBounds);
   };
 
   useEffect(() => {
-    if (selectedPolygonId) {
-      const selectedPolygon = polygons.find(
-        (polygon) => polygon.objectid === selectedPolygonId
-      );
-      if (selectedPolygon) {
-        const polygonCoordinates = selectedPolygon.geom.coordinates;
-        filterMarkersWithinPolygon(polygonCoordinates);
-      }
-    }
-  }, [selectedPolygonId, polygons]);
+    // Filter polygons based on map bounds
+    const polygonsInView = polygons.filter((polygon) =>
+      isPolygonWithinMapBounds(polygon)
+    );
+    setFilteredPolygons(polygonsInView);
 
-  const ShowMapBounds = () => {
-    const map = useMap();
-
-    useEffect(() => {
-      const updateMapBounds = () => {
-        const bounds = map.getBounds();
-        console.log("Map Bounds:", bounds.toBBoxString());
-      };
-
-      map.on("moveend", updateMapBounds);
-
-      return () => {
-        map.off("moveend", updateMapBounds);
-      };
-    }, [map]);
-
-    return null;
-  };
+    // Filter markers based on whether they are within the bounds of the map
+    setFilteredMarkers(filterMarkersByMapBounds(polygonsInView));
+  }, [mapBounds, polygons]);
 
   return (
     <div>
-      <MapContainer center={center} zoom={zoom} style={containerStyle}>
+      <MapContainer
+        center={center}
+        zoom={zoom}
+        style={containerStyle}
+        onMoveend={handleMoveEnd}
+      >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {polygons.map((polygon) => (
+        {filteredPolygons.map((polygon) => (
           <Polygon
             key={polygon.objectid}
             positions={polygon.geom.coordinates}
@@ -172,7 +182,6 @@ const LeafletMap = ({ handlePolygonClick }) => {
             <Popup>{marker.id}</Popup>
           </Marker>
         ))}
-        <ShowMapBounds />
       </MapContainer>
     </div>
   );
