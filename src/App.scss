@@ -202,3 +202,13 @@
   display: flex;
   flex-direction: row;
 }
+
+.button_Tomap {
+  background-color: #012c87;
+  color: #f8f5f5;
+  outline: none;
+  border: 1px solid #f8f5f5;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}

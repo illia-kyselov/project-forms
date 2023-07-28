@@ -14,6 +14,7 @@
     "express": "^4.18.2",
     "fs": "^0.0.1-security",
     "leaflet": "^1.9.4",
+    "leaflet-pip": "^1.1.0",
     "net": "^1.0.2",
     "node-sass": "^7.0.3",
     "os": "^0.1.2",

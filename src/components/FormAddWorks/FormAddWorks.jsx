@@ -28,41 +28,41 @@ const FormAddWorks = ({ handleAddInfo, objectid }) => {
   };
 
   
-// const handleChange = (e) => {
-//   const { name, value } = e.target;
-//   setFormData((prevData) => ({
-//     ...prevData,
-//     [name]: value,
-//   }));
-// };
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     [name]: value,
+  //   }));
+  // };
 
-// const handleSubmit = (e) => {
-//   e.preventDefault();
-//   fetch("http://localhost:3001/work_table", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(formData),
-//   })
-//     .then((response) => {
-//       if (!response.ok) {
-//         throw new Error("Network response was not ok");
-//       }
-//       setFormData({
-//         type_work: "",
-//         is_doc: true,
-//         id_doc: "",
-//         address: "",
-//         date_work: "",
-//         pers_work: "",
-//         uuid: "",
-//       });
-//     })
-//     .catch((error) => {
-//       console.error("Error inserting data into the database", error);
-//     });
-// };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   fetch("http://localhost:3001/work_table", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(formData),
+  //   })
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         throw new Error("Network response was not ok");
+  //       }
+  //       setFormData({
+  //         type_work: "",
+  //         is_doc: true,
+  //         id_doc: "",
+  //         address: "",
+  //         date_work: "",
+  //         pers_work: "",
+  //         uuid: "",
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error inserting data into the database", error);
+  //     });
+  // };
 
   return (
     <form className="form">
@@ -85,6 +85,7 @@ const FormAddWorks = ({ handleAddInfo, objectid }) => {
           checked={isChecked}
           onChange={handleCheckboxChange}
         />
+        {isChecked && <button className="button_Tomap">Обрати на карті</button>}
       </div>
       <div className="form__group">
         <label className="form-input_title">Документ:</label>

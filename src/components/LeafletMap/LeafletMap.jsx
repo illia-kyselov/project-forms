@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -40,6 +40,8 @@ const LeafletMap = ({ handlePolygonClick }) => {
 
   const [polygons, setPolygons] = useState([]);
   const [markers, setMarkers] = useState([]);
+  const [selectedPolygonId, setSelectedPolygonId] = useState(null);
+  const [filteredMarkers, setFilteredMarkers] = useState([]);
 
   useEffect(() => {
     fetch("http://localhost:3001/doc_plg")
@@ -59,9 +61,7 @@ const LeafletMap = ({ handlePolygonClick }) => {
       .catch((error) => {
         console.error("Error fetching polygons data", error);
       });
-  }, []);
 
-  useEffect(() => {
     fetch("http://localhost:3001/dz")
       .then((response) => response.json())
       .then((data) => {
@@ -76,10 +76,54 @@ const LeafletMap = ({ handlePolygonClick }) => {
       });
   }, []);
 
+  const filterMarkersWithinPolygon = (polygonCoordinates) => {
+    const filtered = markers.filter((marker) => {
+      const point = L.latLng(marker.coordinates[1], marker.coordinates[0]);
+      return isPointWithinPolygon(point, polygonCoordinates);
+    });
+    setFilteredMarkers(filtered);
+  };
+
+  const isPointWithinPolygon = (point, polygonCoordinates) => {
+    const x = point.lng;
+    const y = point.lat;
+    let isInside = false;
+
+    for (
+      let i = 0, j = polygonCoordinates.length - 1;
+      i < polygonCoordinates.length;
+      j = i++
+    ) {
+      const xi = polygonCoordinates[i][0];
+      const yi = polygonCoordinates[i][1];
+      const xj = polygonCoordinates[j][0];
+      const yj = polygonCoordinates[j][1];
+
+      const intersect =
+        yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi;
+      if (intersect) isInside = !isInside;
+    }
+
+    return isInside;
+  };
+
   const handleClick = (e, polygon) => {
     e.target.openPopup();
     handlePolygonClick(polygon.objectid);
+    setSelectedPolygonId(polygon.objectid);
   };
+
+  useEffect(() => {
+    if (selectedPolygonId) {
+      const selectedPolygon = polygons.find(
+        (polygon) => polygon.objectid === selectedPolygonId
+      );
+      if (selectedPolygon) {
+        const polygonCoordinates = selectedPolygon.geom.coordinates;
+        filterMarkersWithinPolygon(polygonCoordinates);
+      }
+    }
+  }, [selectedPolygonId, polygons]);
 
   const ShowMapBounds = () => {
     const map = useMap();
@@ -119,7 +163,7 @@ const LeafletMap = ({ handlePolygonClick }) => {
             <Popup>{polygon.pro_name}</Popup>
           </Polygon>
         ))}
-        {markers.map((marker) => (
+        {filteredMarkers.map((marker) => (
           <Marker
             key={marker.id}
             position={marker.coordinates}
