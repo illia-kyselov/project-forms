@@ -24,7 +24,7 @@ const MainForm = ({
   }, [onObjectidChange, selectedPolygon]);
 
   return (
-    <form className="form">
+    <form className="form" id="MainForm">
       <h1 className="form__title">Основні атрибути:</h1>
       <div className="form__group">
         <label className="form-input_title">ObjectId:</label>
@@ -59,14 +59,14 @@ const MainForm = ({
           }
         />
       </div>
-      <div className="form__button-container">
+      {/* <div className="form__button-container">
         <button
           className="form__button form__button-addForm"
           onClick={handleAddFormClick}
         >
           Додати роботи
         </button>
-      </div>
+      </div> */}
     </form>
   );
 };

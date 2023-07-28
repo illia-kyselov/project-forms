@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const FormAddWorks = ({ handleRemoveForm, handleAddInfo, objectid }) => {
+const FormAddWorks = ({ handleAddInfo, objectid }) => {
   const [options, setOptions] = useState([]);
   const [isChecked, setIsChecked] = useState(true);
   const [formObjectId, setFormObjectId] = useState("");
@@ -27,6 +27,43 @@ const FormAddWorks = ({ handleRemoveForm, handleAddInfo, objectid }) => {
     setIsChecked(!isChecked);
   };
 
+  
+// const handleChange = (e) => {
+//   const { name, value } = e.target;
+//   setFormData((prevData) => ({
+//     ...prevData,
+//     [name]: value,
+//   }));
+// };
+
+// const handleSubmit = (e) => {
+//   e.preventDefault();
+//   fetch("http://localhost:3001/work_table", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify(formData),
+//   })
+//     .then((response) => {
+//       if (!response.ok) {
+//         throw new Error("Network response was not ok");
+//       }
+//       setFormData({
+//         type_work: "",
+//         is_doc: true,
+//         id_doc: "",
+//         address: "",
+//         date_work: "",
+//         pers_work: "",
+//         uuid: "",
+//       });
+//     })
+//     .catch((error) => {
+//       console.error("Error inserting data into the database", error);
+//     });
+// };
+
   return (
     <form className="form">
       <div className="form__group">
@@ -40,9 +77,7 @@ const FormAddWorks = ({ handleRemoveForm, handleAddInfo, objectid }) => {
         </select>
       </div>
       <div className="form__group form__group-radio">
-        <label className="form-input_title">
-          Наявність документа в БД:
-        </label>
+        <label className="form-input_title">Наявність документа в БД:</label>
         <input
           type="checkbox"
           name="Наявність документа в БД"
@@ -83,17 +118,14 @@ const FormAddWorks = ({ handleRemoveForm, handleAddInfo, objectid }) => {
         <input type="text" className="form__input" />
       </div>
       <div className="form__button-container">
+        {/* <button className="form__button button-submit" type="submit">
+          Відправити
+        </button> */}
         <button
           className="form__button form__button-addForm"
           onClick={handleAddInfo}
         >
           Додати інфо про дз
-        </button>
-        <button
-          className="form__button button-escape"
-          onClick={handleRemoveForm}
-        >
-          Скасувати
         </button>
       </div>
     </form>

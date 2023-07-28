@@ -18,10 +18,10 @@ function App() {
     setShowSecondForm(true);
   };
 
-  const handleRemoveForm = (e) => {
-    e.preventDefault();
-    setShowSecondForm(false);
-  };
+  // const handleRemoveForm = (e) => {
+  //   e.preventDefault();
+  //   setShowSecondForm(false);
+  // };
 
   const handleAddInfo = (e) => {
     e.preventDefault();
@@ -103,23 +103,25 @@ function App() {
     }
   };
 
+
   return (
     <div className="App">
       <LeafletMap handlePolygonClick={handlePolygonClick} />
 
       <div className="components-container">
+        <FormAddWorks
+          // handleRemoveForm={handleRemoveForm}
+          handleAddInfo={handleAddInfo}
+          objectid={objectid}
+        />
         <MainForm
           handleAddFormClick={handleAddFormClick}
           selectedPolygon={selectedPolygon}
           onObjectidChange={(value) => setObjectid(value)}
         />
-        {showSecondForm && (
-          <FormAddWorks
-            handleRemoveForm={handleRemoveForm}
-            handleAddInfo={handleAddInfo}
-            objectid={objectid}
-          />
-        )}
+        {/* {showSecondForm && ( */}
+
+        {/* )} */}
         {showAddInfoForm && (
           <FormAddInfo
             handleRemoveInfo={handleRemoveInfo}

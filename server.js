@@ -218,7 +218,7 @@ app.post("/elements", (req, res) => {
   const formData = req.body;
 
   const query = `
-    INSERT INTO exploitation.elements (id_elmts, tab_dz_id, name_elmns, cnt_elmnt, uuid, uid)
+    INSERT INTO exploitation.elements (id_elmts, expl_dz_id, name_elmns, cnt_elmnt, uuid, uid)
     VALUES ($1, $2, $3, $4, $5, $6)
   `;
 

@@ -1,5 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Polygon, Popup, Marker } from "react-leaflet";
+import React, { useEffect, useState, useRef } from "react";
+import {
+  MapContainer,
+  TileLayer,
+  Polygon,
+  Popup,
+  Marker,
+  useMap,
+} from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -19,6 +26,7 @@ const customIcon = new L.Icon({
   iconSize: [50, 50],
   iconAngle: 100,
 });
+
 const LeafletMap = ({ handlePolygonClick }) => {
   const zoom = 17;
   const containerStyle = {
@@ -73,30 +81,56 @@ const LeafletMap = ({ handlePolygonClick }) => {
     handlePolygonClick(polygon.objectid);
   };
 
+  const ShowMapBounds = () => {
+    const map = useMap();
+
+    useEffect(() => {
+      const updateMapBounds = () => {
+        const bounds = map.getBounds();
+        console.log("Map Bounds:", bounds.toBBoxString());
+      };
+
+      map.on("moveend", updateMapBounds);
+
+      return () => {
+        map.off("moveend", updateMapBounds);
+      };
+    }, [map]);
+
+    return null;
+  };
+
   return (
-    <MapContainer center={center} zoom={zoom} style={containerStyle}>
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      {polygons.map((polygon) => (
-        <Polygon
-          key={polygon.objectid}
-          positions={polygon.geom.coordinates}
-          pathOptions={{ color: "purple" }}
-          eventHandlers={{
-            click: (e) => handleClick(e, polygon),
-          }}
-        >
-          <Popup>{polygon.pro_name}</Popup>
-        </Polygon>
-      ))}
-      {markers.map((marker) => (
-        <Marker key={marker.id} position={marker.coordinates} icon={customIcon}>
-          <Popup>{marker.id}</Popup>
-        </Marker>
-      ))}
-    </MapContainer>
+    <div>
+      <MapContainer center={center} zoom={zoom} style={containerStyle}>
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        {polygons.map((polygon) => (
+          <Polygon
+            key={polygon.objectid}
+            positions={polygon.geom.coordinates}
+            pathOptions={{ color: "purple" }}
+            eventHandlers={{
+              click: (e) => handleClick(e, polygon),
+            }}
+          >
+            <Popup>{polygon.pro_name}</Popup>
+          </Polygon>
+        ))}
+        {markers.map((marker) => (
+          <Marker
+            key={marker.id}
+            position={marker.coordinates}
+            icon={customIcon}
+          >
+            <Popup>{marker.id}</Popup>
+          </Marker>
+        ))}
+        <ShowMapBounds />
+      </MapContainer>
+    </div>
   );
 };
 
