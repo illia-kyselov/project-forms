@@ -24,7 +24,6 @@ const FormAddInfo = ({
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
-    handleChangeFormInfo({ name: "Наявність ДЗ в БД", value: !isChecked });
   };
 
   return (
@@ -39,22 +38,31 @@ const FormAddInfo = ({
           onChange={handleCheckboxChange}
         />
       </div>
-      <div className="form__group">
-        <p className="form-input_title">Ідентифікатор ДЗ в БД:</p>
-        <input
-          type="text"
-          className="form__input"
-          onChange={handleChangeFormInfo}
-        />
-      </div>
-      <div className="form__group">
-        <p className="form-input_title">Номер ДЗ:</p>
-        <input
-          type="text"
-          className="form__input"
-          onChange={handleChangeFormInfo}
-        />
-      </div>
+      {isChecked && (
+        <>
+          <div className="form__group">
+            <p className="form-input_title">Ідентифікатор ДЗ в БД:</p>
+            <input
+              type="text"
+              className="form__input"
+              onChange={handleChangeFormInfo}
+            />
+          </div>
+        </>
+      )}
+      {!isChecked && (
+        <>
+          <div className="form__group">
+            <p className="form-input_title">Номер ДЗ:</p>
+            <input
+              type="text"
+              className="form__input"
+              onChange={handleChangeFormInfo}
+            />
+          </div>
+        </>
+      )}
+
       <div className="form__group">
         <p className="form-input_title">Форма ДЗ:</p>
         <select className="form__input form__input-select">

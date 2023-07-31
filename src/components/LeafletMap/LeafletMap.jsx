@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Polygon, Popup, Marker } from "react-leaflet";
 import L from "leaflet";
@@ -19,7 +20,7 @@ const customIcon = new L.Icon({
   iconAngle: 100,
 });
 
-const LeafletMap = ({ handlePolygonClick }) => {
+const LeafletMap = ({ handlePolygonClick, handleDzClick }) => {
   const zoom = 17;
   const containerStyle = {
     width: "100%",
@@ -36,6 +37,7 @@ const LeafletMap = ({ handlePolygonClick }) => {
   const [filteredMarkers, setFilteredMarkers] = useState([]);
   const [mapBounds, setMapBounds] = useState(null);
   const [filteredPolygons, setFilteredPolygons] = useState([]);
+  const [selectedPolygon, setSelectedPolygon] = useState(null);
 
   useEffect(() => {
     fetch("http://localhost:3001/doc_plg")
@@ -105,21 +107,25 @@ const LeafletMap = ({ handlePolygonClick }) => {
     e.target.openPopup();
     handlePolygonClick(polygon.objectid);
     setSelectedPolygonId(polygon.objectid);
+    setSelectedPolygon(polygon);
 
-    // Filter markers when a polygon is clicked
     const polygonCoordinates = polygon.geom.coordinates;
     filterMarkersWithinPolygon(polygonCoordinates);
   };
 
+  const handleMarkerClick = (markerId) => {
+    setSelectedPolygon(null);
+    handlePolygonClick(markerId);
+    handleDzClick(markerId);
+  };
+
   const handleMoveEnd = () => {
     if (mapBounds) {
-      // Filter polygons based on map bounds
       const polygonsInView = polygons.filter((polygon) =>
         isPolygonWithinMapBounds(polygon)
       );
       setFilteredPolygons(polygonsInView);
 
-      // Filter markers based on whether they are within the bounds of the map
       setFilteredMarkers(filterMarkersByMapBounds(polygonsInView));
     }
   };
@@ -133,20 +139,19 @@ const LeafletMap = ({ handlePolygonClick }) => {
   };
 
   const isPolygonWithinMapBounds = (polygon) => {
-    if (!mapBounds) return true; // Show all polygons before the map initializes
+    if (!mapBounds) return true;
     const polygonBounds = L.polygon(polygon.geom.coordinates).getBounds();
     return mapBounds.intersects(polygonBounds);
   };
 
   useEffect(() => {
-    // Filter polygons based on map bounds
     const polygonsInView = polygons.filter((polygon) =>
       isPolygonWithinMapBounds(polygon)
     );
     setFilteredPolygons(polygonsInView);
 
-    // Filter markers based on whether they are within the bounds of the map
     setFilteredMarkers(filterMarkersByMapBounds(polygonsInView));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapBounds, polygons]);
 
   return (
@@ -165,7 +170,9 @@ const LeafletMap = ({ handlePolygonClick }) => {
           <Polygon
             key={polygon.objectid}
             positions={polygon.geom.coordinates}
-            pathOptions={{ color: "purple" }}
+            pathOptions={{
+              color: selectedPolygon === polygon ? "red" : "purple",
+            }}
             eventHandlers={{
               click: (e) => handleClick(e, polygon),
             }}
@@ -178,6 +185,9 @@ const LeafletMap = ({ handlePolygonClick }) => {
             key={marker.id}
             position={marker.coordinates}
             icon={customIcon}
+            eventHandlers={{
+              click: () => handleMarkerClick(marker.id),
+            }}
           >
             <Popup>{marker.id}</Popup>
           </Marker>

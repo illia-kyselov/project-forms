@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./App.scss";
 import FormAddWorks from "./components/FormAddWorks/FormAddWorks";
-import MainForm from "./components/MainForm/MainForm";
 import FormAddInfo from "./components/FormAddInfo/FormAddInfo";
 import LeafletMap from "./components/LeafletMap/LeafletMap";
 import FormAddElements from "./components/FormAddElements/FormAddElements";
@@ -11,6 +10,7 @@ function App() {
   const [selectedPolygon, setSelectedPolygon] = useState(null);
   const [showAddElements, setShowAddElements] = useState(false);
   const [objectid, setObjectid] = useState("");
+  const [selectedMarkerId, setSelectedMarkerId] = useState(null);
 
   const handleAddInfo = (e) => {
     e.preventDefault();
@@ -92,15 +92,23 @@ function App() {
     }
   };
 
+  const handleDzClick = (markerId) => {
+    setSelectedMarkerId(markerId);
+  };
 
   return (
     <div className="App">
-      <LeafletMap handlePolygonClick={handlePolygonClick} />
+      <LeafletMap
+        handlePolygonClick={handlePolygonClick}
+        handleDzClick={handleDzClick}
+      />
 
       <div className="components-container">
         <FormAddWorks
           handleAddInfo={handleAddInfo}
           objectid={objectid}
+          setFormObjectId={setObjectid}
+          selectedMarkerId={selectedMarkerId}
         />
         {/* <MainForm
           selectedPolygon={selectedPolygon}

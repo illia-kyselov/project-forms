@@ -100,7 +100,7 @@ app.get("/dict_elmnts", (req, res) => {
 
 app.get("/dz", (req, res) => {
   const query =
-    "SELECT id, ST_AsGeoJSON(geom) AS geom, id_znk, topocode FROM exploitation.dz";
+    "SELECT id, ST_AsGeoJSON(geom) AS geom, id_znk, topocode, num_pdr FROM exploitation.dz";
   client.query(query, (err, result) => {
     if (err) {
       console.error("Error executing query", err);
@@ -110,6 +110,7 @@ app.get("/dz", (req, res) => {
         id: row.id,
         geom: swapCoordinates(JSON.parse(row.geom)),
         id_znk: row.id_znk,
+        num_pdr: row.num_pdr,
       }));
       res.json(data);
     }
@@ -240,3 +241,5 @@ app.post("/elements", (req, res) => {
     }
   });
 });
+
+

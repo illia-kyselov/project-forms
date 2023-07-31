@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const FormAddWorks = ({ handleAddInfo, objectid }) => {
+const FormAddWorks = ({ handleAddInfo, objectid, selectedMarkerId }) => {
   const [options, setOptions] = useState([]);
   const [isChecked, setIsChecked] = useState(true);
   const [formObjectId, setFormObjectId] = useState("");
@@ -11,7 +11,7 @@ const FormAddWorks = ({ handleAddInfo, objectid }) => {
 
   useEffect(() => {
     setFormObjectId(objectid);
-  }, [objectid]);
+  }, [objectid, setFormObjectId]);
 
   const fetchData = async () => {
     try {
@@ -27,7 +27,6 @@ const FormAddWorks = ({ handleAddInfo, objectid }) => {
     setIsChecked(!isChecked);
   };
 
-  
   // const handleChange = (e) => {
   //   const { name, value } = e.target;
   //   setFormData((prevData) => ({
@@ -85,21 +84,31 @@ const FormAddWorks = ({ handleAddInfo, objectid }) => {
           checked={isChecked}
           onChange={handleCheckboxChange}
         />
-        {isChecked && <button className="button_Tomap">Обрати на карті</button>}
       </div>
-      <div className="form__group">
-        <label className="form-input_title">Документ:</label>
-        <input
-          type="text"
-          className="form__input"
-          value={formObjectId}
-          readOnly
-        />
-      </div>
-      <div className="form__group">
-        <label className="form-input_title">Адреса:</label>
-        <input type="text" className="form__input" />
-      </div>
+      {/* {!isChecked && (
+        <>
+          <div className="form__group">
+            <label className="form-input_title">Зв'язати з документом:</label>
+            <input
+              type="text"
+              className="form__input"
+            />
+          </div>
+        </>
+      )} */}
+      {isChecked && (
+        <>
+          <div className="form__group">
+            <label className="form-input_title">Документ:</label>
+            <input
+              type="text"
+              className="form__input"
+              value={selectedMarkerId || formObjectId}
+              readOnly
+            />
+          </div>
+        </>
+      )}
       <div className="form__group">
         <label className="form-input_title">Дата виконання робіт:</label>
         <input
