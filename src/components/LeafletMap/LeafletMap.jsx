@@ -23,9 +23,8 @@ const customIcon = new L.Icon({
 const LeafletMap = ({ handlePolygonClick, handleDzClick }) => {
   const zoom = 17;
   const containerStyle = {
-    width: "100%",
-    height: "500px",
-  };
+    height: "450px",
+  }
   const center = {
     lat: 50.3865,
     lng: 30.4695,
@@ -155,7 +154,7 @@ const LeafletMap = ({ handlePolygonClick, handleDzClick }) => {
   }, [mapBounds, polygons]);
 
   return (
-    <div>
+    <div className="LeafletMapContainer ">
       <MapContainer
         center={center}
         zoom={zoom}

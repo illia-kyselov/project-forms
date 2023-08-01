@@ -4,6 +4,8 @@ import FormAddWorks from "./components/FormAddWorks/FormAddWorks";
 import FormAddInfo from "./components/FormAddInfo/FormAddInfo";
 import LeafletMap from "./components/LeafletMap/LeafletMap";
 import FormAddElements from "./components/FormAddElements/FormAddElements";
+import Table from "./components/Table/Table";
+import SecondTable from "./components/SecondTable/SecondTable";
 
 function App() {
   const [showAddInfoForm, setShowAddInfoForm] = useState(false);
@@ -98,10 +100,17 @@ function App() {
 
   return (
     <div className="App">
-      <LeafletMap
-        handlePolygonClick={handlePolygonClick}
-        handleDzClick={handleDzClick}
-      />
+      <div className="elements-container">
+      <div className="right-side">
+        <LeafletMap
+          handlePolygonClick={handlePolygonClick}
+          handleDzClick={handleDzClick}
+        />
+        <div className="tables-container">
+          <Table />
+          <SecondTable />
+        </div>
+      </div>
 
       <div className="components-container">
         <FormAddWorks
@@ -129,6 +138,7 @@ function App() {
             formAddElementsData={formAddElementsData}
           />
         )}
+      </div>
       </div>
     </div>
   );

@@ -123,10 +123,10 @@ const FormAddWorks = ({ handleAddInfo, objectid, selectedMarkerId }) => {
           <option value="Шевченко Тарас">Шевченко Тарас</option>
         </select>
       </div>
-      <div className="form__group">
+      {/* <div className="form__group">
         <label className="form-input_title">uuid:</label>
         <input type="text" className="form__input" />
-      </div>
+      </div> */}
       <div className="form__button-container">
         {/* <button className="form__button button-submit" type="submit">
           Відправити

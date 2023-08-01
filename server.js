@@ -111,6 +111,26 @@ app.get("/dz", (req, res) => {
         geom: swapCoordinates(JSON.parse(row.geom)),
         id_znk: row.id_znk,
         num_pdr: row.num_pdr,
+        topocode: row.topocode,
+      }));
+      res.json(data);
+    }
+  });
+});
+
+app.get("/elements", (req, res) => {
+  const query =
+    "SELECT id_elmts, expl_dz_id, name_elmns, cnt_elmnt FROM exploitation.elements";
+  client.query(query, (err, result) => {
+    if (err) {
+      console.error("Error executing query", err);
+      res.status(500).send("Error executing query");
+    } else {
+      const data = result.rows.map((row) => ({
+        id_elmts: row.id_elmts,
+        expl_dz_id: row.expl_dz_id,
+        name_elmns: row.name_elmns,
+        cnt_elmnt: row.cnt_elmnt,
       }));
       res.json(data);
     }
