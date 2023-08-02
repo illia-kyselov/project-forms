@@ -20,7 +20,7 @@ const customIcon = new L.Icon({
   iconAngle: 100,
 });
 
-const LeafletMap = ({ handlePolygonClick, handleDzClick }) => {
+const LeafletMap = ({ handlePolygonClick, handleDzClick, handleAddMarkerData, handleAddFromPolygon }) => {
   const zoom = 17;
   const containerStyle = {
     height: "450px",
@@ -63,6 +63,9 @@ const LeafletMap = ({ handlePolygonClick, handleDzClick }) => {
         const dzMarkers = data.map((marker) => ({
           id: marker.id,
           coordinates: marker.geom.coordinates[0],
+          num_pdr: marker.num_pdr,
+          id_znk: marker.id_znk,
+          topocode: marker.topocode,
         }));
         setMarkers(dzMarkers);
       })
@@ -116,6 +119,8 @@ const LeafletMap = ({ handlePolygonClick, handleDzClick }) => {
     setSelectedPolygon(null);
     handlePolygonClick(markerId);
     handleDzClick(markerId);
+    const markerData = markers.find((marker) => marker.id === markerId);
+    handleAddMarkerData(markerData);
   };
 
   const handleMoveEnd = () => {

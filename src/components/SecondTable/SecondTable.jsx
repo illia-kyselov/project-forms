@@ -3,19 +3,19 @@ import React, { useEffect, useState } from "react";
 const Table = () => {
   const [dataTable, setData] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("http://localhost:3001/elements");
-        const data = await response.json();
-        setData(data);
-      } catch (error) {
-        console.error("Error fetching data", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetch("http://localhost:3001/elements");
+  //       const data = await response.json();
+  //       setData(data);
+  //     } catch (error) {
+  //       console.error("Error fetching data", error);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
   return (
     <div className="table">
@@ -29,14 +29,6 @@ const Table = () => {
           </tr>
         </thead>
         <tbody>
-          {dataTable.map((element) => (
-            <tr key={element.id_elmts}>
-              <td>{element.id_elmts}</td>
-              <td>{element.expl_dz_id}</td>
-              <td>{element.name_elmns || "Немає в БД"}</td>
-              <td>{element.cnt_elmnt || "Немає в БД"}</td>
-            </tr>
-          ))}
         </tbody>
       </table>
     </div>

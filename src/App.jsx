@@ -13,6 +13,7 @@ function App() {
   const [showAddElements, setShowAddElements] = useState(false);
   const [objectid, setObjectid] = useState("");
   const [selectedMarkerId, setSelectedMarkerId] = useState(null);
+  const [dataTable, setDataTable] = useState([]);
 
   const handleAddInfo = (e) => {
     e.preventDefault();
@@ -98,47 +99,52 @@ function App() {
     setSelectedMarkerId(markerId);
   };
 
+  const handleAddMarkerData = (markerData) => {
+    setDataTable((prevData) => [...prevData, markerData]);
+  };
+
   return (
     <div className="App">
       <div className="elements-container">
-      <div className="right-side">
-        <LeafletMap
-          handlePolygonClick={handlePolygonClick}
-          handleDzClick={handleDzClick}
-        />
-        <div className="tables-container">
-          <Table />
-          <SecondTable />
+        <div className="right-side">
+          <LeafletMap
+            handlePolygonClick={handlePolygonClick}
+            handleDzClick={handleDzClick}
+            handleAddMarkerData={handleAddMarkerData}
+          />
+          <div className="tables-container">
+          <Table data={dataTable} setData={setDataTable} />
+            <SecondTable />
+          </div>
         </div>
-      </div>
 
-      <div className="components-container">
-        <FormAddWorks
-          handleAddInfo={handleAddInfo}
-          objectid={objectid}
-          setFormObjectId={setObjectid}
-          selectedMarkerId={selectedMarkerId}
-        />
-        {/* <MainForm
+        <div className="components-container">
+          <FormAddWorks
+            handleAddInfo={handleAddInfo}
+            objectid={objectid}
+            setFormObjectId={setObjectid}
+            selectedMarkerId={selectedMarkerId}
+          />
+          {/* <MainForm
           selectedPolygon={selectedPolygon}
           onObjectidChange={(value) => setObjectid(value)}
         /> */}
 
-        {showAddInfoForm && (
-          <FormAddInfo
-            handleRemoveInfo={handleRemoveInfo}
-            handleAddElements={handleAddElements}
-          />
-        )}
-        {showAddElements && (
-          <FormAddElements
-            handleRemoveElements={handleRemoveElements}
-            handleSubmitElements={handleSubmitElements}
-            handleChange={handleChange}
-            formAddElementsData={formAddElementsData}
-          />
-        )}
-      </div>
+          {showAddInfoForm && (
+            <FormAddInfo
+              handleRemoveInfo={handleRemoveInfo}
+              handleAddElements={handleAddElements}
+            />
+          )}
+          {showAddElements && (
+            <FormAddElements
+              handleRemoveElements={handleRemoveElements}
+              handleSubmitElements={handleSubmitElements}
+              handleChange={handleChange}
+              formAddElementsData={formAddElementsData}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
