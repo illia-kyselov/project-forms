@@ -38,6 +38,8 @@ const LeafletMap = ({ handlePolygonClick, handleDzClick, handleAddMarkerData, ha
   const [filteredPolygons, setFilteredPolygons] = useState([]);
   const [selectedPolygon, setSelectedPolygon] = useState(null);
 
+  const [selectedPolygonMarkers, setSelectedPolygonMarkers] = useState([]);
+
   useEffect(() => {
     fetch("http://localhost:3001/doc_plg")
       .then((response) => response.json())
@@ -80,7 +82,9 @@ const LeafletMap = ({ handlePolygonClick, handleDzClick, handleAddMarkerData, ha
       return isPointWithinPolygon(point, polygonCoordinates);
     });
     setFilteredMarkers(filtered);
+    handleAddFromPolygon(filtered);
   };
+
 
   const isPointWithinPolygon = (point, polygonCoordinates) => {
     const x = point.lng;
@@ -112,7 +116,12 @@ const LeafletMap = ({ handlePolygonClick, handleDzClick, handleAddMarkerData, ha
     setSelectedPolygon(polygon);
 
     const polygonCoordinates = polygon.geom.coordinates;
-    filterMarkersWithinPolygon(polygonCoordinates);
+    const filteredMarkers = filterMarkersWithinPolygon(polygonCoordinates);
+    setSelectedPolygonMarkers(filteredMarkers);
+  };
+
+  const handleAddFromPolygonClick = () => {
+    handleAddFromPolygon(selectedPolygonMarkers);
   };
 
   const handleMarkerClick = (markerId) => {

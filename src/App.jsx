@@ -15,6 +15,8 @@ function App() {
   const [selectedMarkerId, setSelectedMarkerId] = useState(null);
   const [dataTable, setDataTable] = useState([]);
 
+  const [filteredMarkers, setFilteredMarkers] = useState([]);
+
   const handleAddInfo = (e) => {
     e.preventDefault();
     setShowAddInfoForm(true);
@@ -33,6 +35,10 @@ function App() {
   const handleRemoveElements = (e) => {
     e.preventDefault();
     setShowAddElements(false);
+  };
+
+  const handleAddFromPolygon = (markers) => {
+    setDataTable(markers);
   };
 
   const handlePolygonClick = (objectid) => {
@@ -111,9 +117,15 @@ function App() {
             handlePolygonClick={handlePolygonClick}
             handleDzClick={handleDzClick}
             handleAddMarkerData={handleAddMarkerData}
+            handleAddFromPolygon={handleAddFromPolygon} // Add this line to pass the function
           />
           <div className="tables-container">
-          <Table data={dataTable} setData={setDataTable} />
+            <Table
+              data={dataTable}
+              setData={setDataTable}
+              filteredMarkers={filteredMarkers}
+              handleAddFromPolygon={handleAddFromPolygon}
+            />
             <SecondTable />
           </div>
         </div>
