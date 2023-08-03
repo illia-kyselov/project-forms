@@ -32,14 +32,12 @@ const SecondTable = () => {
     document.addEventListener("click", handleOutsideClick);
 
     return () => {
-      // Clean up the event listener when component unmounts
       document.removeEventListener("click", handleOutsideClick);
     };
   }, []);
 
   const handleRowDoubleClick = (rowId) => {
     setEditRowId(rowId);
-    // Store the original data in the editedData state
     const originalData = dataTable.find(
       (element) => element.id_elmts === rowId
     );
@@ -55,9 +53,7 @@ const SecondTable = () => {
   };
 
   const handleCellBlur = () => {
-    // Remove the editRowId when the input loses focus
     setEditRowId(null);
-    // Save changes to the data
     if (editedData.id_elmts) {
       setData((prevData) =>
         prevData.map((element) =>
@@ -71,25 +67,21 @@ const SecondTable = () => {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      // Save changes when Enter key is pressed
       handleCellBlur();
     }
   };
 
   const handleTableClick = (e) => {
-    // Prevent the click event from propagating to the document
     e.stopPropagation();
   };
 
   const handleInputBlur = () => {
-    // Delay the onBlur event using setTimeout
     blurTimeoutRef.current = setTimeout(() => {
       handleCellBlur();
     }, 100);
   };
 
   const handleInputFocus = () => {
-    // Cancel the onBlur event if input receives focus within the delay time
     if (blurTimeoutRef.current) {
       clearTimeout(blurTimeoutRef.current);
     }
@@ -122,7 +114,7 @@ const SecondTable = () => {
                     onBlur={handleInputBlur}
                     onFocus={handleInputFocus}
                     onKeyDown={handleKeyDown}
-                    autoFocus // This field will have autoFocus initially to allow double-click
+                    autoFocus
                   />
                 ) : (
                   <span>{element.expl_dz_id}</span>
