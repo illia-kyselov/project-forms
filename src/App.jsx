@@ -16,6 +16,8 @@ function App() {
   const [dataTable, setDataTable] = useState([]);
 
   const [filteredMarkers, setFilteredMarkers] = useState([]);
+  const [buttonPressed, setButtonPressed] = useState(false);
+  const [showSecondTable, setShowSecondTable] = useState(false);
 
   const handleAddInfo = (e) => {
     e.preventDefault();
@@ -38,7 +40,10 @@ function App() {
   };
 
   const handleAddFromPolygon = (markers) => {
-    setDataTable(markers);
+    if (buttonPressed) {
+      setDataTable(markers);
+      setButtonPressed(false);
+    }
   };
 
   const handlePolygonClick = (objectid) => {
@@ -106,7 +111,17 @@ function App() {
   };
 
   const handleAddMarkerData = (markerData) => {
+    const idExists = dataTable.some((row) => row.id === markerData.id);
+
+    if (idExists) {
+      return;
+    }
+
     setDataTable((prevData) => [...prevData, markerData]);
+  };
+
+  const handleClearTable = () => {
+    setDataTable([]);
   };
 
   return (
@@ -123,10 +138,12 @@ function App() {
             <Table
               data={dataTable}
               setData={setDataTable}
-              filteredMarkers={filteredMarkers}
               handleAddFromPolygon={handleAddFromPolygon}
+              setButtonPressed={setButtonPressed}
+              setShowSecondTable={setShowSecondTable}
+              handleClearTable={handleClearTable}
             />
-            <SecondTable />
+            <SecondTable showSecondTable={showSecondTable} />
           </div>
         </div>
 

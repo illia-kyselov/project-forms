@@ -120,10 +120,6 @@ const LeafletMap = ({ handlePolygonClick, handleDzClick, handleAddMarkerData, ha
     setSelectedPolygonMarkers(filteredMarkers);
   };
 
-  const handleAddFromPolygonClick = () => {
-    handleAddFromPolygon(selectedPolygonMarkers);
-  };
-
   const handleMarkerClick = (markerId) => {
     setSelectedPolygon(null);
     handlePolygonClick(markerId);

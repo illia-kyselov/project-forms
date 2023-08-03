@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const Table = ({ data, setData, filteredMarkers, handleAddFromPolygon }) => {
+const Table = ({ data, setData, setShowSecondTable, setButtonPressed, handleClearTable }) => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [newRowData, setNewRowData] = useState({
@@ -9,10 +9,6 @@ const Table = ({ data, setData, filteredMarkers, handleAddFromPolygon }) => {
     topocode: "",
   });
 
-  useEffect(() => {
-    setData(data);
-  }, [data]);
-
   const deleteData = (id) => {
     setData((prevData) => {
       const updatedData = prevData.filter((element) => element.id !== id);
@@ -20,12 +16,9 @@ const Table = ({ data, setData, filteredMarkers, handleAddFromPolygon }) => {
     });
   };
 
-  const handleAddFromPolygonClick = () => {
-    handleAddFromPolygon(filteredMarkers);
-  };
-
   const handleROwDoubleClick = (rowId) => {
     setSelectedRow(rowId);
+    setShowSecondTable(true);
   }
 
   const handleInputChange = (e) => {
@@ -91,7 +84,7 @@ const Table = ({ data, setData, filteredMarkers, handleAddFromPolygon }) => {
         </form>
       )}
       <div className="flex">
-        <button className="button-add-Dz" onClick={handleAddFromPolygonClick}>
+        <button className="button-add-Dz" onClick={setButtonPressed}>
           Додати з полігону
         </button>
         <button
@@ -99,6 +92,12 @@ const Table = ({ data, setData, filteredMarkers, handleAddFromPolygon }) => {
           onClick={() => setShowAddForm(true)}
         >
           Додати dz
+        </button>
+        <button
+          className="button-add-Dz"
+          onClick={handleClearTable}
+        >
+          Очистити
         </button>
       </div>
       <table>
