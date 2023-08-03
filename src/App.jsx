@@ -122,6 +122,7 @@ function App() {
 
   const handleClearTable = () => {
     setDataTable([]);
+    setShowSecondTable(false);
   };
 
   return (
@@ -143,7 +144,9 @@ function App() {
               setShowSecondTable={setShowSecondTable}
               handleClearTable={handleClearTable}
             />
-            <SecondTable showSecondTable={showSecondTable} />
+            {showSecondTable && (
+              <SecondTable />
+            )}
           </div>
         </div>
 

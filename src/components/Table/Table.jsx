@@ -44,6 +44,11 @@ const Table = ({ data, setData, setShowSecondTable, setButtonPressed, handleClea
     setShowAddForm(false);
   };
 
+  const hideForm = (event) => {
+    event.preventDefault();
+    setShowAddForm(false)
+  }
+
   return (
     <div className="table">
       {showAddForm && (
@@ -81,6 +86,7 @@ const Table = ({ data, setData, setShowSecondTable, setButtonPressed, handleClea
             required
           />
           <button type="submit" className="button-add-Dz">Зберегти</button>
+          <button className="button-add-Dz" onClick={hideForm}>Назад</button>
         </form>
       )}
       <div className="flex">
