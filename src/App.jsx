@@ -6,6 +6,7 @@ import LeafletMap from "./components/LeafletMap/LeafletMap";
 import FormAddElements from "./components/FormAddElements/FormAddElements";
 import Table from "./components/Table/Table";
 import SecondTable from "./components/SecondTable/SecondTable";
+import SelectedMarkers from "./components/SelectedMarkers/SelectedMarkers";
 
 function App() {
   const [showAddInfoForm, setShowAddInfoForm] = useState(false);
@@ -129,38 +130,29 @@ function App() {
     <div className="App">
       <div className="elements-container">
         <div className="right-side">
-          <LeafletMap
-            handlePolygonClick={handlePolygonClick}
-            handleDzClick={handleDzClick}
-            handleAddMarkerData={handleAddMarkerData}
-            handleAddFromPolygon={handleAddFromPolygon} // Add this line to pass the function
-          />
-          <div className="tables-container">
-            <Table
-              data={dataTable}
-              setData={setDataTable}
-              handleAddFromPolygon={handleAddFromPolygon}
-              setButtonPressed={setButtonPressed}
-              setShowSecondTable={setShowSecondTable}
-              handleClearTable={handleClearTable}
+          <div className="container-leaflet">
+            <LeafletMap
+              handlePolygonClick={handlePolygonClick}
+              handleDzClick={handleDzClick}
+              handleAddMarkerData={handleAddMarkerData}
+              handleAddFromPolygon={handleAddFromPolygon} // Add this line to pass the function
             />
-            {showSecondTable && (
-              <SecondTable />
-            )}
+            <SelectedMarkers />
           </div>
+
         </div>
 
-        <div className="components-container">
+        {/* <div className="components-container">
           <FormAddWorks
             handleAddInfo={handleAddInfo}
             objectid={objectid}
             setFormObjectId={setObjectid}
             selectedMarkerId={selectedMarkerId}
           />
-          {/* <MainForm
+          <MainForm
           selectedPolygon={selectedPolygon}
           onObjectidChange={(value) => setObjectid(value)}
-        /> */}
+        />
 
           {showAddInfoForm && (
             <FormAddInfo
@@ -176,7 +168,20 @@ function App() {
               formAddElementsData={formAddElementsData}
             />
           )}
-        </div>
+        </div> */}
+      </div>
+      <div className="tables-container">
+        <Table
+          data={dataTable}
+          setData={setDataTable}
+          handleAddFromPolygon={handleAddFromPolygon}
+          setButtonPressed={setButtonPressed}
+          setShowSecondTable={setShowSecondTable}
+          handleClearTable={handleClearTable}
+        />
+        {showSecondTable && (
+          <SecondTable />
+        )}
       </div>
     </div>
   );

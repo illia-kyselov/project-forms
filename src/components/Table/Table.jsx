@@ -5,9 +5,31 @@ const Table = ({ data, setData, setShowSecondTable, setButtonPressed, handleClea
   const [showAddForm, setShowAddForm] = useState(false);
   const [newRowData, setNewRowData] = useState({
     id: "",
-    num_pdr: "",
-    topocode: "",
+    num_sing: "",
   });
+
+  const [forms, setForms] = useState([]);
+  const [selectedForm, setSelectedForm] = useState("");
+
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
+
+  // const fetchData = async () => {
+  //   try {
+  //     fetch("http://localhost:3001/dict_dz_form")
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       const dzForms = data.map((form) => ({
+  //         id: form.id,
+  //         form_dz: form.form_dz,
+  //       }));
+  //       setForms(data);
+  //     })
+  //   } catch (error) {
+  //     console.error("Error fetching data", error);
+  //   }
+  // };
 
   const deleteData = (id) => {
     setData((prevData) => {
@@ -29,6 +51,10 @@ const Table = ({ data, setData, setShowSecondTable, setButtonPressed, handleClea
     }));
   };
 
+  const handleFormSelect = (e) => {
+    setSelectedForm(e.target.value);
+  };
+
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
@@ -40,7 +66,7 @@ const Table = ({ data, setData, setShowSecondTable, setButtonPressed, handleClea
 
     setData([...data, newRowData]);
 
-    setNewRowData({ id: "", num_pdr: "", topocode: "" });
+    setNewRowData({ id: "", num_sing: "" });
     setShowAddForm(false);
   };
 
@@ -63,14 +89,6 @@ const Table = ({ data, setData, setShowSecondTable, setButtonPressed, handleClea
           />
           <input
             type="text"
-            name="num_pdr"
-            value={newRowData.num_pdr}
-            onChange={handleInputChange}
-            placeholder="num_pdr"
-            required
-          />
-          <input
-            type="text"
             name="id_znk"
             value={newRowData.id_znk}
             onChange={handleInputChange}
@@ -79,10 +97,10 @@ const Table = ({ data, setData, setShowSecondTable, setButtonPressed, handleClea
           />
           <input
             type="text"
-            name="topocode"
-            value={newRowData.topocode}
+            name="num_sing"
+            value={newRowData.num_sing}
             onChange={handleInputChange}
-            placeholder="topocode"
+            placeholder="num_sing"
             required
           />
           <button type="submit" className="button-add-Dz">Зберегти</button>
@@ -110,9 +128,9 @@ const Table = ({ data, setData, setShowSecondTable, setButtonPressed, handleClea
         <thead>
           <tr>
             <th>ID</th>
-            <th>num_pdr</th>
             <th>id_znk</th>
-            <th>topocode</th>
+            <th>num_sing</th>
+            <th>Форма</th>
             <th></th>
           </tr>
         </thead>
@@ -120,9 +138,22 @@ const Table = ({ data, setData, setShowSecondTable, setButtonPressed, handleClea
           {data.map((row) => (
             <tr key={row.id} onDoubleClick={() => handleROwDoubleClick(row.id)} style={{ background: selectedRow === row.id ? '#b3dcfd' : '' }}>
               <td>{row.id}</td>
-              <td>{row.num_pdr}</td>
               <td>{row.id_znk || 'Немає в БД'}</td>
-              <td>{row.topocode || 'Немає в БД'}</td>
+              <td>{row.num_sing || 'Немає в БД'}</td>
+              <td>
+                <select
+                  className="form__input form__input-select"
+                  value={selectedForm}
+                  onChange={handleFormSelect}
+                >
+                  <option value="">Оберіть форму</option>
+                  {forms.map((form) => (
+                    <option key={form} value={form} className="form__input-option">
+                      {form}
+                    </option>
+                  ))}
+                </select>
+              </td>
               <td>
                 <button className="delete-icon" onClick={() => deleteData(row.id)}>X</button>
               </td>

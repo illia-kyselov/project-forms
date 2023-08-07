@@ -194,6 +194,7 @@
   display: flex;
   flex-direction: row-reverse;
   justify-content: space-evenly;
+  border-bottom: 2px solid black;
 }
 
 .LeafletMap .blur {
@@ -283,4 +284,14 @@ th {
   padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
+}
+
+
+
+//
+
+.container-leaflet {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }

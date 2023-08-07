@@ -22,7 +22,6 @@ const SecondTable = () => {
   }, []);
 
   useEffect(() => {
-    // Add event listener to handle clicks outside the edited row
     const handleOutsideClick = (e) => {
       if (!tableRef.current.contains(e.target)) {
         handleCellBlur();
@@ -34,7 +33,7 @@ const SecondTable = () => {
     return () => {
       document.removeEventListener("click", handleOutsideClick);
     };
-  }, []);
+  });
 
   const handleRowDoubleClick = (rowId) => {
     setEditRowId(rowId);
@@ -106,19 +105,7 @@ const SecondTable = () => {
             >
               <td>{element.id_elmts}</td>
               <td>
-                {editRowId === element.id_elmts ? (
-                  <input
-                    type="text"
-                    value={editedData.expl_dz_id || ""}
-                    onChange={(e) => handleCellChange(e, "expl_dz_id")}
-                    onBlur={handleInputBlur}
-                    onFocus={handleInputFocus}
-                    onKeyDown={handleKeyDown}
-                    autoFocus
-                  />
-                ) : (
-                  <span>{element.expl_dz_id}</span>
-                )}
+                <span>{element.expl_dz_id}</span>
               </td>
               <td>
                 {editRowId === element.id_elmts ? (

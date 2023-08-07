@@ -67,7 +67,7 @@ const LeafletMap = ({ handlePolygonClick, handleDzClick, handleAddMarkerData, ha
           coordinates: marker.geom.coordinates[0],
           num_pdr: marker.num_pdr,
           id_znk: marker.id_znk,
-          topocode: marker.topocode,
+          num_sing: marker.num_sing,
         }));
         setMarkers(dzMarkers);
       })

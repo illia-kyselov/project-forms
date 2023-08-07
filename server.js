@@ -98,9 +98,27 @@ app.get("/dict_elmnts", (req, res) => {
   });
 });
 
+app.get("/dict_dz_form", (req, res) => {
+  const query =
+    "SELECT id, num_pdr_new, form_dz FROM exploitation.dict_dz_form";
+  client.query(query, (err, result) => {
+    if (err) {
+      console.error("Error executing query", err);
+      res.status(500).send("Error executing query");
+    } else {
+      const data = result.rows.map((row) => ({
+        id: row.id,
+        num_pdr_new: row.num_pdr_new,
+        form_dz: row.form_dz,
+      }));
+      res.json(data);
+    }
+  });
+});
+
 app.get("/dz", (req, res) => {
   const query =
-    "SELECT id, ST_AsGeoJSON(geom) AS geom, id_znk, topocode, num_pdr FROM exploitation.dz";
+    "SELECT id, ST_AsGeoJSON(geom) AS geom, id_znk, topocode, num_sing, num_pdr FROM exploitation.dz";
   client.query(query, (err, result) => {
     if (err) {
       console.error("Error executing query", err);
@@ -112,6 +130,7 @@ app.get("/dz", (req, res) => {
         id_znk: row.id_znk,
         num_pdr: row.num_pdr,
         topocode: row.topocode,
+        num_sing: row.num_sing,
       }));
       res.json(data);
     }
