@@ -7,6 +7,8 @@ import FormAddElements from "./components/FormAddElements/FormAddElements";
 import Table from "./components/Table/Table";
 import SecondTable from "./components/SecondTable/SecondTable";
 import SelectedMarkers from "./components/SelectedMarkers/SelectedMarkers";
+import MainForm from "./components/MainForm/MainForm";
+import Tabs from "./components/Tabs/Tabs";
 
 function App() {
   const [showAddInfoForm, setShowAddInfoForm] = useState(false);
@@ -135,24 +137,30 @@ function App() {
               handlePolygonClick={handlePolygonClick}
               handleDzClick={handleDzClick}
               handleAddMarkerData={handleAddMarkerData}
-              handleAddFromPolygon={handleAddFromPolygon} // Add this line to pass the function
+              handleAddFromPolygon={handleAddFromPolygon}
             />
-            <SelectedMarkers />
+            <SelectedMarkers
+              data={dataTable}
+              setData={setDataTable}
+              handleAddFromPolygon={handleAddFromPolygon}
+              setButtonPressed={setButtonPressed}
+              setShowSecondTable={setShowSecondTable}
+              handleClearTable={handleClearTable}
+            />
           </div>
-
         </div>
 
-        {/* <div className="components-container">
+        <div className="components-container">
           <FormAddWorks
             handleAddInfo={handleAddInfo}
             objectid={objectid}
             setFormObjectId={setObjectid}
             selectedMarkerId={selectedMarkerId}
           />
-          <MainForm
+          {/* <MainForm
           selectedPolygon={selectedPolygon}
           onObjectidChange={(value) => setObjectid(value)}
-        />
+          /> */}
 
           {showAddInfoForm && (
             <FormAddInfo
@@ -168,9 +176,46 @@ function App() {
               formAddElementsData={formAddElementsData}
             />
           )}
-        </div> */}
+        </div>
       </div>
-      <div className="tables-container">
+      <div className="content">
+        <nav className="tabs__items">
+          <a href="#tab_01" className="tabs__item">
+            <span className="tabs__item-content">Перша вкладка</span>
+          </a>
+          <a href="#tab_02" className="tabs__item">
+            <span className="tabs__item-content">Друга вкладка</span>
+          </a>
+          <a href="#tab_03" className="tabs__item">
+            <span className="tabs__item-content">Третя вкладка</span>
+          </a>
+        </nav>
+        <div className="tabs__body">
+          <div id="tab_01" className="tabs__block">
+            <div className="text">
+              <Table
+                data={dataTable}
+                setData={setDataTable}
+                handleAddFromPolygon={handleAddFromPolygon}
+                setButtonPressed={setButtonPressed}
+                setShowSecondTable={setShowSecondTable}
+                handleClearTable={handleClearTable}
+              />
+            </div>
+          </div>
+          <div id="tab_02" className="tabs__block">
+            <div className="text">
+              {(showSecondTable && <SecondTable />) ||
+                "Спочатку додайте елементи до таблиці"}
+            </div>
+          </div>
+          <div id="tab_03" className="tabs__block">
+            <div className="text">Поки пусто</div>
+          </div>
+        </div>
+      </div>
+
+      {/* <div className="tables-container">
         <Table
           data={dataTable}
           setData={setDataTable}
@@ -179,10 +224,8 @@ function App() {
           setShowSecondTable={setShowSecondTable}
           handleClearTable={handleClearTable}
         />
-        {showSecondTable && (
-          <SecondTable />
-        )}
-      </div>
+        {showSecondTable && <SecondTable />}
+      </div> */}
     </div>
   );
 }

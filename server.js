@@ -156,6 +156,26 @@ app.get("/elements", (req, res) => {
   });
 });
 
+app.get("/dz_forms", (req, res) => {
+  const query = `
+    SELECT dz.num_sing, dict_dz_form.form_dz
+    FROM exploitation.dict_dz_form, exploitation.dz
+    WHERE dict_dz_form.num_pdr_new = dz.num_sing
+    GROUP BY dz.num_sing, dict_dz_form.form_dz
+    ORDER BY dz.num_sing;
+  `;
+
+  client.query(query, (err, result) => {
+    if (err) {
+      console.error("Error executing query", err);
+      res.status(500).send("Error executing query");
+    } else {
+      const data = result.rows;
+      res.json(data);
+    }
+  });
+});
+
 function parsePolygon(geom) {
   const polygonString = geom.replace(/^POLYGON\s*\(/i, "").replace(/\)$/, "");
   const coordinates = polygonString.split(",").map((pair) => {
@@ -280,5 +300,3 @@ app.post("/elements", (req, res) => {
     }
   });
 });
-
-

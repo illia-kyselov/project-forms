@@ -1,5 +1,5 @@
-.body {
-  background-color: grey;
+body {
+  background-color: #c7dcec;
 }
 
 .form {
@@ -194,12 +194,17 @@
   display: flex;
   flex-direction: row-reverse;
   justify-content: space-evenly;
-  border-bottom: 2px solid black;
+  border-bottom: 2px solid rgb(13, 77, 161);
+  background-color: #b3dcfd;
 }
 
 .LeafletMap .blur {
   filter: blur(4px);
   pointer-events: none;
+}
+
+.selected-marker {
+  border: 2px solid #690909; 
 }
 
 .table {
@@ -210,7 +215,11 @@
   user-select: none;
   height: fit-content;
   background-color: #76f1f3;
-  width: min-content;
+  width: max-content;
+
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .tables-container {
@@ -286,12 +295,82 @@ th {
   cursor: pointer;
 }
 
-
-
 //
 
 .container-leaflet {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.content {
+  max-width: 1000px;
+  padding-left: 50px;
+}
+
+.tabs__items {
+  display: flex;
+}
+
+.tabs__item {
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  color: #012c87;
+  text-decoration: none;
+  background-color: #b3dcfd;
+  border-radius: 0 0 4px 4px;
+  margin-right: 20px;
+  border-left: 1px solid rgb(13, 77, 161);
+  border-right: 1px solid rgb(13, 77, 161);
+  border-bottom: 1px solid rgb(13, 77, 161);
+
+  .tabs__item span {
+    position: relative;
+    z-index: 2;
+  }
+
+  &-content {
+    padding: 5px;
+  }
+
+  &:hover {
+    background-color: #90ccfd;
+  }
+
+  &::after {
+    background-color: #90ccfd;
+  }
+}
+
+.tabs__block {
+  position: relative;
+  padding: 20px;
+  font-size: 18px;
+  line-height: 24px;
+  display: none;
+
+  &::before {
+    content: "";
+    height: 50px;
+    position: absolute;
+    top: -50px;
+  }
+
+  &:target {
+    display: block;
+  }
+}
+
+.text {
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.table-button-submit-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

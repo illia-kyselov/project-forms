@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 const Table = ({ data, setData, setShowSecondTable, setButtonPressed, handleClearTable }) => {
   const [selectedRow, setSelectedRow] = useState(null);
@@ -8,7 +8,7 @@ const Table = ({ data, setData, setShowSecondTable, setButtonPressed, handleClea
     num_sing: "",
   });
 
-  const [forms, setForms] = useState([]);
+  // const [forms, setForms] = useState([]);
   const [selectedForm, setSelectedForm] = useState("");
 
   // useEffect(() => {
@@ -147,11 +147,11 @@ const Table = ({ data, setData, setShowSecondTable, setButtonPressed, handleClea
                   onChange={handleFormSelect}
                 >
                   <option value="">Оберіть форму</option>
-                  {forms.map((form) => (
+                  {/* {forms.map((form) => (
                     <option key={form} value={form} className="form__input-option">
                       {form}
                     </option>
-                  ))}
+                  ))} */}
                 </select>
               </td>
               <td>
