@@ -157,20 +157,17 @@ app.get("/elements", (req, res) => {
 });
 
 app.get("/dz_forms", (req, res) => {
-  const query = `
-    SELECT dz.num_sing, dict_dz_form.form_dz
-    FROM exploitation.dict_dz_form, exploitation.dz
-    WHERE dict_dz_form.num_pdr_new = dz.num_sing
-    GROUP BY dz.num_sing, dict_dz_form.form_dz
-    ORDER BY dz.num_sing;
-  `;
-
+  const query = "SELECT id, num_pdr_new, form_dz FROM exploitation.dict_dz_form";
   client.query(query, (err, result) => {
     if (err) {
       console.error("Error executing query", err);
       res.status(500).send("Error executing query");
     } else {
-      const data = result.rows;
+      const data = result.rows.map((row) => ({
+        id: row.id,
+        num_pdr_new: row.num_pdr_new,
+        form_dz: row.form_dz,
+      }));
       res.json(data);
     }
   });

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const Table = ({
   data,
@@ -15,8 +15,23 @@ const Table = ({
     num_sing: "",
   });
 
-  // const [forms, setForms] = useState([]);
+  const [forms, setForms] = useState([]);
   const [selectedForm, setSelectedForm] = useState("");
+  const [selectedFormByRow, setSelectedFormByRow] = useState({});
+
+  useEffect(() => {
+    fetchForms(); // Fetch the forms data when the component mounts
+  }, []);
+
+  const fetchForms = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/dz_forms");
+      const formData = await response.json();
+      setForms(formData);
+    } catch (error) {
+      console.error("Error fetching forms data", error);
+    }
+  };
 
   // useEffect(() => {
   //   fetchData();
@@ -63,8 +78,12 @@ const Table = ({
     }));
   };
 
-  const handleFormSelect = (e) => {
-    setSelectedForm(e.target.value);
+  const handleFormSelect = (e, rowId) => {
+    const selectedValue = e.target.value;
+    setSelectedFormByRow((prevSelectedForms) => ({
+      ...prevSelectedForms,
+      [rowId]: selectedValue,
+    }));
   };
 
   const handleFormSubmit = (e) => {
@@ -157,15 +176,19 @@ const Table = ({
                 <td>
                   <select
                     className="form__input form__input-select"
-                    value={selectedForm}
-                    onChange={handleFormSelect}
+                    value={selectedFormByRow[row.id] || ""}
+                    onChange={(e) => handleFormSelect(e, row.id)}
                   >
-                    <option value="">Оберіть форму</option>
-                    {/* {forms.map((form) => (
-                    <option key={form} value={form} className="form__input-option">
-                      {form}
+                    <option value="" >
+                      Оберіть форму
                     </option>
-                  ))} */}
+                    {forms
+                      .filter((form) => form.num_pdr_new === row.num_sing)
+                      .map((form) => (
+                        <option key={form.id} value={form.id}>
+                          {form.form_dz}
+                        </option>
+                      ))}
                   </select>
                 </td>
                 <td>
