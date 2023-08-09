@@ -20,11 +20,24 @@ const customIcon = new L.Icon({
   iconAngle: 100,
 });
 
-const LeafletMap = ({ handlePolygonClick, handleDzClick, handleAddMarkerData, handleAddFromPolygon }) => {
+const customIconFocus = new L.Icon({
+  iconUrl: markerImage,
+  iconRetinaUrl: markerImage,
+  iconSize: [70, 70],
+  iconAngle: 100,
+});
+
+const LeafletMap = ({
+  handlePolygonClick,
+  handleDzClick,
+  handleAddMarkerData,
+  handleAddFromPolygon,
+  focusMarker,
+}) => {
   const zoom = 17;
   const containerStyle = {
     height: "450px",
-  }
+  };
   const center = {
     lat: 50.3865,
     lng: 30.4695,
@@ -84,7 +97,6 @@ const LeafletMap = ({ handlePolygonClick, handleDzClick, handleAddMarkerData, ha
     setFilteredMarkers(filtered);
     handleAddFromPolygon(filtered);
   };
-
 
   const isPointWithinPolygon = (point, polygonCoordinates) => {
     const x = point.lng;
@@ -193,7 +205,7 @@ const LeafletMap = ({ handlePolygonClick, handleDzClick, handleAddMarkerData, ha
           <Marker
             key={marker.id}
             position={marker.coordinates}
-            icon={customIcon}
+            icon={marker.id === focusMarker ? customIconFocus : customIcon}
             eventHandlers={{
               click: () => handleMarkerClick(marker.id),
             }}

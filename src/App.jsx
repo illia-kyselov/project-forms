@@ -22,6 +22,11 @@ function App() {
   const [buttonPressed, setButtonPressed] = useState(false);
   const [showSecondTable, setShowSecondTable] = useState(false);
   const [selectedMarkersPressed, setSelectedMarkersPressed] = useState(false);
+  const [focusMarker, setFocusMarker] = useState(null);
+
+  const handleRowClick = (markerId) => {
+    setFocusMarker(markerId);
+  };
 
   const handleAddInfo = (e) => {
     e.preventDefault();
@@ -140,6 +145,7 @@ function App() {
               handleDzClick={handleDzClick}
               handleAddMarkerData={handleAddMarkerData}
               handleAddFromPolygon={handleAddFromPolygon}
+              focusMarker={focusMarker}
             />
             <SelectedMarkers
               data={dataTable}
@@ -184,7 +190,9 @@ function App() {
       <div className="content">
         <nav className="tabs__items">
           <a href="#tab_01" className="tabs__item" фс>
-            <span className="tabs__item-content" ф>Перша вкладка</span>
+            <span className="tabs__item-content" ф>
+              Перша вкладка
+            </span>
           </a>
           <a href="#tab_02" className="tabs__item">
             <span className="tabs__item-content">Друга вкладка</span>
@@ -204,6 +212,7 @@ function App() {
                 setShowSecondTable={setShowSecondTable}
                 handleClearTable={handleClearTable}
                 selectedMarkersPressed={selectedMarkersPressed}
+                onRowClick={handleRowClick}
               />
             </div>
           </div>

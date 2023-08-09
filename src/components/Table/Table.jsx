@@ -6,6 +6,7 @@ const Table = ({
   setShowSecondTable,
   handleClearTable,
   selectedMarkersPressed,
+  onRowClick,
 }) => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -36,6 +37,11 @@ const Table = ({
   //     console.error("Error fetching data", error);
   //   }
   // };
+
+  const handleRowClick = (rowId) => {
+    onRowClick(rowId); // Call the function to update focusMarker
+    setSelectedRow(rowId); // This can be used for highlighting the selected row
+  };
 
   const deleteData = (id) => {
     setData((prevData) => {
@@ -141,6 +147,7 @@ const Table = ({
             data.map((row) => (
               <tr
                 key={row.id}
+                onClick={() => handleRowClick(row.id)}
                 onDoubleClick={() => handleROwDoubleClick(row.id)}
                 style={{ background: selectedRow === row.id ? "#b3dcfd" : "" }}
               >
