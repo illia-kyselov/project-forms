@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 
-const Table = ({ data, setData, setShowSecondTable, setButtonPressed, handleClearTable }) => {
+const Table = ({
+  data,
+  setData,
+  setShowSecondTable,
+  handleClearTable,
+  selectedMarkersPressed,
+}) => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [newRowData, setNewRowData] = useState({
@@ -41,7 +47,7 @@ const Table = ({ data, setData, setShowSecondTable, setButtonPressed, handleClea
   const handleROwDoubleClick = (rowId) => {
     setSelectedRow(rowId);
     setShowSecondTable(true);
-  }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -72,8 +78,8 @@ const Table = ({ data, setData, setShowSecondTable, setButtonPressed, handleClea
 
   const hideForm = (event) => {
     event.preventDefault();
-    setShowAddForm(false)
-  }
+    setShowAddForm(false);
+  };
 
   return (
     <div className="table">
@@ -103,24 +109,19 @@ const Table = ({ data, setData, setShowSecondTable, setButtonPressed, handleClea
             placeholder="num_sing"
             required
           />
-          <button type="submit" className="button-add-Dz">Зберегти</button>
-          <button className="button-add-Dz" onClick={hideForm}>Назад</button>
+          <button type="submit" className="button-add-Dz">
+            Зберегти
+          </button>
+          <button className="button-add-Dz" onClick={hideForm}>
+            Назад
+          </button>
         </form>
       )}
       <div className="flex">
-        <button className="button-add-Dz" onClick={setButtonPressed}>
-          Додати з полігону
-        </button>
-        <button
-          className="button-add-Dz"
-          onClick={() => setShowAddForm(true)}
-        >
+        <button className="button-add-Dz" onClick={() => setShowAddForm(true)}>
           Додати dz
         </button>
-        <button
-          className="button-add-Dz"
-          onClick={handleClearTable}
-        >
+        <button className="button-add-Dz" onClick={handleClearTable}>
           Очистити
         </button>
       </div>
@@ -132,33 +133,47 @@ const Table = ({ data, setData, setShowSecondTable, setButtonPressed, handleClea
             <th>num_sing</th>
             <th>Форма</th>
             <th></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
-          {data.map((row) => (
-            <tr key={row.id} onDoubleClick={() => handleROwDoubleClick(row.id)} style={{ background: selectedRow === row.id ? '#b3dcfd' : '' }}>
-              <td>{row.id}</td>
-              <td>{row.id_znk || 'Немає в БД'}</td>
-              <td>{row.num_sing || 'Немає в БД'}</td>
-              <td>
-                <select
-                  className="form__input form__input-select"
-                  value={selectedForm}
-                  onChange={handleFormSelect}
-                >
-                  <option value="">Оберіть форму</option>
-                  {/* {forms.map((form) => (
+          {selectedMarkersPressed &&
+            data.map((row) => (
+              <tr
+                key={row.id}
+                onDoubleClick={() => handleROwDoubleClick(row.id)}
+                style={{ background: selectedRow === row.id ? "#b3dcfd" : "" }}
+              >
+                <td>{row.id}</td>
+                <td>{row.id_znk || "Немає в БД"}</td>
+                <td>{row.num_sing || "Немає в БД"}</td>
+                <td>
+                  <select
+                    className="form__input form__input-select"
+                    value={selectedForm}
+                    onChange={handleFormSelect}
+                  >
+                    <option value="">Оберіть форму</option>
+                    {/* {forms.map((form) => (
                     <option key={form} value={form} className="form__input-option">
                       {form}
                     </option>
                   ))} */}
-                </select>
-              </td>
-              <td>
-                <button className="delete-icon" onClick={() => deleteData(row.id)}>X</button>
-              </td>
-            </tr>
-          ))}
+                  </select>
+                </td>
+                <td>
+                  <button className="button-add-Dz">До елементу</button>
+                </td>
+                <td>
+                  <button
+                    className="delete-icon"
+                    onClick={() => deleteData(row.id)}
+                  >
+                    X
+                  </button>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>

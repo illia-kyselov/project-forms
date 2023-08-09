@@ -6,6 +6,7 @@ const SelectedMarkers = ({
   setShowSecondTable,
   setButtonPressed,
   handleClearTable,
+  setSelectedMarkersPressed,
 }) => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -80,14 +81,16 @@ const SelectedMarkers = ({
     event.preventDefault();
     setShowAddForm(false);
   };
+
+  const handleButtonClick = () => {
+    setSelectedMarkersPressed(true);
+  }
+
   return (
     <div className="table">
       <div className="flex">
         <button className="button-add-Dz" onClick={setButtonPressed}>
           Додати з полігону
-        </button>
-        <button className="button-add-Dz" onClick={() => setShowAddForm(true)}>
-          Додати dz
         </button>
         <button className="button-add-Dz" onClick={handleClearTable}>
           Очистити
@@ -123,7 +126,7 @@ const SelectedMarkers = ({
         </tbody>
       </table>
       <div className="table-button-submit-container">
-        <button className="button-add-Dz table-button-submit">
+        <button className="button-add-Dz table-button-submit" onClick={handleButtonClick}>
           Відправити у таблицю
         </button>
       </div>

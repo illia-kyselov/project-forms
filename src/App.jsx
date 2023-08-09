@@ -21,6 +21,7 @@ function App() {
   const [filteredMarkers, setFilteredMarkers] = useState([]);
   const [buttonPressed, setButtonPressed] = useState(false);
   const [showSecondTable, setShowSecondTable] = useState(false);
+  const [selectedMarkersPressed, setSelectedMarkersPressed] = useState(false);
 
   const handleAddInfo = (e) => {
     e.preventDefault();
@@ -126,6 +127,7 @@ function App() {
   const handleClearTable = () => {
     setDataTable([]);
     setShowSecondTable(false);
+    setSelectedMarkersPressed(false);
   };
 
   return (
@@ -146,6 +148,7 @@ function App() {
               setButtonPressed={setButtonPressed}
               setShowSecondTable={setShowSecondTable}
               handleClearTable={handleClearTable}
+              setSelectedMarkersPressed={setSelectedMarkersPressed}
             />
           </div>
         </div>
@@ -180,8 +183,8 @@ function App() {
       </div>
       <div className="content">
         <nav className="tabs__items">
-          <a href="#tab_01" className="tabs__item">
-            <span className="tabs__item-content">Перша вкладка</span>
+          <a href="#tab_01" className="tabs__item" фс>
+            <span className="tabs__item-content" ф>Перша вкладка</span>
           </a>
           <a href="#tab_02" className="tabs__item">
             <span className="tabs__item-content">Друга вкладка</span>
@@ -200,6 +203,7 @@ function App() {
                 setButtonPressed={setButtonPressed}
                 setShowSecondTable={setShowSecondTable}
                 handleClearTable={handleClearTable}
+                selectedMarkersPressed={selectedMarkersPressed}
               />
             </div>
           </div>
