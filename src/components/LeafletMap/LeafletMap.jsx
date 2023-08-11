@@ -36,7 +36,7 @@ const LeafletMap = ({
 }) => {
   const zoom = 17;
   const containerStyle = {
-    height: "450px",
+    height: "100vh",
   };
   const center = {
     lat: 50.3865,
