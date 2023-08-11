@@ -211,6 +211,11 @@ const LeafletMap = ({
             }}
           >
             <Popup>{marker.id}</Popup>
+            {/* {marker.id === focusMarker && (
+              <div className="pulse">
+                {console.log("Adding pulse animation")}
+              </div>
+            )} */}
           </Marker>
         ))}
       </MapContainer>

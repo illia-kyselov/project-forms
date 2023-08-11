@@ -189,8 +189,8 @@ function App() {
       </div>
       <div className="content">
         <nav className="tabs__items">
-          <a href="#tab_01" className="tabs__item" фс>
-            <span className="tabs__item-content" ф>
+          <a href="#tab_01" className="tabs__item">
+            <span className="tabs__item-content">
               Перша вкладка
             </span>
           </a>
