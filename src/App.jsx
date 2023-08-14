@@ -7,10 +7,7 @@ import FormAddElements from "./components/FormAddElements/FormAddElements";
 import Table from "./components/Table/Table";
 import SecondTable from "./components/SecondTable/SecondTable";
 import SelectedMarkers from "./components/SelectedMarkers/SelectedMarkers";
-<<<<<<< HEAD
 import SelectedPolygons from "./components/SelectedPolygons/SelectedPolygons";
-=======
->>>>>>> 03539122eb93aae8721950e73d65cc748f183586
 // import MainForm from "./components/MainForm/MainForm";
 // import Tabs from "./components/Tabs/Tabs";
 
@@ -159,10 +156,7 @@ function App() {
             handleClearTable={handleClearTable}
             setSelectedMarkersPressed={setSelectedMarkersPressed}
           />
-<<<<<<< HEAD
           <SelectedPolygons />
-=======
->>>>>>> 03539122eb93aae8721950e73d65cc748f183586
         </div>
         <div className="right-side">
           <div className="content">
