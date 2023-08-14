@@ -4,6 +4,7 @@ import { MapContainer, TileLayer, Polygon, Popup, Marker } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import markerImage from "../../img/1.39z.png";
+import MouseCoordinates from "../CursorCoordinates/MapEvents";
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -36,7 +37,7 @@ const LeafletMap = ({
 }) => {
   const zoom = 17;
   const containerStyle = {
-    height: "450px",
+    height: "100vh",
   };
   const center = {
     lat: 50.3865,
@@ -121,16 +122,26 @@ const LeafletMap = ({
     return isInside;
   };
 
-  const handleClick = (e, polygon) => {
+  const handleClick = async (e, polygon) => {
     e.target.openPopup();
+    const clickedPoint = L.latLng(e.latlng.lat, e.latlng.lng);
+
+    try {
+      const response = await fetch(
+        `http://localhost:3001/doc_plg/contains?lat=${clickedPoint.lat}&lng=${clickedPoint.lng}`,
+      );
+      const data = await response.json();
+
+      setSelectedPolygonMarkers(data);
+    } catch (error) {
+      console.error("Error fetching polygons data", error);
+    }
+
     handlePolygonClick(polygon.objectid);
     setSelectedPolygonId(polygon.objectid);
     setSelectedPolygon(polygon);
-
-    const polygonCoordinates = polygon.geom.coordinates;
-    const filteredMarkers = filterMarkersWithinPolygon(polygonCoordinates);
-    setSelectedPolygonMarkers(filteredMarkers);
   };
+
 
   const handleMarkerClick = (markerId) => {
     setSelectedPolygon(null);
@@ -175,6 +186,8 @@ const LeafletMap = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapBounds, polygons]);
 
+  const [coordinaetes, setCoordinates] = useState();
+
   return (
     <div className="LeafletMapContainer ">
       <MapContainer
@@ -213,7 +226,9 @@ const LeafletMap = ({
             <Popup>{marker.id}</Popup>
           </Marker>
         ))}
+        <MouseCoordinates setCoordinates={setCoordinates} />
       </MapContainer>
+      <div>Coordinates: {coordinaetes}</div>
     </div>
   );
 };

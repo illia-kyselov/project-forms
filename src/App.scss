@@ -1,5 +1,6 @@
 body {
-  background-color: #c7dcec;
+  background-color: #f5f5f5;
+  overflow-x: hidden;
 }
 
 .form {
@@ -182,8 +183,13 @@ body {
 }
 
 .LeafletMapContainer {
-  width: 800px;
-  margin: 20px 50px;
+  margin: 0 30px 50px 0;
+  box-sizing: border-box;
+}
+
+.leaflet-container {
+  z-index: 2;
+  width: 50vw;
 }
 
 .leaflet-control-attribution {
@@ -192,24 +198,12 @@ body {
 
 .elements-container {
   display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-evenly;
-  border-bottom: 2px solid rgb(13, 77, 161);
-  background-color: #b3dcfd;
-}
-
-.LeafletMap .blur {
-  filter: blur(4px);
-  pointer-events: none;
-}
-
-.selected-marker {
-  border: 2px solid #690909; 
+  justify-content: space-between;
+  background-color: #f5f5f5;
 }
 
 .table {
-  margin: 20px 50px;
-  border: 1px solid #23c6c8;
+  border: 1px solid #f5f5f5;
   border-collapse: collapse;
   border-spacing: 0;
   user-select: none;
@@ -282,7 +276,7 @@ th {
 
 .components-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 }
 
 .button_Tomap {
@@ -299,13 +293,11 @@ th {
 
 .container-leaflet {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
 }
 
 .content {
   max-width: 1000px;
-  padding-left: 50px;
 }
 
 .tabs__items {
@@ -318,14 +310,14 @@ th {
   align-items: center;
   justify-content: center;
   text-transform: uppercase;
-  color: #012c87;
+  color: #1a1a1a;
   text-decoration: none;
-  background-color: #b3dcfd;
+  background-color: #e6e4e4;
   border-radius: 0 0 4px 4px;
   margin-right: 20px;
-  border-left: 1px solid rgb(13, 77, 161);
-  border-right: 1px solid rgb(13, 77, 161);
-  border-bottom: 1px solid rgb(13, 77, 161);
+  border-left: 1px solid #f1f1f1;
+  border-right: 1px solid #f1f1f1;
+  border-bottom: 1px solid #f1f1f1;
 
   .tabs__item span {
     position: relative;
@@ -347,7 +339,7 @@ th {
 
 .tabs__block {
   position: relative;
-  padding: 20px;
+  padding: 20px 20px 20px 0;
   font-size: 18px;
   line-height: 24px;
   display: none;
@@ -374,3 +366,74 @@ th {
   align-items: center;
   justify-content: center;
 }
+
+// .dot {
+//   position: absolute;
+//   height: 55px;
+//   width: 55px;
+//   left: -59px;
+//   top: -48px;
+//   z-index: 2;
+//   opacity: 0;
+
+//   border: 10px solid rgba(0, 166, 205, 1);
+//   background: transparent;
+//   background-repeat: 60px;
+//   animation: flash 2s ease-out;
+//   animation-iteration-count: infinite;
+// }
+
+.marker-animation {
+  position: relative;
+}
+
+.pulse {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #147b9b;
+  cursor: pointer;
+  box-shadow: 0 0 0 rgba(204, 169, 44, 0.4);
+  animation: pulse 2s infinite;
+  position: absolute;
+  transform: translate3d(258px, 221px, 0px);
+  z-index: 9899;
+}
+
+.pulse:hover {
+  animation: none;
+}
+
+@-webkit-keyframes pulse {
+  0% {
+    -webkit-box-shadow: 0 0 0 0 rgba(204, 169, 44, 0.4);
+  }
+  70% {
+    -webkit-box-shadow: 0 0 0 10px rgba(204, 169, 44, 0);
+  }
+  100% {
+    -webkit-box-shadow: 0 0 0 0 rgba(204, 169, 44, 0);
+  }
+}
+@keyframes pulse {
+  0% {
+    -moz-box-shadow: 0 0 0 0 rgba(204, 169, 44, 0.4);
+    box-shadow: 0 0 0 0 rgba(204, 169, 44, 0.4);
+  }
+  70% {
+    -moz-box-shadow: 0 0 0 10px rgba(204, 169, 44, 0);
+    box-shadow: 0 0 0 10px rgba(204, 169, 44, 0);
+  }
+  100% {
+    -moz-box-shadow: 0 0 0 0 rgba(204, 169, 44, 0);
+    box-shadow: 0 0 0 0 rgba(204, 169, 44, 0);
+  }
+}
+
+.leaflet-control-coordination {
+  z-index: 9999;
+  width: 100px;
+  height: max-content;
+}
+
+
