@@ -87,58 +87,61 @@ const SecondTable = () => {
   };
 
   return (
-    <div className="table" ref={tableRef}>
-      <table onClick={handleTableClick}>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>expl_dz_id</th>
-            <th>name_elmns</th>
-            <th>cnt_elmnt</th>
-          </tr>
-        </thead>
-        <tbody>
-          {dataTable.map((element) => (
-            <tr
-              key={element.id_elmts}
-              onDoubleClick={() => handleRowDoubleClick(element.id_elmts)}
-            >
-              <td>{element.id_elmts}</td>
-              <td>
-                <span>{element.expl_dz_id}</span>
-              </td>
-              <td>
-                {editRowId === element.id_elmts ? (
-                  <input
-                    type="text"
-                    value={editedData.name_elmns || ""}
-                    onChange={(e) => handleCellChange(e, "name_elmns")}
-                    onBlur={handleInputBlur}
-                    onFocus={handleInputFocus}
-                    onKeyDown={handleKeyDown}
-                  />
-                ) : (
-                  <span>{element.name_elmns || "Немає в БД"}</span>
-                )}
-              </td>
-              <td>
-                {editRowId === element.id_elmts ? (
-                  <input
-                    type="text"
-                    value={editedData.cnt_elmnt || ""}
-                    onChange={(e) => handleCellChange(e, "cnt_elmnt")}
-                    onBlur={handleInputBlur}
-                    onFocus={handleInputFocus}
-                    onKeyDown={handleKeyDown}
-                  />
-                ) : (
-                  <span>{element.cnt_elmnt || "Немає в БД"}</span>
-                )}
-              </td>
+    <div className="form-container-inside">
+      <label className="block-label">Елементи до ДЗ №___</label>
+      <div className="table" ref={tableRef}>
+        <table onClick={handleTableClick}>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>expl_dz_id</th>
+              <th>name_elmns</th>
+              <th>cnt_elmnt</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {dataTable.map((element) => (
+              <tr
+                key={element.id_elmts}
+                onDoubleClick={() => handleRowDoubleClick(element.id_elmts)}
+              >
+                <td>{element.id_elmts}</td>
+                <td>
+                  <span>{element.expl_dz_id}</span>
+                </td>
+                <td>
+                  {editRowId === element.id_elmts ? (
+                    <input
+                      type="text"
+                      value={editedData.name_elmns || ""}
+                      onChange={(e) => handleCellChange(e, "name_elmns")}
+                      onBlur={handleInputBlur}
+                      onFocus={handleInputFocus}
+                      onKeyDown={handleKeyDown}
+                    />
+                  ) : (
+                    <span>{element.name_elmns || "Немає в БД"}</span>
+                  )}
+                </td>
+                <td>
+                  {editRowId === element.id_elmts ? (
+                    <input
+                      type="text"
+                      value={editedData.cnt_elmnt || ""}
+                      onChange={(e) => handleCellChange(e, "cnt_elmnt")}
+                      onBlur={handleInputBlur}
+                      onFocus={handleInputFocus}
+                      onKeyDown={handleKeyDown}
+                    />
+                  ) : (
+                    <span>{element.cnt_elmnt || "Немає в БД"}</span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

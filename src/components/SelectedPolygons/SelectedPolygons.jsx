@@ -14,7 +14,7 @@ const SelectedPolygons = () => {
             <th></th>
           </tr>
         </thead>
-        <tbody>
+        {/* <tbody>
           {selectedPolygonMarkers.map((polygon) => (
             <tr key={polygon.objectid}>
               <td>{polygon.objectid}</td>
@@ -22,7 +22,7 @@ const SelectedPolygons = () => {
               <td>{polygon.pro_name}</td>
             </tr>
           ))}
-        </tbody>
+        </tbody> */}
 
       </table>
       <div className="table-button-submit-container">

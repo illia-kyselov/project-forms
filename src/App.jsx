@@ -8,6 +8,7 @@ import Table from "./components/Table/Table";
 import SecondTable from "./components/SecondTable/SecondTable";
 import SelectedMarkers from "./components/SelectedMarkers/SelectedMarkers";
 import SelectedPolygons from "./components/SelectedPolygons/SelectedPolygons";
+import Navigation from "./components/Navigation/Navigation";
 // import MainForm from "./components/MainForm/MainForm";
 // import Tabs from "./components/Tabs/Tabs";
 
@@ -138,6 +139,7 @@ function App() {
 
   return (
     <div className="App">
+      <Navigation />
       <div className="elements-container">
         <LeafletMap
           handlePolygonClick={handlePolygonClick}
@@ -146,7 +148,7 @@ function App() {
           handleAddFromPolygon={handleAddFromPolygon}
           focusMarker={focusMarker}
         />
-        <div className="container-leaflet">
+        {/* <div className="container-leaflet">
           <SelectedMarkers
             data={dataTable}
             setData={setDataTable}
@@ -157,59 +159,37 @@ function App() {
             setSelectedMarkersPressed={setSelectedMarkersPressed}
           />
           <SelectedPolygons />
-        </div>
-        <div className="right-side">
-          <div className="content">
-            <nav className="tabs__items">
-              <a href="#tab_01" className="tabs__item">
-                <span className="tabs__item-content">Перша вкладка</span>
-              </a>
-              <a href="#tab_02" className="tabs__item">
-                <span className="tabs__item-content">Друга вкладка</span>
-              </a>
-              <a href="#tab_03" className="tabs__item">
-                <span className="tabs__item-content">Третя вкладка</span>
-              </a>
-            </nav>
-            <div className="tabs__body">
-              <div id="tab_01" className="tabs__block">
-                <div className="text">
-                  <Table
-                    data={dataTable}
-                    setData={setDataTable}
-                    handleAddFromPolygon={handleAddFromPolygon}
-                    setButtonPressed={setButtonPressed}
-                    setShowSecondTable={setShowSecondTable}
-                    handleClearTable={handleClearTable}
-                    selectedMarkersPressed={selectedMarkersPressed}
-                    onRowClick={handleRowClick}
-                  />
-                </div>
-              </div>
-              <div id="tab_02" className="tabs__block">
-                <div className="text">
-                  {(showSecondTable && <SecondTable />) ||
-                    "Спочатку виберіть елемент в таблиці"}
-                </div>
-              </div>
-              <div id="tab_03" className="tabs__block">
-                <div className="text">Поки пусто</div>
-              </div>
-            </div>
+        </div> */}
+        <div className="form-container">
+          <FormAddWorks
+            handleAddInfo={handleAddInfo}
+            objectid={objectid}
+            setFormObjectId={setObjectid}
+            selectedMarkerId={selectedMarkerId}
+          />
+          <div className=" flex">
+            <Table
+              data={dataTable}
+              setData={setDataTable}
+              handleAddFromPolygon={handleAddFromPolygon}
+              setButtonPressed={setButtonPressed}
+              setShowSecondTable={setShowSecondTable}
+              handleClearTable={handleClearTable}
+              selectedMarkersPressed={selectedMarkersPressed}
+              onRowClick={handleRowClick}
+            />
+            <SecondTable />
           </div>
         </div>
       </div>
       <div className="components-container">
-        <FormAddWorks
-          handleAddInfo={handleAddInfo}
-          objectid={objectid}
-          setFormObjectId={setObjectid}
-          selectedMarkerId={selectedMarkerId}
-        />
+
         {/* <MainForm
           selectedPolygon={selectedPolygon}
           onObjectidChange={(value) => setObjectid(value)}
           /> */}
+
+
 
         {showAddInfoForm && (
           <FormAddInfo

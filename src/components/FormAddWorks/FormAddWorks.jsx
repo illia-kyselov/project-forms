@@ -64,28 +64,69 @@ const FormAddWorks = ({ handleAddInfo, objectid, selectedMarkerId }) => {
   // };
 
   return (
-    <form className="form">
-      <div className="form__group">
-        <label className="form-input_title">Тип виконаних робіт:</label>
-        <select className="form__input form__input-select">
-          {options.map((option) => (
-            <option key={option} value={option} className="form__input-option">
-              {option}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="form__group form__group-radio">
-        <label className="form-input_title">Наявність документа в БД:</label>
-        <input
-          type="checkbox"
-          name="Наявність документа в БД"
-          className="form__input form__input-radio"
-          checked={isChecked}
-          onChange={handleCheckboxChange}
-        />
-      </div>
-      {/* {!isChecked && (
+    <div className="form-container-inside">
+      <label className="block-label">Загальна інформація</label>
+      <form className="form">
+        <div className="form-left">
+          <div className="form__group">
+            <label className="form-input_title">Тип роботи</label>
+            <select className="form__input form__input-select">
+              {options.map((option) => (
+                <option key={option} value={option} className="form__input-option">
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="form__group">
+            <label className="form-input_title">Особа, яка виконувала роботу</label>
+            <select className="form__input">
+              <option value="Шевченко Тарас">Шевченко Тарас</option>
+            </select>
+          </div>
+          <div className="form__group">
+            <label className="form-input_title">Дата виконання роботи</label>
+            <input
+              type="datetime-local"
+              id="additionalDatetime"
+              className="form__input"
+            />
+          </div>
+        </div>
+        <div className="form-right">
+          <div className="form__group form__group-radio">
+            <label className="form-input_title">Обрати документ з БД</label>
+            
+            <input
+              type="checkbox"
+              name="Наявність документа в БД"
+              className="form__input form__input-radio"
+              checked={isChecked}
+              onChange={handleCheckboxChange}
+            />
+          </div>
+          {isChecked && (
+            <>
+              <div className="form__group">
+                <label className="form-input_title">Документ / підстава проведення роботи</label>
+                <input
+                  type="text"
+                  placeholder="Документ / підстава "
+                  className="form__input"
+                  value={`${selectedMarkerId || formObjectId} / ${options.pro_name}`}
+                  readOnly
+                />
+              </div>
+            </>
+          )}
+          <button
+            className="form__button form__button-addForm"
+            onClick={handleAddInfo}
+          >
+            Додати інфо про дз
+          </button>
+        </div>
+        {/* {!isChecked && (
         <>
           <div className="form__group">
             <label className="form-input_title">Зв'язати з документом:</label>
@@ -96,49 +137,15 @@ const FormAddWorks = ({ handleAddInfo, objectid, selectedMarkerId }) => {
           </div>
         </>
       )} */}
-      {isChecked && (
-        <>
-          <div className="form__group">
-            <label className="form-input_title">Документ:</label>
-            <input
-              type="text"
-              className="form__input"
-              value={selectedMarkerId || formObjectId}
-              readOnly
-            />
-          </div>
-        </>
-      )}
-      <div className="form__group">
-        <label className="form-input_title">Дата виконання робіт:</label>
-        <input
-          type="datetime-local"
-          id="additionalDatetime"
-          className="form__input"
-        />
-      </div>
-      <div className="form__group">
-        <label className="form-input_title">Особа яка фіксувала роботи:</label>
-        <select className="form__input">
-          <option value="Шевченко Тарас">Шевченко Тарас</option>
-        </select>
-      </div>
-      {/* <div className="form__group">
-        <label className="form-input_title">uuid:</label>
-        <input type="text" className="form__input" />
-      </div> */}
-      <div className="form__button-container">
-        {/* <button className="form__button button-submit" type="submit">
+
+        <div className="form__button-container">
+          {/* <button className="form__button button-submit" type="submit">
           Відправити
         </button> */}
-        <button
-          className="form__button form__button-addForm"
-          onClick={handleAddInfo}
-        >
-          Додати інфо про дз
-        </button>
-      </div>
-    </form>
+
+        </div>
+      </form>
+    </div>
   );
 };
 

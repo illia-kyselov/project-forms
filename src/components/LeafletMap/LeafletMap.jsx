@@ -60,6 +60,7 @@ const LeafletMap = ({
       .then((data) => {
         const filteredPolygons = data.map((polygon) => ({
           ...polygon,
+          pro_name: polygon.pro_name,
           geom: {
             ...polygon.geom,
             coordinates: polygon.geom.coordinates[0].filter(
@@ -122,26 +123,16 @@ const LeafletMap = ({
     return isInside;
   };
 
-  const handleClick = async (e, polygon) => {
+  const handleClick = (e, polygon) => {
     e.target.openPopup();
-    const clickedPoint = L.latLng(e.latlng.lat, e.latlng.lng);
-
-    try {
-      const response = await fetch(
-        `http://localhost:3001/doc_plg/contains?lat=${clickedPoint.lat}&lng=${clickedPoint.lng}`,
-      );
-      const data = await response.json();
-
-      setSelectedPolygonMarkers(data);
-    } catch (error) {
-      console.error("Error fetching polygons data", error);
-    }
-
     handlePolygonClick(polygon.objectid);
     setSelectedPolygonId(polygon.objectid);
     setSelectedPolygon(polygon);
-  };
 
+    const polygonCoordinates = polygon.geom.coordinates;
+    const filteredMarkers = filterMarkersWithinPolygon(polygonCoordinates);
+    setSelectedPolygonMarkers(filteredMarkers);
+  };
 
   const handleMarkerClick = (markerId) => {
     setSelectedPolygon(null);
@@ -224,11 +215,6 @@ const LeafletMap = ({
             }}
           >
             <Popup>{marker.id}</Popup>
-            {/* {marker.id === focusMarker && (
-              <div className="pulse">
-                {console.log("Adding pulse animation")}
-              </div>
-            )} */}
           </Marker>
         ))}
         <MouseCoordinates setCoordinates={setCoordinates} />

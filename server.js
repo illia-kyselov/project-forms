@@ -45,6 +45,25 @@ app.get("/doc_plg", (req, res) => {
   });
 });
 
+app.get("/doc_plg/filteredPolygons", (req, res) => {
+  const query =
+    "Select * from exploitation.doc_plg WHERE ST_Contains(geom, ST_GeomFromText('POINT(30.570757 50.4612)', 4326));";
+  client.query(query, (err, result) => {
+    if (err) {
+      console.error("Error executing query", err);
+      res.status(500).send("Error executing query");
+    } else {
+      const data = result.rows.map((row) => ({
+        objectid: row.objectid,
+        num_disl: row.num_disl,
+        pro_name: row.pro_name,
+        geom: parsePolygon(row.geom),
+      }));
+      res.json(data);
+    }
+  });
+});
+
 app.get("/doc_plg/:objectid", (req, res) => {
   const objectid = req.params.objectid;
   const query = `SELECT objectid, num_disl, pro_name FROM exploitation.doc_plg WHERE objectid = '${objectid}'`;
