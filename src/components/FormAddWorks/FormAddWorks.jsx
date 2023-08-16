@@ -96,14 +96,17 @@ const FormAddWorks = ({ handleAddInfo, objectid, selectedMarkerId }) => {
         <div className="form-right">
           <div className="form__group form__group-radio">
             <label className="form-input_title">Обрати документ з БД</label>
-            
-            <input
-              type="checkbox"
-              name="Наявність документа в БД"
-              className="form__input form__input-radio"
-              checked={isChecked}
-              onChange={handleCheckboxChange}
-            />
+            <label class="switch">
+              <input
+                type="checkbox"
+                checkedtype="checkbox"
+                name="Наявність документа в БД"
+                className="form__input form__input-radio"
+                checked={isChecked}
+                onChange={handleCheckboxChange}>
+              </input>
+              <span class="slider round"></span>
+            </label>
           </div>
           {isChecked && (
             <>
@@ -111,9 +114,9 @@ const FormAddWorks = ({ handleAddInfo, objectid, selectedMarkerId }) => {
                 <label className="form-input_title">Документ / підстава проведення роботи</label>
                 <input
                   type="text"
-                  placeholder="Документ / підстава "
+                  placeholder="Документ / підстава"
                   className="form__input"
-                  value={`${selectedMarkerId || formObjectId} / ${options.pro_name}`}
+                  value={`${selectedMarkerId || formObjectId}${options.pro_name || ''}` || ''}
                   readOnly
                 />
               </div>

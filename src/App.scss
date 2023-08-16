@@ -5,17 +5,13 @@ body {
 .form {
   display: flex;
   flex-wrap: nowrap;
-  justify-content: space-between;
+  justify-content: space-around;
 
   padding: 10px 20px;
-  // margin: 20px 50px;
 
   background-color: #fff;
   color: #f8f5f5;
   border: 1px solid #23c6c8;
-  // border-radius: 5px;
-  // width: 310px;
-  // height: max-content;
 
   .form__title {
     margin: 0 0 32px 0;
@@ -25,7 +21,6 @@ body {
   }
 
   .form__input {
-    // width: 100%;
     padding: 5px 10px;
     border: 1px solid #4e4e4e;
     color: #4e4e4e;
@@ -183,7 +178,6 @@ body {
 }
 
 .LeafletMapContainer {
-  // margin: 0 30px 50px 0;
   height: min-content;
   box-sizing: border-box;
 }
@@ -208,7 +202,6 @@ body {
   border-collapse: collapse;
   border-spacing: 0;
   user-select: none;
-  // background-color: #76f1f3;
 
   border: 1px solid #76f1f3;
 
@@ -251,31 +244,6 @@ body {
   margin: 5px 5px 5px 5px;
 }
 
-// .table th {
-//   padding: 10px;
-//   text-align: left;
-//   border-bottom: 1px solid #23c6c8;
-//   width: fit-content;
-// }
-
-// .table tr,
-// th {
-//   background-color: #f2f2f2;
-//   color: #333;
-// }
-
-// .table tbody tr:nth-child(even) {
-//   background-color: #e6e6e6;
-// }
-
-// .table th,
-// .table td {
-//   padding: 10px;
-//   text-align: center;
-//   border-bottom: 1px solid #ddd;
-//   max-height: 40px;
-// }
-
 .components-container {
   display: flex;
   flex-direction: row;
@@ -291,8 +259,6 @@ body {
   cursor: pointer;
 }
 
-//
-
 .container-leaflet {
   width: min-content;
   display: flex;
@@ -307,58 +273,6 @@ body {
   display: flex;
 }
 
-// .tabs__item {
-//   height: 25px;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   text-transform: uppercase;
-//   color: #1a1a1a;
-//   text-decoration: none;
-//   background-color: #e6e4e4;
-//   border-radius: 0 0 4px 4px;
-//   margin-right: 20px;
-//   border-left: 1px solid #f1f1f1;
-//   border-right: 1px solid #f1f1f1;
-//   border-bottom: 1px solid #f1f1f1;
-
-//   .tabs__item span {
-//     position: relative;
-//     z-index: 2;
-//   }
-
-//   &-content {
-//     padding: 5px;
-//   }
-
-//   &:hover {
-//     background-color: #90ccfd;
-//   }
-
-//   &::after {
-//     background-color: #90ccfd;
-//   }
-// }
-
-// .tabs__block {
-//   position: relative;
-//   padding: 20px 20px 20px 0;
-//   font-size: 18px;
-//   line-height: 24px;
-//   display: none;
-
-//   &::before {
-//     content: "";
-//     height: 50px;
-//     position: absolute;
-//     top: -50px;
-//   }
-
-//   &:target {
-//     display: block;
-//   }
-// }
-
 .text {
   font-size: 18px;
   line-height: 24px;
@@ -369,22 +283,6 @@ body {
   align-items: center;
   justify-content: center;
 }
-
-// .dot {
-//   position: absolute;
-//   height: 55px;
-//   width: 55px;
-//   left: -59px;
-//   top: -48px;
-//   z-index: 2;
-//   opacity: 0;
-
-//   border: 10px solid rgba(0, 166, 205, 1);
-//   background: transparent;
-//   background-repeat: 60px;
-//   animation: flash 2s ease-out;
-//   animation-iteration-count: infinite;
-// }
 
 .marker-animation {
   position: relative;
@@ -505,10 +403,8 @@ body {
   border-radius: 0 8px 8px 0;
 }
 
-
 .navigation {
   padding: 10px;
-  // margin-bottom: 15px;
   display: flex;
   justify-content: flex-end;
   background-color: #d4d4d4;
@@ -517,4 +413,61 @@ body {
 .navigation__company-name {
   font-weight: bold;
   margin-right: 50px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #2196f3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196f3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }

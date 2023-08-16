@@ -7,6 +7,7 @@ const Table = ({
   handleClearTable,
   selectedMarkersPressed,
   onRowClick,
+  filteredMarkers, handleAddFromPolygon, setButtonPressed
 }) => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -106,6 +107,10 @@ const Table = ({
     setShowAddForm(false);
   };
 
+  const handleAddFromPolygonClick = () => {
+    handleAddFromPolygon(filteredMarkers);
+  };
+
   return (
     <div className="form-container-inside">
       <label className="block-label">Обрані дорожні знаки</label>
@@ -146,6 +151,9 @@ const Table = ({
           </form>
         )}
         <div className="flex">
+          <button className="button-add-Dz" onClick={setButtonPressed}>
+            Додати з полігону
+          </button>
           <button className="button-add-Dz" onClick={() => setShowAddForm(true)}>
             Додати dz
           </button>
