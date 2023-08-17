@@ -121,6 +121,7 @@ const FormAddWorks = ({ handleAddInfo, objectid, selectedMarkerId, selectedPolyg
                 />
                 <button
                   className="form__button form__button-addForm"
+                  disabled
                 >
                   Обрати
                 </button>
@@ -136,11 +137,13 @@ const FormAddWorks = ({ handleAddInfo, objectid, selectedMarkerId, selectedPolyg
             </button>
             <button
               className="form__button form__button-addForm"
+              disabled
             >
               Обрати ДЗ
             </button>
             <button
               className="form__button form__button-addForm"
+              disabled
             >
               Створити ДЗ
             </button>
