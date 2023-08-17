@@ -86,17 +86,30 @@ const SecondTable = () => {
     }
   };
 
+  const deleteData = (id) => {
+    setData((prevData) => {
+      const updatedData = prevData.filter((element) => element.id !== id);
+      return updatedData;
+    });
+  };
+
   return (
     <div className="form-container-inside">
       <label className="block-label">Елементи до ДЗ №___</label>
       <div className="table" ref={tableRef}>
+        <div className="flex-secondTable">
+          <button className="button-add-Dz">
+            Додати
+          </button>
+        </div>
         <table onClick={handleTableClick}>
           <thead>
             <tr>
-              <th>ID</th>
+              <th>№<br></br>з/п</th>
               <th>expl_dz_id</th>
-              <th>name_elmns</th>
-              <th>cnt_elmnt</th>
+              <th>Назва елемента</th>
+              <th>Кількість елементів</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -136,6 +149,14 @@ const SecondTable = () => {
                   ) : (
                     <span>{element.cnt_elmnt || "Немає в БД"}</span>
                   )}
+                </td>
+                <td>
+                  <button
+                    className="delete-icon"
+                    onClick={() => deleteData(element.id)}
+                  >
+                    X
+                  </button>
                 </td>
               </tr>
             ))}

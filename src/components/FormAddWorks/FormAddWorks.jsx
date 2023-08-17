@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const FormAddWorks = ({ handleAddInfo, objectid, selectedMarkerId }) => {
+const FormAddWorks = ({ handleAddInfo, objectid, selectedMarkerId, selectedPolygon, }) => {
   const [options, setOptions] = useState([]);
   const [isChecked, setIsChecked] = useState(true);
   const [formObjectId, setFormObjectId] = useState("");
@@ -96,7 +96,7 @@ const FormAddWorks = ({ handleAddInfo, objectid, selectedMarkerId }) => {
         <div className="form-right">
           <div className="form__group form__group-radio">
             <label className="form-input_title">Обрати документ з БД</label>
-            <label class="switch">
+            <label className="switch">
               <input
                 type="checkbox"
                 checkedtype="checkbox"
@@ -105,7 +105,7 @@ const FormAddWorks = ({ handleAddInfo, objectid, selectedMarkerId }) => {
                 checked={isChecked}
                 onChange={handleCheckboxChange}>
               </input>
-              <span class="slider round"></span>
+              <span className="slider round"></span>
             </label>
           </div>
           {isChecked && (
@@ -116,18 +116,35 @@ const FormAddWorks = ({ handleAddInfo, objectid, selectedMarkerId }) => {
                   type="text"
                   placeholder="Документ / підстава"
                   className="form__input"
-                  value={`${selectedMarkerId || formObjectId}${options.pro_name || ''}` || ''}
+                  value={selectedMarkerId || formObjectId || selectedPolygon ? `${selectedMarkerId || formObjectId} / ${selectedPolygon ? ` ${selectedPolygon.pro_name}` : ''}` : ''}
                   readOnly
                 />
+                <button
+                  className="form__button form__button-addForm"
+                >
+                  Обрати
+                </button>
               </div>
             </>
           )}
-          <button
-            className="form__button form__button-addForm"
-            onClick={handleAddInfo}
-          >
-            Додати інфо про дз
-          </button>
+          <div className="flex">
+            <button
+              className="form__button form__button-addForm"
+              onClick={handleAddInfo}
+            >
+              Додати інфо про дз
+            </button>
+            <button
+              className="form__button form__button-addForm"
+            >
+              Обрати ДЗ
+            </button>
+            <button
+              className="form__button form__button-addForm"
+            >
+              Створити ДЗ
+            </button>
+          </div>
         </div>
         {/* {!isChecked && (
         <>

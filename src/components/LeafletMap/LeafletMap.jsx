@@ -28,6 +28,28 @@ const customIconFocus = new L.Icon({
   iconAngle: 100,
 });
 
+const coordinatesStyle = {
+  position: 'absolute',
+  top: '10px',
+  right: '10px',
+  backgroundColor: 'white',
+  padding: '5px',
+  borderRadius: '5px',
+  zIndex: 1000,
+};
+
+const listStyle = {
+  position: 'absolute',
+  top: '50px',
+  right: '10px',
+  backgroundColor: 'white',
+  padding: '5px',
+  borderRadius: '5px',
+  zIndex: 1000,
+  listStyle: 'none'
+};
+
+
 const LeafletMap = ({
   handlePolygonClick,
   handleDzClick,
@@ -37,7 +59,7 @@ const LeafletMap = ({
 }) => {
   const zoom = 17;
   const containerStyle = {
-    height: "90vh",
+    height: "100vh",
   };
   const center = {
     lat: 50.3865,
@@ -218,8 +240,14 @@ const LeafletMap = ({
           </Marker>
         ))}
         <MouseCoordinates setCoordinates={setCoordinates} />
+        {coordinaetes
+          ? <div style={coordinatesStyle}>{coordinaetes}</div>
+          : ''}
+        <ul style={listStyle}>
+          <li>1</li>
+          <li>2</li>
+        </ul>
       </MapContainer>
-      <div>Coordinates: {coordinaetes}</div>
     </div>
   );
 };

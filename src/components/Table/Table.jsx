@@ -131,7 +131,7 @@ const Table = ({
               name="id_znk"
               value={newRowData.id_znk}
               onChange={handleInputChange}
-              placeholder="id_znk"
+              placeholder="Ідент. №"
               required
             />
             <input
@@ -139,7 +139,7 @@ const Table = ({
               name="num_sing"
               value={newRowData.num_sing}
               onChange={handleInputChange}
-              placeholder="num_sing"
+              placeholder="Номер ПДР"
               required
             />
             <button type="submit" className="button-add-Dz">

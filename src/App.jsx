@@ -166,6 +166,7 @@ function App() {
             objectid={objectid}
             setFormObjectId={setObjectid}
             selectedMarkerId={selectedMarkerId}
+            selectedPolygon={selectedPolygon}
           />
           <div className=" flex">
             <Table
