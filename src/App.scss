@@ -11,7 +11,7 @@ body {
 
   background-color: #fff;
   color: #f8f5f5;
-  border: 1px solid #23c6c8;
+  border: 1px solid #326d0c;
 
   .form__title {
     margin: 0 0 32px 0;
@@ -234,7 +234,8 @@ body {
 }
 
 .button-add-Dz {
-  background-color: #23c6c8;
+  background-color: #326d0c;
+  color: #ffffff;
   outline: none;
   border: none;
   cursor: pointer;
@@ -339,7 +340,7 @@ body {
 .block-label {
   display: block;
   padding: 5px 10px;
-  background-color: #23c6c8;
+  background-color: #326d0c;
   border-radius: 4px 4px 0 0;
   color: #fff;
 }
@@ -365,10 +366,10 @@ body {
   flex-direction: column;
 }
 
-.table {
+#326d0c .table {
   width: 100%;
   margin-bottom: 20px;
-  border: 1px solid #23c6c8;
+  border: 1px solid #326d0c;
   box-sizing: border-box;
 }
 .table thead th {
@@ -404,7 +405,7 @@ body {
 .navigation {
   padding: 10px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   background-color: #d4d4d4;
 }
 
@@ -449,11 +450,11 @@ body {
 }
 
 input:checked + .slider {
-  background-color: #23c6c8;
+  background-color: #326d0c;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #23c6c8;
+  box-shadow: 0 0 1px #326d0c;
 }
 
 input:checked + .slider:before {
@@ -472,5 +473,10 @@ input:checked + .slider:before {
 
 .flex-secondTable {
   display: flex;
-  justify-content: flex-start ;
+  justify-content: flex-start;
+}
+
+.logo {
+  width: 60px;
+  margin-right: 100px;
 }

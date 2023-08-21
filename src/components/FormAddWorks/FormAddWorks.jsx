@@ -79,7 +79,7 @@ const FormAddWorks = ({ handleAddInfo, objectid, selectedMarkerId, selectedPolyg
             </select>
           </div>
           <div className="form__group">
-            <label className="form-input_title">Особа, яка виконувала роботу</label>
+            <label className="form-input_title">Особа, яка виконала роботу</label>
             <select className="form__input">
               <option value="Шевченко Тарас">Шевченко Тарас</option>
             </select>
@@ -133,7 +133,7 @@ const FormAddWorks = ({ handleAddInfo, objectid, selectedMarkerId, selectedPolyg
               className="form__button form__button-addForm"
               onClick={handleAddInfo}
             >
-              Додати інфо про дз
+              Додати інфо про ДЗ
             </button>
             <button
               className="form__button form__button-addForm"

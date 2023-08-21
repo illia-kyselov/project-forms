@@ -189,9 +189,6 @@ function App() {
           selectedPolygon={selectedPolygon}
           onObjectidChange={(value) => setObjectid(value)}
           /> */}
-
-
-
         {showAddInfoForm && (
           <FormAddInfo
             handleRemoveInfo={handleRemoveInfo}

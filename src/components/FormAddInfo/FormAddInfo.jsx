@@ -77,14 +77,6 @@ const FormAddInfo = ({
         <p className="form-input_title">Ідентифікатор з таблиці робіт:</p>
         <input className="form__input" onChange={handleChangeFormInfo} />
       </div>
-      {/* <div className="form__group">
-        <p className="form-input_title">uuid:</p>
-        <input
-          type="text"
-          className="form__input"
-          onChange={handleChangeFormInfo}
-        />
-      </div> */}
       <div className="form__button-container">
         <button
           className="form__button form__button-addForm"

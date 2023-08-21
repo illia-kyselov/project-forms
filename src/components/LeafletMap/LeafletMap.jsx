@@ -46,7 +46,8 @@ const listStyle = {
   padding: '5px',
   borderRadius: '5px',
   zIndex: 1000,
-  listStyle: 'none'
+  listStyle: 'none',
+  width: '300px',
 };
 
 
@@ -145,6 +146,8 @@ const LeafletMap = ({
     return isInside;
   };
 
+  const [clickedPolygons, setClickedPolygons] = useState([]);
+
   const handleClick = (e, polygon) => {
     e.target.openPopup();
     handlePolygonClick(polygon.objectid);
@@ -154,6 +157,18 @@ const LeafletMap = ({
     const polygonCoordinates = polygon.geom.coordinates;
     const filteredMarkers = filterMarkersWithinPolygon(polygonCoordinates);
     setSelectedPolygonMarkers(filteredMarkers);
+
+    setClickedPolygons((prevClickedPolygons) => {
+      if (prevClickedPolygons.some((poly) => poly.objectid === polygon.objectid)) {
+        return prevClickedPolygons.filter((poly) => poly.objectid !== polygon.objectid);
+      } else {
+        return [...prevClickedPolygons, polygon];
+      }
+    });
+  };
+
+  const handleMapClick = () => {
+    setClickedPolygons([]);
   };
 
   const handleMarkerClick = (markerId) => {
@@ -208,10 +223,12 @@ const LeafletMap = ({
         zoom={zoom}
         style={containerStyle}
         onMoveend={handleMoveEnd}
+        onClick={handleMapClick}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          noWrap={true}
         />
         {filteredPolygons.map((polygon) => (
           <Polygon
@@ -243,10 +260,13 @@ const LeafletMap = ({
         {coordinaetes
           ? <div style={coordinatesStyle}>{coordinaetes}</div>
           : ''}
-        <ul style={listStyle}>
-          <li>1</li>
-          <li>2</li>
-        </ul>
+        {clickedPolygons.length > 0 && (
+          <ul style={listStyle}>
+            {clickedPolygons.map((polygon) => (
+              <li key={polygon.objectid}>{polygon.pro_name}</li>
+            ))}
+          </ul>
+        )}
       </MapContainer>
     </div>
   );
