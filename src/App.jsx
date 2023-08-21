@@ -190,18 +190,26 @@ function App() {
           onObjectidChange={(value) => setObjectid(value)}
           /> */}
         {showAddInfoForm && (
-          <FormAddInfo
-            handleRemoveInfo={handleRemoveInfo}
-            handleAddElements={handleAddElements}
-          />
+          <div className="popup-overlay">
+            <div className="popup-content">
+              <FormAddInfo
+                handleRemoveInfo={handleRemoveInfo}
+                handleAddElements={handleAddElements}
+              />
+            </div>
+          </div>
         )}
         {showAddElements && (
-          <FormAddElements
-            handleRemoveElements={handleRemoveElements}
-            handleSubmitElements={handleSubmitElements}
-            handleChange={handleChange}
-            formAddElementsData={formAddElementsData}
-          />
+          <div className="popup-overlay">
+            <div className="popup-content">
+              <FormAddElements
+                handleRemoveElements={handleRemoveElements}
+                handleSubmitElements={handleSubmitElements}
+                handleChange={handleChange}
+                formAddElementsData={formAddElementsData}
+              />
+            </div>
+          </div>
         )}
       </div>
 

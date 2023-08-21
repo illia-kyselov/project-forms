@@ -84,7 +84,7 @@ const FormAddWorks = ({ handleAddInfo, objectid, selectedMarkerId, selectedPolyg
               <option value="Шевченко Тарас">Шевченко Тарас</option>
             </select>
           </div>
-          <div className="form__group">
+          <div className="form__group datetime-input">
             <label className="form-input_title">Дата виконання роботи</label>
             <input
               type="datetime-local"
