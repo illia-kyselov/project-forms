@@ -21,7 +21,7 @@ const Table = ({
   const [selectedFormByRow, setSelectedFormByRow] = useState({});
 
   useEffect(() => {
-    fetchForms(); // Fetch the forms data when the component mounts
+    fetchForms();
   }, []);
 
   const fetchForms = async () => {
@@ -55,8 +55,8 @@ const Table = ({
   // };
 
   const handleRowClick = (rowId) => {
-    onRowClick(rowId); // Call the function to update focusMarker
-    setSelectedRow(rowId); // This can be used for highlighting the selected row
+    onRowClick(rowId);
+    setSelectedRow(rowId); 
   };
 
   const deleteData = (id) => {
@@ -155,7 +155,7 @@ const Table = ({
             Додати з полігону
           </button>
           <button className="button-add-Dz" onClick={() => setShowAddForm(true)}>
-            Додати dz
+            Додати ДЗ
           </button>
           <button className="button-add-Dz" onClick={handleClearTable}>
             Очистити

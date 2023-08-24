@@ -38,10 +38,6 @@ const coordinatesStyle = {
   zIndex: 1000,
 };
 
-const listStyle = {
-
-};
-
 const LeafletMap = ({
   handlePolygonClick,
   handleDzClick,
@@ -158,7 +154,7 @@ const LeafletMap = ({
       }
     };
 
-    handleAsyncClick(); // Call the asynchronous inner function
+    handleAsyncClick();
 
     const polygonCoordinates = polygon.geom.coordinates;
     const filteredMarkers = filterMarkersWithinPolygon(polygonCoordinates);
@@ -213,7 +209,7 @@ const LeafletMap = ({
     setFilteredPolygons(polygonsInView);
 
     setFilteredMarkers(filterMarkersByMapBounds(polygonsInView));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapBounds, polygons]);
 
   const [coordinaetes, setCoordinates] = useState();
@@ -260,7 +256,7 @@ const LeafletMap = ({
         ))}
         {/* <MouseCoordinates setCoordinates={setCoordinates} />
         {coordinaetes ? <div style={coordinatesStyle}>{coordinaetes}</div> : ""} */}
-        <ul style={clickedPolygons ? listStyle : ""} className="list">
+        <ul className="map-list">
           {clickedPolygons.length > 0 && (
             clickedPolygons.map((polygon) => (
               <li key={polygon.objectid}>{polygon.pro_name}</li>

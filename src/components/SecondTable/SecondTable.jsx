@@ -60,7 +60,6 @@ const SecondTable = () => {
         )
       );
     }
-    // Clear the editedData state
     setEditedData({});
   };
 
