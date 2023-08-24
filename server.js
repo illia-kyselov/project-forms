@@ -45,9 +45,16 @@ app.get("/doc_plg", (req, res) => {
   });
 });
 
-app.get("/doc_plg/filteredPolygons", (req, res) => {
-  const query =
-    "Select * from exploitation.doc_plg WHERE ST_Contains(geom, ST_GeomFromText('POINT(30.570757 50.4612)', 4326));";
+app.get("/doc_plg/filteredPolygons/:lat/:lng", (req, res) => {
+  const lat = req.params.lat;
+  const lng = req.params.lng;
+
+  const query = `
+    SELECT objectid, num_disl, pro_name, ST_AsText(geom) AS geom
+    FROM exploitation.doc_plg
+    WHERE ST_Contains(geom, ST_GeomFromText('POINT(${lng} ${lat})', 4326));
+  `;
+
   client.query(query, (err, result) => {
     if (err) {
       console.error("Error executing query", err);
@@ -176,7 +183,8 @@ app.get("/elements", (req, res) => {
 });
 
 app.get("/dz_forms", (req, res) => {
-  const query = "SELECT id, num_pdr_new, form_dz FROM exploitation.dict_dz_form";
+  const query =
+    "SELECT id, num_pdr_new, form_dz FROM exploitation.dict_dz_form";
   client.query(query, (err, result) => {
     if (err) {
       console.error("Error executing query", err);

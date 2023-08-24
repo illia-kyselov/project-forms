@@ -13,6 +13,7 @@ body {
   background-color: #fff;
   color: #f8f5f5;
   border: 1px solid #326d0c;
+  border-radius: 0 0 4px 4px;
 
   .form__title {
     margin: 0 0 32px 0;
@@ -364,12 +365,14 @@ body {
   flex-direction: column;
 }
 
-#326d0c .table {
+.table {
   width: 100%;
   margin-bottom: 20px;
   border: 1px solid #326d0c;
+  border-radius: 0 0 4px 4px;
   box-sizing: border-box;
 }
+
 .table thead th {
   font-weight: bold;
   text-align: left;
@@ -408,7 +411,9 @@ body {
   padding: 10px;
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   background-color: #f1f1f1;
+  border-bottom: 1px solid #d4d2d2;
   z-index: 9;
 }
 
@@ -508,4 +513,16 @@ input:checked + .slider:before {
 .form-info {
   display: flex;
   flex-direction: column;
+}
+
+.list {
+  position: absolute;
+  top: 50px;
+  right: 10px;
+  background-color: white;
+  padding: 5px 5px 10px 20px;
+  border-radius: 5px;
+  z-index: 1000;
+  list-style: decimal;
+  width: 300px;
 }

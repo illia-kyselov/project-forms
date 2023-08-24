@@ -29,27 +29,18 @@ const customIconFocus = new L.Icon({
 });
 
 const coordinatesStyle = {
-  position: 'absolute',
-  top: '10px',
-  right: '10px',
-  backgroundColor: 'white',
-  padding: '5px',
-  borderRadius: '5px',
+  position: "absolute",
+  top: "10px",
+  right: "10px",
+  backgroundColor: "white",
+  padding: "5px",
+  borderRadius: "5px",
   zIndex: 1000,
 };
 
 const listStyle = {
-  position: 'absolute',
-  top: '50px',
-  right: '10px',
-  backgroundColor: 'white',
-  padding: '5px',
-  borderRadius: '5px',
-  zIndex: 1000,
-  listStyle: 'none',
-  width: '300px',
-};
 
+};
 
 const LeafletMap = ({
   handlePolygonClick,
@@ -76,6 +67,7 @@ const LeafletMap = ({
   const [selectedPolygon, setSelectedPolygon] = useState(null);
 
   const [selectedPolygonMarkers, setSelectedPolygonMarkers] = useState([]);
+  const [clickedPolygons, setClickedPolygons] = useState([]);
 
   useEffect(() => {
     fetch("http://localhost:3001/doc_plg")
@@ -146,7 +138,6 @@ const LeafletMap = ({
     return isInside;
   };
 
-  const [clickedPolygons, setClickedPolygons] = useState([]);
 
   const handleClick = (e, polygon) => {
     e.target.openPopup();
@@ -154,22 +145,29 @@ const LeafletMap = ({
     setSelectedPolygonId(polygon.objectid);
     setSelectedPolygon(polygon);
 
+    const handleAsyncClick = async () => {
+      const lat = e.latlng.lat;
+      const lng = e.latlng.lng;
+
+      try {
+        const response = await fetch(`http://localhost:3001/doc_plg/filteredPolygons/${lat}/${lng}`);
+        const data = await response.json();
+        setClickedPolygons(data);
+      } catch (error) {
+        console.error("Error fetching clicked polygons data", error);
+      }
+    };
+
+    handleAsyncClick(); // Call the asynchronous inner function
+
     const polygonCoordinates = polygon.geom.coordinates;
     const filteredMarkers = filterMarkersWithinPolygon(polygonCoordinates);
     setSelectedPolygonMarkers(filteredMarkers);
-
-    setClickedPolygons((prevClickedPolygons) => {
-      if (prevClickedPolygons.some((poly) => poly.objectid === polygon.objectid)) {
-        return prevClickedPolygons.filter((poly) => poly.objectid !== polygon.objectid);
-      } else {
-        return [...prevClickedPolygons, polygon];
-      }
-    });
   };
 
-  const handleMapClick = () => {
-    setClickedPolygons([]);
-  };
+
+  const [filteredClickedPolygons, setFilteredClickedPolygons] = useState([]);
+  const [clickedCoordinates, setClickedCoordinates] = useState(null);
 
   const handleMarkerClick = (markerId) => {
     setSelectedPolygon(null);
@@ -202,6 +200,10 @@ const LeafletMap = ({
     if (!mapBounds) return true;
     const polygonBounds = L.polygon(polygon.geom.coordinates).getBounds();
     return mapBounds.intersects(polygonBounds);
+  };
+
+  const handleMapClick = async (e) => {
+
   };
 
   useEffect(() => {
@@ -256,17 +258,16 @@ const LeafletMap = ({
             <Popup>{marker.id}</Popup>
           </Marker>
         ))}
-        <MouseCoordinates setCoordinates={setCoordinates} />
-        {coordinaetes
-          ? <div style={coordinatesStyle}>{coordinaetes}</div>
-          : ''}
-        {clickedPolygons.length > 0 && (
-          <ul style={listStyle}>
-            {clickedPolygons.map((polygon) => (
+        {/* <MouseCoordinates setCoordinates={setCoordinates} />
+        {coordinaetes ? <div style={coordinatesStyle}>{coordinaetes}</div> : ""} */}
+        <ul style={clickedPolygons ? listStyle : ""} className="list">
+          {clickedPolygons.length > 0 && (
+            clickedPolygons.map((polygon) => (
               <li key={polygon.objectid}>{polygon.pro_name}</li>
-            ))}
-          </ul>
-        )}
+            ))
+          )
+          }
+        </ul>
       </MapContainer>
     </div>
   );
