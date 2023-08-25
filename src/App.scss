@@ -528,10 +528,46 @@ input:checked+.slider:before {
   position: absolute;
   top: 50px;
   right: 10px;
-  background-color: white;
   border-radius: 5px;
   z-index: 1000;
   list-style: decimal;
+}
+
+.map-table {
+  position: absolute;
+  top: 50px;
+  right: 10px;
+  border: 1px solid #326d0c;
+  z-index: 1000;
+  background-color: white;
   width: 300px;
   cursor: pointer;
+  border-collapse: collapse;
+  border-radius: 5px;
+
+}
+
+.map-table thead th {
+  font-weight: bold;
+  text-align: center;
+  border: none;
+  padding: 10px 15px;
+  background-color: #e1ffcd;
+  font-size: 14px;
+}
+
+.map-table thead tr th:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.map-table thead tr th:last-child {
+  border-radius: 0 8px 8px 0;
+}
+
+.map-table tbody td {
+  padding: 5px 10px;
+}
+
+.map-table tbody tr:hover {
+  background-color: #b6ff85;
 }
