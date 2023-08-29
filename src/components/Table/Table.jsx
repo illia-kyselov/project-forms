@@ -7,7 +7,10 @@ const Table = ({
   handleClearTable,
   selectedMarkersPressed,
   onRowClick,
-  filteredMarkers, handleAddFromPolygon, setButtonPressed
+  filteredMarkers,
+  handleAddFromPolygon,
+  setButtonPressed,
+  setDataSecondTable,
 }) => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -34,29 +37,9 @@ const Table = ({
     }
   };
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
-
-  // const fetchData = async () => {
-  //   try {
-  //     fetch("http://localhost:3001/dict_dz_form")
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       const dzForms = data.map((form) => ({
-  //         id: form.id,
-  //         form_dz: form.form_dz,
-  //       }));
-  //       setForms(data);
-  //     })
-  //   } catch (error) {
-  //     console.error("Error fetching data", error);
-  //   }
-  // };
-
   const handleRowClick = (rowId) => {
     onRowClick(rowId);
-    setSelectedRow(rowId); 
+    setSelectedRow(rowId);
   };
 
   const deleteData = (id) => {
@@ -69,7 +52,9 @@ const Table = ({
   const handleROwDoubleClick = (rowId) => {
     setSelectedRow(rowId);
     setShowSecondTable(true);
+    setDataSecondTable(rowId);
   };
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -112,7 +97,7 @@ const Table = ({
   };
 
   return (
-    <div className="form-container-inside">
+    <div className="form-container-inside form-container-inside-width">
       <label className="block-label">Обрані дорожні знаки</label>
 
       <div className="table">

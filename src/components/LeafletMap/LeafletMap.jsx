@@ -47,7 +47,7 @@ const LeafletMap = ({
 }) => {
   const zoom = 17;
   const containerStyle = {
-    height: "95vh",
+    height: "95.5vh",
   };
   const center = {
     lat: 50.3865,
@@ -149,7 +149,6 @@ const LeafletMap = ({
         const response = await fetch(`http://localhost:3001/doc_plg/filteredPolygons/${lat}/${lng}`);
         const data = await response.json();
         setClickedPolygons(data);
-        console.log(clickedPolygons);
       } catch (error) {
         console.error("Error fetching clicked polygons data", error);
       }
@@ -257,23 +256,24 @@ const LeafletMap = ({
         ))}
         <MouseCoordinates setCoordinates={setCoordinates} />
         {coordinaetes ? <div style={coordinatesStyle}>{coordinaetes}</div> : ""}
-        <table className="map-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Назва</th>
-            </tr>
-          </thead>
-          <tbody>
-            {clickedPolygons.length > 0 &&
-              clickedPolygons.map((polygon) => (
+        {clickedPolygons.length > 0 &&
+          <table className="map-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Назва</th>
+              </tr>
+            </thead>
+            <tbody>
+              {clickedPolygons.map((polygon) => (
                 <tr key={polygon.objectid}>
                   <td>{polygon.objectid}</td>
                   <td>{polygon.pro_name}</td>
                 </tr>
               ))}
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        }
       </MapContainer>
     </div>
   );

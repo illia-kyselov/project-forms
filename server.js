@@ -182,6 +182,32 @@ app.get("/elements", (req, res) => {
   });
 });
 
+app.get("/elements/:expl_dz_id", (req, res) => {
+  const expl_dz_id = req.params.expl_dz_id;
+  const query = `
+    SELECT id_elmts, expl_dz_id, name_elmns, cnt_elmnt
+    FROM exploitation.elements
+    WHERE expl_dz_id = $1
+  `;
+
+  const values = [expl_dz_id];
+
+  client.query(query, values, (err, result) => {
+    if (err) {
+      console.error("Error executing query", err);
+      res.status(500).send("Error executing query");
+    } else {
+      const data = result.rows.map((row) => ({
+        id_elmts: row.id_elmts,
+        expl_dz_id: row.expl_dz_id,
+        name_elmns: row.name_elmns,
+        cnt_elmnt: row.cnt_elmnt,
+      }));
+      res.json(data);
+    }
+  });
+});
+
 app.get("/dz_forms", (req, res) => {
   const query =
     "SELECT id, num_pdr_new, form_dz FROM exploitation.dict_dz_form";

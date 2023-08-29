@@ -27,10 +27,6 @@ const FormAddWorks = ({ handleAddInfo, objectid, selectedMarkerId, selectedPolyg
     setIsChecked(!isChecked);
   };
 
-  console.log("selectedMarkerId:", selectedMarkerId);
-  console.log("formObjectId:", formObjectId);
-  console.log("selectedPolygon:", selectedPolygon);
-
   // const handleChange = (e) => {
   //   const { name, value } = e.target;
   //   setFormData((prevData) => ({
@@ -120,7 +116,7 @@ const FormAddWorks = ({ handleAddInfo, objectid, selectedMarkerId, selectedPolyg
                   type="text"
                   placeholder="Документ / підстава"
                   className="form__input"
-                  value={selectedMarkerId || formObjectId || selectedPolygon
+                  value={formObjectId || selectedMarkerId || selectedPolygon
                     ? `${selectedMarkerId || formObjectId} / ${selectedPolygon
                       ? ` ${selectedPolygon.pro_name}`
                       : ''}`

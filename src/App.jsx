@@ -26,6 +26,8 @@ function App() {
   const [selectedMarkersPressed, setSelectedMarkersPressed] = useState(false);
   const [focusMarker, setFocusMarker] = useState(null);
 
+  const [dataSecondTable, setDataSecondTable] = useState(null);
+
   const handleRowClick = (markerId) => {
     setFocusMarker(markerId);
   };
@@ -102,7 +104,6 @@ function App() {
         body: JSON.stringify(formAddElementsData),
       });
       const data = await response.json();
-      console.log(data);
       setformAddElementsData({
         fid: "",
         tableId: "",
@@ -137,6 +138,8 @@ function App() {
     setSelectedMarkersPressed(false);
   };
 
+  console.log(dataSecondTable);
+
   return (
     <div className="App">
       <Navigation />
@@ -147,6 +150,7 @@ function App() {
           handleAddMarkerData={handleAddMarkerData}
           handleAddFromPolygon={handleAddFromPolygon}
           focusMarker={focusMarker}
+          setSelectedMarkerId={setSelectedMarkerId}
         />
         {/* <div className="container-leaflet">
           <SelectedMarkers
@@ -178,8 +182,13 @@ function App() {
               handleClearTable={handleClearTable}
               selectedMarkersPressed={selectedMarkersPressed}
               onRowClick={handleRowClick}
+              setDataSecondTable={setDataSecondTable}
             />
-            <SecondTable />
+            {showSecondTable &&
+              <SecondTable
+                dataSecondTable={dataSecondTable}
+              />
+            }
           </div>
         </div>
       </div>
