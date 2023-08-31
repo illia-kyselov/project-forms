@@ -165,7 +165,15 @@ const SecondTable = ({ dataSecondTable }) => {
             </tbody>
           </table>
         ) : (
-          <p className="table-paragraph">Немає елементів</p>
+          <>
+            <p className="table-paragraph">Немає елементів</p>
+            {/* <button
+              className="form__button form__button-addForm"
+              disabled
+            >
+              Обрати
+            </button> */}
+          </>
         )}
       </div>
     </div>

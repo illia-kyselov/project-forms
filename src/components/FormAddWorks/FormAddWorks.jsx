@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 
-const FormAddWorks = ({ 
-  handleAddInfo, 
-  objectid, 
-  selectedMarkerId, 
-  selectedPolygon, 
-  polygonTableRowClick,  
+const FormAddWorks = ({
+  handleAddInfo,
+  objectid,
+  selectedMarkerId,
+  selectedPolygon,
+  polygonTableRowClick,
+  setButtonAddDocPressed,
+  buttonAddDocPressed
 }) => {
   const [options, setOptions] = useState([]);
   const [isChecked, setIsChecked] = useState(true);
@@ -80,6 +82,23 @@ const FormAddWorks = ({
   //     });
   // };
 
+  const handleButtonClick = (e) => {
+    e.preventDefault();
+    setButtonAddDocPressed((prevValue) => !prevValue);
+  }
+
+  const [selectedDocValue, setSelectedDocValue] = useState("");
+
+  const handleInputChange = (e) => {
+    setSelectedDocValue(e.target.value);
+  };
+
+  useEffect(() => {
+    if (buttonAddDocPressed) {
+      setSelectedDocValue(selectedInfo);
+    }
+  }, [buttonAddDocPressed, selectedInfo]);
+
   return (
     <div className="form-container-inside">
       <label className="block-label">Загальна інформація</label>
@@ -133,20 +152,13 @@ const FormAddWorks = ({
                   type="text"
                   placeholder="Документ / підстава"
                   className="form__input"
-                  value={selectedInfo}
-
-                  /*
-                  value={`${polygonTableRowClick.objectid} / ${polygonTableRowClick.pro_name} ` || selectedMarkerId || selectedPolygon
-                    ? `${selectedMarkerId || formObjectId} / ${selectedPolygon
-                      ? ` ${selectedPolygon.pro_name}`
-                      : ''}`
-                    : ''}
-                  */
-                  readOnly
+                  value={selectedDocValue}
+                  onChange={handleInputChange}
                 />
                 <button
                   className="form__button form__button-addForm"
-                  disabled
+                  onClick={handleButtonClick}
+                  style={{ backgroundColor: buttonAddDocPressed ? '#d8d8d8' : '' }}
                 >
                   Обрати
                 </button>

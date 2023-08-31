@@ -22,6 +22,8 @@ function App() {
   const [dataSecondTable, setDataSecondTable] = useState(null);
   const [polygonTableRowClick, setPolygonTableRowClick] = useState([]);
 
+  const [buttonAddDocPressed, setButtonAddDocPressed] = useState(false);
+
 
   const handleRowClick = (markerId) => {
     setFocusMarker(markerId);
@@ -157,6 +159,8 @@ function App() {
             selectedPolygon={selectedPolygon}
             polygonTableRowClick={polygonTableRowClick}
             setButtonAddDocPressed={setButtonAddDocPressed}
+            buttonAddDocPressed={buttonAddDocPressed}
+
           />
           <div className=" flex">
             <Table
