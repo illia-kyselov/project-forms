@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 
-const FormAddWorks = ({ handleAddInfo, objectid, selectedMarkerId, selectedPolygon, }) => {
+const FormAddWorks = ({ 
+  handleAddInfo, 
+  objectid, 
+  selectedMarkerId, 
+  selectedPolygon, 
+  polygonTableRowClick,  
+}) => {
   const [options, setOptions] = useState([]);
   const [isChecked, setIsChecked] = useState(true);
   const [formObjectId, setFormObjectId] = useState("");
@@ -26,6 +32,17 @@ const FormAddWorks = ({ handleAddInfo, objectid, selectedMarkerId, selectedPolyg
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };
+
+  const selectedInfoFromTableRowClick =
+    polygonTableRowClick.objectid && polygonTableRowClick.pro_name
+      ? `${polygonTableRowClick.objectid} / ${polygonTableRowClick.pro_name}`
+      : "";
+
+  const selectedInfo =
+    selectedMarkerId ||
+    (selectedPolygon
+      ? `${selectedPolygon.objectid} / ${selectedPolygon.pro_name}`
+      : selectedInfoFromTableRowClick);
 
   // const handleChange = (e) => {
   //   const { name, value } = e.target;
@@ -116,11 +133,15 @@ const FormAddWorks = ({ handleAddInfo, objectid, selectedMarkerId, selectedPolyg
                   type="text"
                   placeholder="Документ / підстава"
                   className="form__input"
-                  value={formObjectId || selectedMarkerId || selectedPolygon
+                  value={selectedInfo}
+
+                  /*
+                  value={`${polygonTableRowClick.objectid} / ${polygonTableRowClick.pro_name} ` || selectedMarkerId || selectedPolygon
                     ? `${selectedMarkerId || formObjectId} / ${selectedPolygon
                       ? ` ${selectedPolygon.pro_name}`
                       : ''}`
                     : ''}
+                  */
                   readOnly
                 />
                 <button

@@ -11,6 +11,7 @@ const Table = ({
   handleAddFromPolygon,
   setButtonPressed,
   setDataSecondTable,
+  buttonPressed,
 }) => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -136,7 +137,7 @@ const Table = ({
           </form>
         )}
         <div className="flex">
-          <button className="button-add-Dz" onClick={setButtonPressed}>
+          <button className="button-add-Dz" onClick={setButtonPressed} style={{ backgroundColor: buttonPressed ? '#46aa03' : '' }}>
             Додати з полігону
           </button>
           <button className="button-add-Dz" onClick={() => setShowAddForm(true)}>

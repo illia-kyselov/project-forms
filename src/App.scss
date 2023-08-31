@@ -225,6 +225,17 @@ body {
   border: none;
   background-color: transparent;
   padding: 5px;
+  transition: all linear 0.2s;
+}
+
+.delete-icon:hover {
+  color: #f32222;
+  scale: 1.2;
+}
+
+.delete-icon:active {
+  color: #ca0505;
+  scale: 1;
 }
 
 .tr-table:active {
@@ -244,6 +255,19 @@ body {
   padding: 8px 6px;
   border-radius: 4px;
   margin: 5px 5px 5px 5px;
+  transition: all linear 0.2s;
+}
+
+.button-add-Dz:hover {
+  background-color: #3b9202;
+  box-shadow: #2c6d00 0 4px 10px;
+  transform: translateY(-1px);
+}
+
+.button-add-Dz:active {
+  background-color: #46aa03;
+  box-shadow: none;
+  transform: translateY(0);
 }
 
 .components-container {
@@ -381,10 +405,10 @@ body {
   border-radius: 0 0 4px 4px;
   box-sizing: border-box;
 }
- 
+
 .table thead th {
   font-weight: bold;
-  text-align: left;
+  text-align: center;
   border: none;
   padding: 10px 15px;
   background: #d8d8d8;
@@ -559,6 +583,10 @@ input:checked+.slider:before {
   padding: 10px 15px;
   background-color: #e1ffcd;
   font-size: 14px;
+}
+
+.map-table tbody tr {
+  text-align: center;
 }
 
 .map-table thead tr th:first-child {

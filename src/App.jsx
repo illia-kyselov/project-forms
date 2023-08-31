@@ -6,11 +6,7 @@ import LeafletMap from "./components/LeafletMap/LeafletMap";
 import FormAddElements from "./components/FormAddElements/FormAddElements";
 import Table from "./components/Table/Table";
 import SecondTable from "./components/SecondTable/SecondTable";
-import SelectedMarkers from "./components/SelectedMarkers/SelectedMarkers";
-import SelectedPolygons from "./components/SelectedPolygons/SelectedPolygons";
 import Navigation from "./components/Navigation/Navigation";
-// import MainForm from "./components/MainForm/MainForm";
-// import Tabs from "./components/Tabs/Tabs";
 
 function App() {
   const [showAddInfoForm, setShowAddInfoForm] = useState(false);
@@ -19,14 +15,13 @@ function App() {
   const [objectid, setObjectid] = useState("");
   const [selectedMarkerId, setSelectedMarkerId] = useState(null);
   const [dataTable, setDataTable] = useState([]);
-
-  const [filteredMarkers, setFilteredMarkers] = useState([]);
   const [buttonPressed, setButtonPressed] = useState(false);
   const [showSecondTable, setShowSecondTable] = useState(false);
   const [selectedMarkersPressed, setSelectedMarkersPressed] = useState(false);
   const [focusMarker, setFocusMarker] = useState(null);
-
   const [dataSecondTable, setDataSecondTable] = useState(null);
+  const [polygonTableRowClick, setPolygonTableRowClick] = useState([]);
+
 
   const handleRowClick = (markerId) => {
     setFocusMarker(markerId);
@@ -66,6 +61,7 @@ function App() {
         if (data.length > 0) {
           setSelectedPolygon(data[0]);
           setObjectid(objectid);
+          setSelectedMarkerId(null);
         }
       })
       .catch((error) => {
@@ -138,8 +134,6 @@ function App() {
     setSelectedMarkersPressed(false);
   };
 
-  console.log(dataSecondTable);
-
   return (
     <div className="App">
       <Navigation />
@@ -151,19 +145,9 @@ function App() {
           handleAddFromPolygon={handleAddFromPolygon}
           focusMarker={focusMarker}
           setSelectedMarkerId={setSelectedMarkerId}
+          setPolygonTableRowClick={setPolygonTableRowClick}
+          setSelectedPolygonApp={setSelectedPolygon}
         />
-        {/* <div className="container-leaflet">
-          <SelectedMarkers
-            data={dataTable}
-            setData={setDataTable}
-            handleAddFromPolygon={handleAddFromPolygon}
-            setButtonPressed={setButtonPressed}
-            setShowSecondTable={setShowSecondTable}
-            handleClearTable={handleClearTable}
-            setSelectedMarkersPressed={setSelectedMarkersPressed}
-          />
-          <SelectedPolygons />
-        </div> */}
         <div className="form-container">
           <FormAddWorks
             handleAddInfo={handleAddInfo}
@@ -171,6 +155,8 @@ function App() {
             setFormObjectId={setObjectid}
             selectedMarkerId={selectedMarkerId}
             selectedPolygon={selectedPolygon}
+            polygonTableRowClick={polygonTableRowClick}
+            setButtonAddDocPressed={setButtonAddDocPressed}
           />
           <div className=" flex">
             <Table
@@ -178,6 +164,7 @@ function App() {
               setData={setDataTable}
               handleAddFromPolygon={handleAddFromPolygon}
               setButtonPressed={setButtonPressed}
+              buttonPressed={buttonPressed}
               setShowSecondTable={setShowSecondTable}
               handleClearTable={handleClearTable}
               selectedMarkersPressed={selectedMarkersPressed}
@@ -193,11 +180,6 @@ function App() {
         </div>
       </div>
       <div className="components-container">
-
-        {/* <MainForm
-          selectedPolygon={selectedPolygon}
-          onObjectidChange={(value) => setObjectid(value)}
-          /> */}
         {showAddInfoForm && (
           <div className="popup-overlay">
             <div className="popup-content">
@@ -221,18 +203,6 @@ function App() {
           </div>
         )}
       </div>
-
-      {/* <div className="tables-container">
-        <Table
-          data={dataTable}
-          setData={setDataTable}
-          handleAddFromPolygon={handleAddFromPolygon}
-          setButtonPressed={setButtonPressed}
-          setShowSecondTable={setShowSecondTable}
-          handleClearTable={handleClearTable}
-        />
-        {showSecondTable && <SecondTable />}
-      </div> */}
     </div>
   );
 }

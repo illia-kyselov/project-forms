@@ -5,6 +5,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import markerImage from "../../img/1.39z.png";
 import MouseCoordinates from "../CursorCoordinates/MapEvents";
+import ListPolygons from "../ListPolygons/ListPolygons";
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -44,6 +45,9 @@ const LeafletMap = ({
   handleAddMarkerData,
   handleAddFromPolygon,
   focusMarker,
+  setPolygonTableRowClick,
+  setSelectedMarkerId,
+  setSelectedPolygonApp,
 }) => {
   const zoom = 17;
   const containerStyle = {
@@ -61,6 +65,7 @@ const LeafletMap = ({
   const [mapBounds, setMapBounds] = useState(null);
   const [filteredPolygons, setFilteredPolygons] = useState([]);
   const [selectedPolygon, setSelectedPolygon] = useState(null);
+  const [coordinaetes, setCoordinates] = useState();
 
   const [selectedPolygonMarkers, setSelectedPolygonMarkers] = useState([]);
   const [clickedPolygons, setClickedPolygons] = useState([]);
@@ -198,10 +203,6 @@ const LeafletMap = ({
     return mapBounds.intersects(polygonBounds);
   };
 
-  const handleMapClick = async (e) => {
-
-  };
-
   useEffect(() => {
     const polygonsInView = polygons.filter((polygon) =>
       isPolygonWithinMapBounds(polygon)
@@ -212,7 +213,8 @@ const LeafletMap = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapBounds, polygons]);
 
-  const [coordinaetes, setCoordinates] = useState();
+;
+  console.log(clickedPolygons);
 
   return (
     <div className="LeafletMapContainer ">
@@ -221,7 +223,6 @@ const LeafletMap = ({
         zoom={zoom}
         style={containerStyle}
         onMoveend={handleMoveEnd}
-        onClick={handleMapClick}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -256,24 +257,17 @@ const LeafletMap = ({
         ))}
         <MouseCoordinates setCoordinates={setCoordinates} />
         {coordinaetes ? <div style={coordinatesStyle}>{coordinaetes}</div> : ""}
-        {clickedPolygons.length > 0 &&
-          <table className="map-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Назва</th>
-              </tr>
-            </thead>
-            <tbody>
-              {clickedPolygons.map((polygon) => (
-                <tr key={polygon.objectid}>
-                  <td>{polygon.objectid}</td>
-                  <td>{polygon.pro_name}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        {clickedPolygons.length > 1 &&
+          <ListPolygons 
+            clickedPolygons={clickedPolygons} 
+            setPolygonTableRowClick={setPolygonTableRowClick}
+            setSelectedMarkerId={setSelectedMarkerId}
+            setSelectedPolygon={setSelectedPolygon}
+            setSelectedPolygonApp={setSelectedPolygonApp}
+            setClickedPolygons={setClickedPolygons}
+          />
         }
+
       </MapContainer>
     </div>
   );
