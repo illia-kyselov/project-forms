@@ -5,7 +5,7 @@ const ListPolygons = ({ clickedPolygons, setPolygonTableRowClick, setSelectedMar
     setSelectedMarkerId(null);
     setSelectedPolygonApp(null);
 
-    setSelectedPolygon(objectid);
+    // setSelectedPolygon(objectid);
 
     setPolygonTableRowClick({ objectid, pro_name });
     setClickedPolygons([]);

@@ -258,7 +258,7 @@ const LeafletMap = ({
             clickedPolygons={clickedPolygons}
             setPolygonTableRowClick={setPolygonTableRowClick}
             setSelectedMarkerId={setSelectedMarkerId}
-            setSelectedPolygon={setSelectedPolygon}
+            // setSelectedPolygon={setSelectedPolygon}
             setSelectedPolygonApp={setSelectedPolygonApp}
             setClickedPolygons={setClickedPolygons}
           />
