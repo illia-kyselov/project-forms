@@ -7,7 +7,7 @@ const FormAddWorks = ({
   selectedPolygon,
   polygonTableRowClick,
   setButtonAddDocPressed,
-  buttonAddDocPressed
+  buttonAddDocPressed,
 }) => {
   const [options, setOptions] = useState([]);
   const [isChecked, setIsChecked] = useState(true);

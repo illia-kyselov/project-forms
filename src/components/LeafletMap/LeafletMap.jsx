@@ -166,10 +166,6 @@ const LeafletMap = ({
     setSelectedPolygonMarkers(filteredMarkers);
   };
 
-
-  const [filteredClickedPolygons, setFilteredClickedPolygons] = useState([]);
-  const [clickedCoordinates, setClickedCoordinates] = useState(null);
-
   const handleMarkerClick = (markerId) => {
     setSelectedPolygon(null);
     handlePolygonClick(markerId);
@@ -213,7 +209,7 @@ const LeafletMap = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapBounds, polygons]);
 
-;
+  ;
   console.log(clickedPolygons);
 
   return (
@@ -258,8 +254,8 @@ const LeafletMap = ({
         <MouseCoordinates setCoordinates={setCoordinates} />
         {coordinaetes ? <div style={coordinatesStyle}>{coordinaetes}</div> : ""}
         {clickedPolygons.length > 1 &&
-          <ListPolygons 
-            clickedPolygons={clickedPolygons} 
+          <ListPolygons
+            clickedPolygons={clickedPolygons}
             setPolygonTableRowClick={setPolygonTableRowClick}
             setSelectedMarkerId={setSelectedMarkerId}
             setSelectedPolygon={setSelectedPolygon}
