@@ -1,14 +1,21 @@
 import React from "react";
 
-const ListPolygons = ({ clickedPolygons, setPolygonTableRowClick, setSelectedMarkerId, setSelectedPolygonApp, setClickedPolygons, setSelectedPolygon }) => {
+const ListPolygons = ({
+  clickedPolygons, 
+  setPolygonTableRowClick, 
+  setSelectedMarkerId, 
+  setSelectedPolygonApp, 
+  setClickedPolygons,
+  setSelectedPolygonIdFromList,
+  setSelectedPolygon,
+}) => {
   const handleRowClick = (objectid, pro_name) => {
     setSelectedMarkerId(null);
     setSelectedPolygonApp(null);
-
-    // setSelectedPolygon(objectid);
-
+    setSelectedPolygonIdFromList(objectid);
     setPolygonTableRowClick({ objectid, pro_name });
     setClickedPolygons([]);
+    setSelectedPolygon(null);
   };
 
 

@@ -149,6 +149,8 @@ function App() {
           setSelectedMarkerId={setSelectedMarkerId}
           setPolygonTableRowClick={setPolygonTableRowClick}
           setSelectedPolygonApp={setSelectedPolygon}
+          polygonTableRowClick={polygonTableRowClick}
+          buttonAddDocPressed={buttonAddDocPressed}
         />
         <div className="form-container">
           <FormAddWorks
@@ -178,6 +180,9 @@ function App() {
             {showSecondTable &&
               <SecondTable
                 dataSecondTable={dataSecondTable}
+                handleSubmitElements={handleSubmitElements}
+                handleChange={handleChange}
+                formAddElementsData={formAddElementsData}
               />
             }
           </div>

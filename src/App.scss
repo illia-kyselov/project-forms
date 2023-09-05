@@ -96,7 +96,7 @@ body {
     color: #1a1a1a;
     cursor: pointer;
     outline: none;
-    padding: 7px 12px;
+    padding: 5px 8px;
     text-align: center;
     transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
     touch-action: manipulation;
@@ -396,6 +396,7 @@ body {
 .form-right {
   display: flex;
   flex-direction: column;
+  gap: 16px;
 }
 
 .table {
@@ -610,7 +611,78 @@ input:checked+.slider:before {
 }
 
 .table-paragraph {
+  display: block;
   color: red;
   font-weight: bold;
   margin-left: 20px;
+  margin-bottom: 10px;
+}
+
+.table-paragraph-button {
+  display: block;
+  background-color: #326d0c;
+  color: #ffffff;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 6px;
+  border-radius: 4px;
+  margin: 5px 5px 5px 5px;
+  transition: all linear 0.2s;
+  width: max-content;
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+
+.table-paragraph-button:hover {
+  background-color: #3b9202;
+  box-shadow: #2c6d00 0 4px 10px;
+  transform: translateY(-1px);
+}
+
+.table-paragraph-button:active {
+  background-color: #46aa03;
+  box-shadow: none;
+  transform: translateY(0);
+}
+
+.form-addDz {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  padding: 10px 10px;
+  background-color: #fff;
+  color: #f8f5f5;
+  border: 1px solid #326d0c;
+  border-radius: 0 0 4px 4px;
+
+  &__group {
+    margin-bottom: 10px;
+  }
+
+  &-input_title {
+    display: block;
+    margin-right: 10px;
+    margin-bottom: 2px;
+    top: 0;
+    z-index: -1;
+    color: #1a1a1a;
+    transition: 0.3s;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+
+  &__input {
+    padding: 5px 10px;
+    border: 1px solid #4e4e4e;
+    color: #4e4e4e;
+    background-color: transparent;
+    outline: none;
+    transition: 0.3s;
+
+    width: 150px;
+    margin-right: 10px;
+    display: inline-block;
+  }
 }

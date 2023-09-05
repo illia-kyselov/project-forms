@@ -1,11 +1,19 @@
 import React, { useEffect, useState, useRef } from "react";
+import FormAddElements from "../FormAddElements/FormAddElements";
 
-const SecondTable = ({ dataSecondTable }) => {
+const SecondTable = ({
+  dataSecondTable,
+  handleSubmitElements,
+  handleChange,
+  formAddElementsData,
+}) => {
   const [dataTable, setDataTable] = useState([]);
   const [editRowId, setEditRowId] = useState(null);
   const [editedData, setEditedData] = useState({});
   const tableRef = useRef();
   const blurTimeoutRef = useRef(null);
+
+  const [showAddElements, setShowAddElements] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -98,6 +106,16 @@ const SecondTable = ({ dataSecondTable }) => {
     });
   };
 
+  const handleButtonClick = (e) => {
+    e.preventDefault();
+    setShowAddElements(true);
+  }
+
+  const handleRemoveElements = (e) => {
+    e.preventDefault();
+    setShowAddElements(false);
+  };
+
   return (
     <div className="form-container-inside form-container-inside-width">
       <label className="block-label">Елементи до ДЗ № {dataSecondTable}</label>
@@ -163,16 +181,50 @@ const SecondTable = ({ dataSecondTable }) => {
                 </tr>
               ))}
             </tbody>
+            <button
+              className="table-paragraph-button"
+              onClick={handleButtonClick}
+            >
+              Додати елементи
+            </button>
+            {showAddElements && (
+              <div className="popup-overlay">
+                <div className="popup-content">
+                  <FormAddElements
+                    handleRemoveElements={handleRemoveElements}
+                    handleSubmitElements={handleSubmitElements}
+                    handleChange={handleChange}
+                    formAddElementsData={formAddElementsData}
+                    dataSecondTable={dataSecondTable}
+                  />
+                </div>
+              </div>
+            )}
           </table>
+
         ) : (
           <>
             <p className="table-paragraph">Немає елементів</p>
-            {/* <button
-              className="form__button form__button-addForm"
-              disabled
+            <button
+              className="table-paragraph-button"
+              onClick={handleButtonClick}
             >
-              Обрати
-            </button> */}
+              Додати елементи
+            </button>
+
+            {showAddElements && (
+              <div className="popup-overlay">
+                <div className="popup-content">
+                  <FormAddElements
+                    handleRemoveElements={handleRemoveElements}
+                    handleSubmitElements={handleSubmitElements}
+                    handleChange={handleChange}
+                    formAddElementsData={formAddElementsData}
+                    dataSecondTable={dataSecondTable}
+                  />
+                </div>
+              </div>
+            )}
           </>
         )}
       </div>

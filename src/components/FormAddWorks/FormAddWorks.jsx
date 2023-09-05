@@ -84,7 +84,7 @@ const FormAddWorks = ({
 
   const handleButtonClick = (e) => {
     e.preventDefault();
-    setButtonAddDocPressed((prevValue) => !prevValue);
+    setButtonAddDocPressed(true);
   }
 
   const [selectedDocValue, setSelectedDocValue] = useState("");
@@ -94,7 +94,7 @@ const FormAddWorks = ({
   };
 
   useEffect(() => {
-    if (buttonAddDocPressed) {
+    if (!buttonAddDocPressed) {
       setSelectedDocValue(selectedInfo);
     }
   }, [buttonAddDocPressed, selectedInfo]);
@@ -154,13 +154,26 @@ const FormAddWorks = ({
                   className="form__input"
                   value={selectedDocValue}
                   onChange={handleInputChange}
+                  readOnly
                 />
-                <button
+                {/* <button
                   className="form__button form__button-addForm"
                   onClick={handleButtonClick}
                   style={{ backgroundColor: buttonAddDocPressed ? '#d8d8d8' : '' }}
                 >
                   Обрати
+                </button> */}
+                <button
+                  className="form__button form__button-addForm"
+                  onClick={handleButtonClick}
+                  style={{ backgroundColor: buttonAddDocPressed ? '#6cd823' : '' }}
+                >
+                  Зберегти
+                </button>
+                <button
+                  className="form__button form__button-addForm"
+                >
+                  Скасувати
                 </button>
               </div>
             </>

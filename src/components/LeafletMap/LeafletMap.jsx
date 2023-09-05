@@ -48,6 +48,7 @@ const LeafletMap = ({
   setPolygonTableRowClick,
   setSelectedMarkerId,
   setSelectedPolygonApp,
+  buttonAddDocPressed,
 }) => {
   const zoom = 17;
   const containerStyle = {
@@ -69,6 +70,9 @@ const LeafletMap = ({
 
   const [selectedPolygonMarkers, setSelectedPolygonMarkers] = useState([]);
   const [clickedPolygons, setClickedPolygons] = useState([]);
+
+  const [selectedPolygonIdFromList, setSelectedPolygonIdFromList] = useState(null);
+
 
   useEffect(() => {
     fetch("http://localhost:3001/doc_plg")
@@ -139,12 +143,12 @@ const LeafletMap = ({
     return isInside;
   };
 
-
   const handleClick = (e, polygon) => {
     e.target.openPopup();
     handlePolygonClick(polygon.objectid);
     setSelectedPolygonId(polygon.objectid);
     setSelectedPolygon(polygon);
+    setSelectedPolygonIdFromList(null);
 
     const handleAsyncClick = async () => {
       const lat = e.latlng.lat;
@@ -168,6 +172,7 @@ const LeafletMap = ({
 
   const handleMarkerClick = (markerId) => {
     setSelectedPolygon(null);
+    setSelectedPolygonIdFromList(null);
     handlePolygonClick(markerId);
     handleDzClick(markerId);
     const markerData = markers.find((marker) => marker.id === markerId);
@@ -230,7 +235,18 @@ const LeafletMap = ({
             key={polygon.objectid}
             positions={polygon.geom.coordinates}
             pathOptions={{
-              color: selectedPolygon === polygon ? "red" : "purple",
+              color:
+                selectedPolygon === polygon || selectedPolygonIdFromList === polygon.objectid
+                  ? "red"
+                  : "purple",
+              zIndex:
+                selectedPolygon === polygon || selectedPolygonIdFromList === polygon.objectid
+                  ? '2147483647'
+                  : '',
+              opacity:
+                selectedPolygon === polygon || selectedPolygonIdFromList === polygon.objectid
+                  ? '1'
+                  : '0.7',
             }}
             eventHandlers={{
               click: (e) => handleClick(e, polygon),
@@ -253,14 +269,16 @@ const LeafletMap = ({
         ))}
         <MouseCoordinates setCoordinates={setCoordinates} />
         {coordinaetes ? <div style={coordinatesStyle}>{coordinaetes}</div> : ""}
-        {clickedPolygons.length > 1 &&
+
+        {clickedPolygons.length > 1 && !buttonAddDocPressed &&
           <ListPolygons
             clickedPolygons={clickedPolygons}
             setPolygonTableRowClick={setPolygonTableRowClick}
             setSelectedMarkerId={setSelectedMarkerId}
-            // setSelectedPolygon={setSelectedPolygon}
             setSelectedPolygonApp={setSelectedPolygonApp}
             setClickedPolygons={setClickedPolygons}
+            setSelectedPolygonIdFromList={setSelectedPolygonIdFromList}
+            setSelectedPolygon={setSelectedPolygon}
           />
         }
 

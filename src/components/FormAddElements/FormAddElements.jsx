@@ -4,6 +4,7 @@ const FormAddElements = ({
   handleRemoveElements,
   handleSubmitElements,
   handleChange,
+  dataSecondTable,
 }) => {
   const [elements, setElements] = useState([]);
   useEffect(() => {
@@ -41,6 +42,8 @@ const FormAddElements = ({
             name="tableId"
             className="form__input"
             onChange={handleChange}
+            placeholder={`${dataSecondTable}`}
+            // value={dataSecondTable}
             required
           />
         </div>

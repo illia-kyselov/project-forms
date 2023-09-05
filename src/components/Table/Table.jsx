@@ -103,38 +103,57 @@ const Table = ({
 
       <div className="table">
         {showAddForm && (
-          <form onSubmit={handleFormSubmit}>
-            <input
-              type="text"
-              name="id"
-              value={newRowData.id}
-              onChange={handleInputChange}
-              placeholder="ID"
-              required
-            />
-            <input
-              type="text"
-              name="id_znk"
-              value={newRowData.id_znk}
-              onChange={handleInputChange}
-              placeholder="Ідент. №"
-              required
-            />
-            <input
-              type="text"
-              name="num_sing"
-              value={newRowData.num_sing}
-              onChange={handleInputChange}
-              placeholder="Номер ПДР"
-              required
-            />
-            <button type="submit" className="button-add-Dz">
-              Зберегти
-            </button>
-            <button className="button-add-Dz" onClick={hideForm}>
-              Назад
-            </button>
-          </form>
+          <div>
+            <form onSubmit={handleFormSubmit} className="form-addDz">
+              <div className="form-addDz__group">
+                <label className="form-addDz-input_title">ID</label>
+                <input
+                  className="form-addDz__input"
+                  type="text"
+                  name="id"
+                  value={newRowData.id}
+                  onChange={handleInputChange}
+                  placeholder="ID"
+                  required
+                />
+              </div>
+              <div className="form-addDz__group">
+                <label className="form-addDz-input_title">Ідент. №</label>
+                <input
+                  className="form-addDz__input"
+                  type="text"
+                  name="id_znk"
+                  value={newRowData.id_znk}
+                  onChange={handleInputChange}
+                  placeholder="Ідент. №"
+                  required
+                />
+              </div>
+              <div className="form-addDz__group">
+                <label className="form-addDz-input_title">Номер ПДР</label>
+                <input
+                  className="form-addDz__input"
+                  type="text"
+                  name="num_sing"
+                  value={newRowData.num_sing}
+                  onChange={handleInputChange}
+                  placeholder="Номер ПДР"
+                  required
+                />
+              </div>
+              <div className="flex">
+                <button disabled className="button-add-Dz">
+                  Показати на карті
+                </button>
+                <button type="submit" className="button-add-Dz">
+                  Зберегти
+                </button>
+                <button className="button-add-Dz" onClick={hideForm}>
+                  Скасувати
+                </button>
+              </div>
+            </form>
+          </div>
         )}
         <div className="flex">
           <button className="button-add-Dz" onClick={setButtonPressed} style={{ backgroundColor: buttonPressed ? '#46aa03' : '' }}>
