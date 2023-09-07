@@ -170,7 +170,7 @@ const Table = ({
           <thead>
             <tr>
               <th>ID</th>
-              <th>Ідент. №</th>
+              {/* <th>Ідент. №</th> */}
               <th>Номер ПДР</th>
               <th>Форма</th>
               <th></th>
@@ -186,7 +186,7 @@ const Table = ({
                   style={{ background: selectedRow === row.id ? "#b3dcfd" : "" }}
                 >
                   <td>{row.id}</td>
-                  <td>{row.id_znk || "Немає в БД"}</td>
+                  {/* <td>{row.id_znk || "Немає в БД"}</td> */}
                   <td>{row.num_sing || "Немає в БД"}</td>
                   <td>
                     <select

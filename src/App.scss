@@ -36,11 +36,12 @@ body {
   }
 
   .form__input-option {
-    background-color: #d8d8d8;
+    background-color: #fff;
   }
 
   .form__input-option:checked {
-    background-color: #bbbaba;
+    color: #fff;
+    background-color: #46aa03;
   }
 
   .form__input:focus {
@@ -75,6 +76,10 @@ body {
   }
 
   .form-input_title-info {
+    display: inline-block;
+  }
+
+  .form-input_title--inline {
     display: inline-block;
   }
 
@@ -391,12 +396,13 @@ body {
 .form-left {
   display: flex;
   flex-direction: column;
+  gap: 5px;
+
 }
 
 .form-right {
   display: flex;
   flex-direction: column;
-  gap: 16px;
 }
 
 .table {
@@ -414,6 +420,7 @@ body {
   padding: 10px 15px;
   background: #d8d8d8;
   font-size: 14px;
+  width: min-content;
 }
 
 .table thead tr th:first-child {
@@ -606,8 +613,8 @@ input:checked+.slider:before {
   background-color: #b6ff85;
 }
 
-.form-container-inside-width {
-  width: 50%;
+.form-container-inside-width:first-child {
+  width: 45%;
 }
 
 .table-paragraph {
@@ -654,8 +661,9 @@ input:checked+.slider:before {
   padding: 10px 10px;
   background-color: #fff;
   color: #f8f5f5;
-  border: 1px solid #326d0c;
+  border-bottom: 1px solid #326d0c;
   border-radius: 0 0 4px 4px;
+  margin-bottom: 10px;
 
   &__group {
     margin-bottom: 10px;

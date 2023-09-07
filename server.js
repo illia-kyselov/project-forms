@@ -6,6 +6,7 @@ const app = express();
 const port = 3001;
 
 app.use(cors());
+app.use(express.json());
 
 const client = new Client({
   user: "postgres",
@@ -17,7 +18,6 @@ const client = new Client({
 
 client.connect();
 
-app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.listen(port, () => {
@@ -163,6 +163,28 @@ app.get("/dz", (req, res) => {
   });
 });
 
+app.get("/work_table", (req, res) => {
+  const query =
+    "SELECT id_wrk_tbl, type_work, is_doc, id_doc, address, date_work, pers_work FROM exploitation.work_table";
+  client.query(query, (err, result) => {
+    if (err) {
+      console.error("Error executing query", err);
+      res.status(500).send("Error executing query");
+    } else {
+      const data = result.rows.map((row) => ({
+        id_wrk_tbl: row.id_wrk_tbl,
+        type_work: row.type_work,
+        is_doc: row.is_doc,
+        id_doc: row.id_doc,
+        address: row.address,
+        date_work: row.date_work,
+        pers_work: row.pers_work,
+      }));
+      res.json(data);
+    }
+  });
+});
+
 app.get("/elements", (req, res) => {
   const query =
     "SELECT id_elmts, expl_dz_id, name_elmns, cnt_elmnt FROM exploitation.elements";
@@ -270,21 +292,20 @@ app.post("/odr_proekty_plg", (req, res) => {
 });
 
 app.post("/work_table", (req, res) => {
-  const formData = req.body;
+  const formWorksData = req.body;
 
   const query = `
-    INSERT INTO exploitation.work_table (type_work, is_doc, id_doc, address, date_work, pers_work, uuid)
-    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    INSERT INTO exploitation.work_table (type_work, is_doc, id_doc, address, date_work, pers_work)
+    VALUES ($1, $2, $3, $4, $5, $6)
   `;
 
   const values = [
-    formData.type_work,
-    formData.is_doc,
-    formData.id_doc,
-    formData.address,
-    formData.date_work,
-    formData.pers_work,
-    formData.uuid,
+    formWorksData.type_work,
+    formWorksData.is_doc,
+    formWorksData.id_doc,
+    formWorksData.address,
+    formWorksData.date_work,
+    formWorksData.pers_work,
   ];
 
   client.query(query, values, (err, result) => {

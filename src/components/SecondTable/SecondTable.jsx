@@ -21,7 +21,6 @@ const SecondTable = ({
         if (dataSecondTable) {
           const response = await fetch(`http://localhost:3001/elements/${dataSecondTable}`);
           const data = await response.json();
-          console.log("Fetched data:", data);
           setDataTable(data);
         } else {
           setDataTable([]);
@@ -124,7 +123,7 @@ const SecondTable = ({
           <table onClick={handleTableClick}>
             <thead>
               <tr>
-                <th>№<br></br>з/п</th>
+                <th>№ з/п</th>
                 <th>expl_dz_id</th>
                 <th>Назва елемента</th>
                 <th>Кількість елементів</th>
@@ -201,7 +200,6 @@ const SecondTable = ({
               </div>
             )}
           </table>
-
         ) : (
           <>
             <p className="table-paragraph">Немає елементів</p>

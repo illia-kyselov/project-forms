@@ -76,7 +76,7 @@ const FormAddElements = ({
             required
           />
         </div>
-        <div className="form__group">
+        {/* <div className="form__group">
           <label className="form-input_title">uuid</label>
           <input
             type="text"
@@ -85,8 +85,8 @@ const FormAddElements = ({
             onChange={handleChange}
             required
           />
-        </div>
-        <div className="form__group">
+        </div> */}
+        {/* <div className="form__group">
           <label className="form-input_title">dztab_uuid</label>
           <input
             type="text"
@@ -95,7 +95,7 @@ const FormAddElements = ({
             onChange={handleChange}
             required
           />
-        </div>
+        </div> */}
         <div className="form__button-container">
           <button className="form__button" type="submit">
             Відправити всі поля
