@@ -78,7 +78,6 @@ const FormAddWorks = ({
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Проверяем, были ли данные уже отправлены
     if (dataSubmitted) {
       return;
     }
@@ -112,7 +111,6 @@ const FormAddWorks = ({
           date_work: "",
           pers_work: "",
         });
-        // Устанавливаем состояние, чтобы отметить, что данные были отправлены
         setDataSubmitted(true);
       })
       .catch((error) => {
@@ -125,14 +123,13 @@ const FormAddWorks = ({
     e.preventDefault();
     setButtonAddDocPressed(true);
 
+    if (!dataSubmitted) {
+      handleSubmit(e);
+    }
   }
 
   const handleSubmitButtonClick = (e) => {
     e.preventDefault();
-
-    if (!dataSubmitted) {
-      handleSubmit(e);
-    }
 
     handleAddInfo(e);
   }
@@ -238,13 +235,8 @@ const FormAddWorks = ({
                   required
                   name="id_doc"
                 />
-                {/* <button
-                  className="form__button form__button-addForm"
-                  onClick={handleButtonClick}
-                  style={{ backgroundColor: buttonAddDocPressed ? '#d8d8d8' : '' }}
-                >
-                  Обрати
-                </button> */}
+              </div>
+              <div className="form__group">
                 <button
                   className="form__button form__button-addForm"
                   onClick={handleButtonClick}
@@ -260,7 +252,7 @@ const FormAddWorks = ({
               </div>
             </>
           )}
-          <div className="flex">
+          {/* <div className="flex">
             <button
               className="form__button form__button-addForm"
               onClick={handleSubmitButtonClick}
@@ -279,7 +271,7 @@ const FormAddWorks = ({
             >
               Створити ДЗ
             </button>
-          </div>
+          </div> */}
         </div>
       </form>
     </div>
