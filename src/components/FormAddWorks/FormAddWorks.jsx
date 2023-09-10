@@ -177,7 +177,6 @@ const FormAddWorks = ({
               className="form__input form__input-select"
               name="pers_work"
               onChange={handleChange}
-              required
             >
               <option value="" selected hidden>Оберіть особу</option>
               <option value="Шевченко Тарас" className="form__input-option">Шевченко Тарас</option>
@@ -192,7 +191,6 @@ const FormAddWorks = ({
               className="form__input"
               onChange={handleChange}
               name="date_work"
-              required
             />
           </div>
         </div>
@@ -232,7 +230,6 @@ const FormAddWorks = ({
                   value={selectedDocValue}
                   onChange={handleInputChange}
                   readOnly
-                  required
                   name="id_doc"
                 />
               </div>
