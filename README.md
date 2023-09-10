@@ -1,70 +1,26 @@
-# Getting Started with Create React App
+# Інструкція для веб-додатку
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+1.  Відкрий репозиторій на гітхабі
+2.  Зміни гілку розробки на develop та натисни кнопку Code
+3.  Завантаж архів проекту та разархівуй його
+4.  Відкрий цю папку в твоєму Visual Studio Code
+5.  Створи термінал та напиши команду npm start
 
-## Available Scripts
+Сайт запустився, однак проблема що наша БД не запустилася, зараз вирішимо цю проблему
 
-In the project directory, you can run:
+# Інструкція для БД
 
-### `npm start`
+1.  Відкрий свій PostgreSQL
+2.  Створи нову БД (ПКМ на Databases), рекоментую називати як в мене mydatabase
+3.  В новоствореній БД перейди до Schemas
+4.  Створи нову схему (ПКМ на Schemas) та назви її exploitation
+5.  Переходим по лінку та завантажуємо файл-бекап нашої БД (https://drive.google.com/file/d/1j5gdt62JGTDGTegvBjxpWWuW7b8y-zBy/view?usp=sharing)
+6.  Повертаємось до нашого PostgreSQL і тиснемо ПКМ на exploitation
+7.  Обераємо Restore та у полі Filename шукаємо наш файл-бекап
+8.  Налаштовуємо у 2й та 3й вкладці Sections та Options (виставляємо всі прапорці у цих пункатах) та тиснемо на Restore кнопку
+9.  Після закінчення процесу ми побачимо що у нас створилися та автоматично наповнилися наші таблиці всім чим нам потрібно
+10.  Переходимо до Visual Studio Code та створюємо ще один термінал та прописуємо команду node server.js
+11.  Якщо у консолі ми бачимо Server is running on port 3001 то переходимо до нашого веб-додатку та перезавантажуємо його щоб данні сайту оновилися
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Щоб облегчити користування додатком я працюю над налаштуванням Docker який буде робити все сам однією командою, поки що працюємо так
