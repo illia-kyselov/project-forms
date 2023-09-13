@@ -12,6 +12,8 @@ const Table = ({
   setButtonPressed,
   setDataSecondTable,
   buttonPressed,
+  dzMarkerPosition,
+  setDraggableDzMarkerShow,
 }) => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -27,6 +29,13 @@ const Table = ({
   useEffect(() => {
     fetchForms();
   }, []);
+
+  useEffect(() => {
+    setNewRowData((prevData) => ({
+      ...prevData,
+      position: dzMarkerPosition,
+    }));
+  }, [dzMarkerPosition]);
 
   const fetchForms = async () => {
     try {
@@ -84,17 +93,23 @@ const Table = ({
 
     setData([...data, newRowData]);
 
-    setNewRowData({ id: "", num_sing: "" });
+    setNewRowData({ id: "", num_sing: "", position: "" });
     setShowAddForm(false);
+    setDraggableDzMarkerShow(false);
   };
 
   const hideForm = (event) => {
     event.preventDefault();
     setShowAddForm(false);
+    setDraggableDzMarkerShow(false);
   };
 
   const handleAddFromPolygonClick = () => {
     handleAddFromPolygon(filteredMarkers);
+  };
+
+  const showDraggableDzMarker = () => {
+    setDraggableDzMarkerShow(true);
   };
 
   return (
@@ -142,7 +157,11 @@ const Table = ({
                 />
               </div>
               <div className="flex">
-                <button disabled className="button-add-Dz">
+                <button
+                  className="button-add-Dz"
+                  onClick={showDraggableDzMarker}
+                  type="button"
+                >
                   Показати на карті
                 </button>
                 <button type="submit" className="button-add-Dz">
@@ -179,43 +198,43 @@ const Table = ({
           <tbody>
             {
               data.map((row) => (
-                <tr
-                  key={row.id}
-                  onClick={() => handleRowClick(row.id)}
-                  onDoubleClick={() => handleROwDoubleClick(row.id)}
-                  style={{ background: selectedRow === row.id ? "#b3dcfd" : "" }}
-                >
-                  <td>{row.id}</td>
-                  {/* <td>{row.id_znk || "Немає в БД"}</td> */}
-                  <td>{row.num_sing || "Немає в БД"}</td>
-                  <td>
-                    <select
-                      className="form__input form__input-select"
-                      value={selectedFormByRow[row.id] || ""}
-                      onChange={(e) => handleFormSelect(e, row.id)}
-                    >
+              <tr
+                key={row.id}
+                onClick={() => handleRowClick(row.id)}
+                onDoubleClick={() => handleROwDoubleClick(row.id)}
+                style={{ background: selectedRow === row.id ? "#b3dcfd" : "" }}
+              >
+                <td>{row.id}</td>
+                {/* <td>{row.id_znk || "Немає в БД"}</td> */}
+                <td>{row.num_sing || "Немає в БД"}</td>
+                <td>
+                  <select
+                    className="form__input form__input-select"
+                    value={selectedFormByRow[row.id] || ""}
+                    onChange={(e) => handleFormSelect(e, row.id)}
+                  >
                       <option value="" >
                         Оберіть форму
                       </option>
-                      {forms
-                        .filter((form) => form.num_pdr_new === row.num_sing)
-                        .map((form) => (
-                          <option key={form.id} value={form.id}>
-                            {form.form_dz}
-                          </option>
-                        ))}
-                    </select>
-                  </td>
-                  <td>
-                    <button
-                      className="delete-icon"
-                      onClick={() => deleteData(row.id)}
-                    >
-                      X
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                    {forms
+                      .filter((form) => form.num_pdr_new === row.num_sing)
+                      .map((form) => (
+                        <option key={form.id} value={form.id}>
+                          {form.form_dz}
+                        </option>
+                      ))}
+                  </select>
+                </td>
+                <td>
+                  <button
+                    className="delete-icon"
+                    onClick={() => deleteData(row.id)}
+                  >
+                    X
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
