@@ -8,7 +8,6 @@ const FormAddWorks = ({
   setButtonAddDocPressed,
   buttonAddDocPressed,
   setIdFormAddWorks,
-
 }) => {
   const [options, setOptions] = useState([]);
   const [isChecked, setIsChecked] = useState(true);

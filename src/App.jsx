@@ -146,34 +146,30 @@ function App() {
           setSelectedMarkerId={setSelectedMarkerId}
           setPolygonTableRowClick={setPolygonTableRowClick}
           setSelectedPolygonApp={setSelectedPolygon}
-          polygonTableRowClick={polygonTableRowClick}
           buttonAddDocPressed={buttonAddDocPressed}
         />
         <div className="form-container">
           <FormAddWorks
             objectid={objectid}
-            setFormObjectId={setObjectid}
             selectedMarkerId={selectedMarkerId}
             selectedPolygon={selectedPolygon}
             polygonTableRowClick={polygonTableRowClick}
             setButtonAddDocPressed={setButtonAddDocPressed}
             buttonAddDocPressed={buttonAddDocPressed}
             setIdFormAddWorks={setIdFormAddWorks}
-            idFormAddWorks={idFormAddWorks}
           />
           <div className=" flex">
             <Table
               data={dataTable}
               setData={setDataTable}
-              handleAddFromPolygon={handleAddFromPolygon}
-              setButtonPressed={setButtonPressed}
-              buttonPressed={buttonPressed}
               setShowSecondTable={setShowSecondTable}
               handleClearTable={handleClearTable}
-              selectedMarkersPressed={selectedMarkersPressed}
               onRowClick={handleRowClick}
+              setButtonPressed={setButtonPressed}
               setDataSecondTable={setDataSecondTable}
+              buttonPressed={buttonPressed}
               buttonAddDocPressed={buttonAddDocPressed}
+              idFormAddWorks={idFormAddWorks}
             />
             {showSecondTable &&
               <SecondTable
