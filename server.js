@@ -24,7 +24,7 @@ app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
-//takes
+//get
 
 app.get("/doc_plg", (req, res) => {
   const query =
@@ -185,6 +185,27 @@ app.get("/work_table", (req, res) => {
   });
 });
 
+app.get("/expl_dz", (req, res) => {
+  const query =
+    "SELECT is_dz, id_expl_dz, num_dz, dz_form, id_disl_dz, work_id FROM exploitation.expl_dz";
+  client.query(query, (err, result) => {
+    if (err) {
+      console.error("Error executing query", err);
+      res.status(500).send("Error executing query");
+    } else {
+      const data = result.rows.map((row) => ({
+        is_dz: row.is_dz,
+        id_expl_dz: row.id_expl_dz,
+        num_dz: row.num_dz,
+        dz_form: row.dz_form,
+        id_disl_dz: row.id_disl_dz,
+        work_id: row.work_id,
+      }));
+      res.json(data);
+    }
+  });
+});
+
 app.get("/elements", (req, res) => {
   const query =
     "SELECT id_elmts, expl_dz_id, name_elmns, cnt_elmnt FROM exploitation.elements";
@@ -295,9 +316,10 @@ app.post("/work_table", (req, res) => {
   const formWorksData = req.body;
 
   const query = `
-    INSERT INTO exploitation.work_table (type_work, is_doc, id_doc, address, date_work, pers_work)
-    VALUES ($1, $2, $3, $4, $5, $6)
-  `;
+  INSERT INTO exploitation.work_table (type_work, is_doc, id_doc, address, date_work, pers_work)
+  VALUES ($1, $2, $3, $4, $5, $6)
+  RETURNING id_wrk_tbl;
+`;
 
   const values = [
     formWorksData.type_work,
@@ -313,7 +335,12 @@ app.post("/work_table", (req, res) => {
       console.error("Error inserting data into database", err);
       res.status(500).send("Error inserting data into database");
     } else {
-      res.json({ message: "Data successfully inserted into database" });
+      const newId = result.rows[0].id_wrk_tbl;
+
+      res.json({
+        message: "Data successfully inserted into database",
+        id_wrk_tbl: newId,
+      });
     }
   });
 });
@@ -322,17 +349,16 @@ app.post("/expl_dz", (req, res) => {
   const formData = req.body;
 
   const query = `
-    INSERT INTO exploitation.expl_dz (is_dz, id_expl_dz, num_dz, dz_form, id_disl_dz, uuid)
-    VALUES ($1, $2, $3, $4, $5, $6)
+    INSERT INTO exploitation.expl_dz (is_dz, num_dz, dz_form, id_disl_dz, work_id)
+    VALUES ($1, $2, $3, $4, $5)
   `;
 
   const values = [
     formData.is_dz,
-    formData.id_expl_dz,
     formData.num_dz,
     formData.dz_form,
     formData.id_disl_dz,
-    formData.uuid,
+    formData.work_id,
   ];
 
   client.query(query, values, (err, result) => {

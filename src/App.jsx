@@ -24,15 +24,12 @@ function App() {
   const [markerDzPosition, setMarkerDzPosition] = useState(null);
   const [draggableDzMarkerShow, setDraggableDzMarkerShow] = useState(false);
 
+  const [idFormAddWorks, setIdFormAddWorks] = useState();
+
   const [buttonAddDocPressed, setButtonAddDocPressed] = useState(false);
 
   const handleRowClick = (markerId) => {
     setFocusMarker(markerId);
-  };
-
-  const handleAddInfo = (e) => {
-    e.preventDefault();
-    setShowAddInfoForm(true);
   };
 
   const handleRemoveInfo = (e) => {
@@ -159,36 +156,33 @@ function App() {
           setSelectedMarkerId={setSelectedMarkerId}
           setPolygonTableRowClick={setPolygonTableRowClick}
           setSelectedPolygonApp={setSelectedPolygon}
-          polygonTableRowClick={polygonTableRowClick}
           buttonAddDocPressed={buttonAddDocPressed}
           showDraggableDzMarker={draggableDzMarkerShow}
         />
         <div className="form-container">
           <FormAddWorks
-            handleAddInfo={handleAddInfo}
             objectid={objectid}
-            setFormObjectId={setObjectid}
             selectedMarkerId={selectedMarkerId}
             selectedPolygon={selectedPolygon}
             polygonTableRowClick={polygonTableRowClick}
             setButtonAddDocPressed={setButtonAddDocPressed}
             buttonAddDocPressed={buttonAddDocPressed}
-
+            setIdFormAddWorks={setIdFormAddWorks}
           />
           <div className=" flex">
             <Table
               data={dataTable}
               setData={setDataTable}
-              handleAddFromPolygon={handleAddFromPolygon}
-              setButtonPressed={setButtonPressed}
-              buttonPressed={buttonPressed}
               setShowSecondTable={setShowSecondTable}
               handleClearTable={handleClearTable}
-              selectedMarkersPressed={selectedMarkersPressed}
               onRowClick={handleRowClick}
+              setButtonPressed={setButtonPressed}
               setDataSecondTable={setDataSecondTable}
               dzMarkerPosition={markerDzPosition}
               setDraggableDzMarkerShow={handleDraggableDzMarkerShow}
+              buttonPressed={buttonPressed}
+              buttonAddDocPressed={buttonAddDocPressed}
+              idFormAddWorks={idFormAddWorks}
             />
             {showSecondTable &&
               <SecondTable
