@@ -22,16 +22,13 @@ function App() {
   const [dataSecondTable, setDataSecondTable] = useState(null);
   const [polygonTableRowClick, setPolygonTableRowClick] = useState([]);
 
+  const [idFormAddWorks, setIdFormAddWorks] = useState();
+
   const [buttonAddDocPressed, setButtonAddDocPressed] = useState(false);
 
 
   const handleRowClick = (markerId) => {
     setFocusMarker(markerId);
-  };
-
-  const handleAddInfo = (e) => {
-    e.preventDefault();
-    setShowAddInfoForm(true);
   };
 
   const handleRemoveInfo = (e) => {
@@ -154,7 +151,6 @@ function App() {
         />
         <div className="form-container">
           <FormAddWorks
-            handleAddInfo={handleAddInfo}
             objectid={objectid}
             setFormObjectId={setObjectid}
             selectedMarkerId={selectedMarkerId}
@@ -162,7 +158,8 @@ function App() {
             polygonTableRowClick={polygonTableRowClick}
             setButtonAddDocPressed={setButtonAddDocPressed}
             buttonAddDocPressed={buttonAddDocPressed}
-
+            setIdFormAddWorks={setIdFormAddWorks}
+            idFormAddWorks={idFormAddWorks}
           />
           <div className=" flex">
             <Table
@@ -176,6 +173,7 @@ function App() {
               selectedMarkersPressed={selectedMarkersPressed}
               onRowClick={handleRowClick}
               setDataSecondTable={setDataSecondTable}
+              buttonAddDocPressed={buttonAddDocPressed}
             />
             {showSecondTable &&
               <SecondTable

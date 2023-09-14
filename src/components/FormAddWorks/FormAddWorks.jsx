@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 
 const FormAddWorks = ({
-  handleAddInfo,
   objectid,
   selectedMarkerId,
   selectedPolygon,
   polygonTableRowClick,
   setButtonAddDocPressed,
   buttonAddDocPressed,
+  setIdFormAddWorks,
+
 }) => {
   const [options, setOptions] = useState([]);
   const [isChecked, setIsChecked] = useState(true);
@@ -54,7 +55,6 @@ const FormAddWorks = ({
       : "";
 
   const selectedInfo =
-    // selectedMarkerId ||
     (selectedPolygon
       ? `${selectedPolygon.objectid} / ${selectedPolygon.pro_name}`
       : selectedInfoFromTableRowClick);
@@ -103,6 +103,12 @@ const FormAddWorks = ({
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
+        return response.json();
+      })
+      .then((data) => {
+        setIdFormAddWorks(data.id_wrk_tbl);
+      })
+      .then((data) => {
         setFormWorksData({
           type_work: "",
           is_doc: true,
@@ -126,12 +132,6 @@ const FormAddWorks = ({
     if (!dataSubmitted) {
       handleSubmit(e);
     }
-  }
-
-  const handleSubmitButtonClick = (e) => {
-    e.preventDefault();
-
-    handleAddInfo(e);
   }
 
   const handleInputChange = (e) => {
@@ -249,26 +249,6 @@ const FormAddWorks = ({
               </div>
             </>
           )}
-          {/* <div className="flex">
-            <button
-              className="form__button form__button-addForm"
-              onClick={handleSubmitButtonClick}
-            >
-              Додати інфо про ДЗ
-            </button>
-            <button
-              className="form__button form__button-addForm"
-              disabled
-            >
-              Обрати ДЗ
-            </button>
-            <button
-              className="form__button form__button-addForm"
-              disabled
-            >
-              Створити ДЗ
-            </button>
-          </div> */}
         </div>
       </form>
     </div>

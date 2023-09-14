@@ -215,7 +215,6 @@ const LeafletMap = ({
   }, [mapBounds, polygons]);
 
   ;
-  console.log(clickedPolygons);
 
   return (
     <div className="LeafletMapContainer ">
