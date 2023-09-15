@@ -10,7 +10,9 @@ const Table = ({
   setDataSecondTable,
   buttonPressed,
   buttonAddDocPressed,
-  idFormAddWorks
+  idFormAddWorks,
+  dzMarkerPosition,
+  setDraggableDzMarkerShow,
 }) => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -25,6 +27,13 @@ const Table = ({
   useEffect(() => {
     fetchForms();
   }, []);
+
+  useEffect(() => {
+    setNewRowData((prevData) => ({
+      ...prevData,
+      position: dzMarkerPosition,
+    }));
+  }, [dzMarkerPosition]);
 
   const fetchForms = async () => {
     try {
@@ -114,13 +123,22 @@ const Table = ({
     updatedSelectedFormByRow[rowId] = selectedText;
 
     setSelectedFormByRow(updatedSelectedFormByRow);
+    const selectedValue = e.target.value;
+    setSelectedFormByRow((prevSelectedForms) => ({
+      ...prevSelectedForms,
+      [rowId]: selectedValue,
+    }));
   };
-
 
 
   const hideForm = (event) => {
     event.preventDefault();
     setShowAddForm(false);
+    setDraggableDzMarkerShow(false);
+  };
+
+  const showDraggableDzMarker = () => {
+    setDraggableDzMarkerShow(true);
   };
 
   return (
@@ -169,7 +187,7 @@ const Table = ({
                   />
                 </div>
                 <div className="flex">
-                  <button disabled className="button-add-Dz">
+                  <button type="button" className="button-add-Dz" onClick={showDraggableDzMarker}>
                     Показати на карті
                   </button>
                   <button type="submit" className="button-add-Dz">

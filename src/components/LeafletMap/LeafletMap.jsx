@@ -6,6 +6,7 @@ import "leaflet/dist/leaflet.css";
 import markerImage from "../../img/1.39z.png";
 import MouseCoordinates from "../CursorCoordinates/MapEvents";
 import ListPolygons from "../ListPolygons/ListPolygons";
+import DraggableDzMarker from "../DraggableDzMarker/DraggableDzMarker";
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -49,6 +50,8 @@ const LeafletMap = ({
   setSelectedMarkerId,
   setSelectedPolygonApp,
   buttonAddDocPressed,
+  handleMarkerDzDragend,
+  showDraggableDzMarker,
 }) => {
   const zoom = 17;
   const containerStyle = {
@@ -204,6 +207,10 @@ const LeafletMap = ({
     return mapBounds.intersects(polygonBounds);
   };
 
+  const handleMarkerDragEnd = (position) => {
+    handleMarkerDzDragend(position);
+  };
+
   useEffect(() => {
     const polygonsInView = polygons.filter((polygon) =>
       isPolygonWithinMapBounds(polygon)
@@ -230,30 +237,33 @@ const LeafletMap = ({
           noWrap={true}
         />
         {filteredPolygons.map((polygon) => (
-          <Polygon
+            <Polygon
             key={polygon.objectid}
-            positions={polygon.geom.coordinates}
-            pathOptions={{
-              color:
+              positions={polygon.geom.coordinates}
+              pathOptions={{
+                color:
                 selectedPolygon === polygon || selectedPolygonIdFromList === polygon.objectid
-                  ? "red"
-                  : "purple",
-              zIndex:
+                    ? "red"
+                    : "purple",
+                zIndex:
                 selectedPolygon === polygon || selectedPolygonIdFromList === polygon.objectid
                   ? '2147483647'
                   : '',
-              opacity:
+                opacity:
                 selectedPolygon === polygon || selectedPolygonIdFromList === polygon.objectid
                   ? '1'
                   : '0.7',
-            }}
-            eventHandlers={{
-              click: (e) => handleClick(e, polygon),
-            }}
-          >
-            <Popup>{polygon.pro_name}</Popup>
-          </Polygon>
-        ))}
+              }}
+              eventHandlers={{
+                click: (e) => handleClick(e, polygon),
+              }}
+            >
+              <Popup>{polygon.pro_name}</Popup>
+            </Polygon>
+          ))}
+        {showDraggableDzMarker && (
+          <DraggableDzMarker handleMarkerPosition={handleMarkerDragEnd} />
+        )}
         {filteredMarkers.map((marker) => (
           <Marker
             key={marker.id}

@@ -21,11 +21,12 @@ function App() {
   const [focusMarker, setFocusMarker] = useState(null);
   const [dataSecondTable, setDataSecondTable] = useState(null);
   const [polygonTableRowClick, setPolygonTableRowClick] = useState([]);
+  const [markerDzPosition, setMarkerDzPosition] = useState(null);
+  const [draggableDzMarkerShow, setDraggableDzMarkerShow] = useState(false);
 
   const [idFormAddWorks, setIdFormAddWorks] = useState();
 
   const [buttonAddDocPressed, setButtonAddDocPressed] = useState(false);
-
 
   const handleRowClick = (markerId) => {
     setFocusMarker(markerId);
@@ -133,6 +134,14 @@ function App() {
     setSelectedMarkersPressed(false);
   };
 
+  const handleMarkerDzPosition = (data) => {
+    setMarkerDzPosition(data);
+  };
+
+  const handleDraggableDzMarkerShow = (data) => {
+    setDraggableDzMarkerShow(data);
+  };
+
   return (
     <div className="App">
       <Navigation />
@@ -142,11 +151,13 @@ function App() {
           handleDzClick={handleDzClick}
           handleAddMarkerData={handleAddMarkerData}
           handleAddFromPolygon={handleAddFromPolygon}
+          handleMarkerDzDragend={handleMarkerDzPosition}
           focusMarker={focusMarker}
           setSelectedMarkerId={setSelectedMarkerId}
           setPolygonTableRowClick={setPolygonTableRowClick}
           setSelectedPolygonApp={setSelectedPolygon}
           buttonAddDocPressed={buttonAddDocPressed}
+          showDraggableDzMarker={draggableDzMarkerShow}
         />
         <div className="form-container">
           <FormAddWorks
@@ -167,6 +178,8 @@ function App() {
               onRowClick={handleRowClick}
               setButtonPressed={setButtonPressed}
               setDataSecondTable={setDataSecondTable}
+              dzMarkerPosition={markerDzPosition}
+              setDraggableDzMarkerShow={handleDraggableDzMarkerShow}
               buttonPressed={buttonPressed}
               buttonAddDocPressed={buttonAddDocPressed}
               idFormAddWorks={idFormAddWorks}
