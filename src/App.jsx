@@ -7,6 +7,8 @@ import FormAddElements from "./components/FormAddElements/FormAddElements";
 import Table from "./components/Table/Table";
 import SecondTable from "./components/SecondTable/SecondTable";
 import Navigation from "./components/Navigation/Navigation";
+import { NotificationContainer } from 'react-notifications';
+import "react-notifications/lib/notifications.css";
 
 function App() {
   const [showAddInfoForm, setShowAddInfoForm] = useState(false);
@@ -188,7 +190,7 @@ function App() {
               idFormAddWorks={idFormAddWorks}
               setSelectedRowData={setSelectedRowData}
             />
-            {showSecondTable &&
+            {showSecondTable && 
               <SecondTable
                 dataSecondTable={dataSecondTable}
                 handleSubmitElements={handleSubmitElements}
@@ -225,6 +227,7 @@ function App() {
           </div>
         )}
       </div>
+      <NotificationContainer/>
     </div>
   );
 }
