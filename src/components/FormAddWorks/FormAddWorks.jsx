@@ -63,7 +63,10 @@ const FormAddWorks = ({
   if (selectedInfo !== selectedMarkerId) {
     const parts = selectedInfo.split('/').map(part => part.trim());
     objectidInput = parts.length > 0 ? parts[0] : null;
+
+    objectidInput = objectidInput.replace(/_/g, '');
   }
+
 
 
   const handleChange = (e) => {
@@ -86,6 +89,8 @@ const FormAddWorks = ({
     const date_work =
       formWorksData.date_work || new Date(Date.now()).toISOString();
 
+    const cleanedObjectidInput = objectidInput.replace(/_/g, '');
+
     fetch("http://localhost:3001/work_table", {
       method: "POST",
       headers: {
@@ -94,7 +99,7 @@ const FormAddWorks = ({
       body: JSON.stringify({
         ...formWorksData,
         is_doc: is_doc,
-        id_doc: objectidInput,
+        id_doc: cleanedObjectidInput,
         date_work: date_work,
       }),
     })

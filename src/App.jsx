@@ -27,6 +27,8 @@ function App() {
   const [idFormAddWorks, setIdFormAddWorks] = useState();
 
   const [buttonAddDocPressed, setButtonAddDocPressed] = useState(false);
+  const [selectedRowData, setSelectedRowData] = useState(null);
+
 
   const handleRowClick = (markerId) => {
     setFocusMarker(markerId);
@@ -70,12 +72,9 @@ function App() {
   };
 
   const [formAddElementsData, setformAddElementsData] = useState({
-    fid: "",
     tableId: "",
     element: "",
     quantity: 0,
-    uuid: "",
-    dztab_uuid: "",
   });
 
   const handleChange = (e) => {
@@ -99,20 +98,24 @@ function App() {
         },
         body: JSON.stringify(formAddElementsData),
       });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+
       const data = await response.json();
       setformAddElementsData({
-        fid: "",
         tableId: "",
         element: "",
         quantity: 0,
-        uuid: "",
-        dztab_uuid: "",
       });
-      window.location.reload();
+
+      handleRemoveElements(e);
     } catch (error) {
-      console.error("Error sending data", error);
+      console.error("Error sending data:", error);
     }
   };
+
 
   const handleDzClick = (markerId) => {
     setSelectedMarkerId(markerId);
@@ -183,6 +186,7 @@ function App() {
               buttonPressed={buttonPressed}
               buttonAddDocPressed={buttonAddDocPressed}
               idFormAddWorks={idFormAddWorks}
+              setSelectedRowData={setSelectedRowData}
             />
             {showSecondTable &&
               <SecondTable
@@ -190,6 +194,7 @@ function App() {
                 handleSubmitElements={handleSubmitElements}
                 handleChange={handleChange}
                 formAddElementsData={formAddElementsData}
+                selectedRowData={selectedRowData}
               />
             }
           </div>
@@ -214,6 +219,7 @@ function App() {
                 handleSubmitElements={handleSubmitElements}
                 handleChange={handleChange}
                 formAddElementsData={formAddElementsData}
+                selectedRowData={selectedRowData}
               />
             </div>
           </div>

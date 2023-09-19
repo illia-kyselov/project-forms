@@ -6,6 +6,7 @@ const SecondTable = ({
   handleSubmitElements,
   handleChange,
   formAddElementsData,
+  selectedRowData
 }) => {
   const [dataTable, setDataTable] = useState([]);
   const [editRowId, setEditRowId] = useState(null);
@@ -19,7 +20,7 @@ const SecondTable = ({
     const fetchData = async () => {
       try {
         if (dataSecondTable) {
-          const response = await fetch(`http://localhost:3001/elements/${dataSecondTable}`);
+          const response = await fetch(`http://localhost:3001/elements/${selectedRowData}`);
           const data = await response.json();
           setDataTable(data);
         } else {
@@ -30,8 +31,12 @@ const SecondTable = ({
       }
     };
 
-    fetchData();
-  }, [dataSecondTable]);
+    if (selectedRowData !== null) {
+      fetchData();
+    } else {
+      setDataTable([]);
+    }
+  }, [dataSecondTable, selectedRowData]);
 
   useEffect(() => {
     const handleOutsideClick = (e) => {
@@ -46,7 +51,6 @@ const SecondTable = ({
       document.removeEventListener("click", handleOutsideClick);
     };
   });
-
 
   const handleRowDoubleClick = (rowId) => {
     setEditRowId(rowId);
@@ -152,7 +156,7 @@ const SecondTable = ({
                         onKeyDown={handleKeyDown}
                       />
                     ) : (
-                      <span>{element.name_elmns || "Немає в БД"}</span>
+                      <span>{element.name_elmns}</span>
                     )}
                   </td>
                   <td>
@@ -166,7 +170,7 @@ const SecondTable = ({
                         onKeyDown={handleKeyDown}
                       />
                     ) : (
-                      <span>{element.cnt_elmnt || "Немає в БД"}</span>
+                      <span>{element.cnt_elmnt}</span>
                     )}
                   </td>
                   <td>
@@ -195,6 +199,7 @@ const SecondTable = ({
                     handleChange={handleChange}
                     formAddElementsData={formAddElementsData}
                     dataSecondTable={dataSecondTable}
+                    selectedRowData={selectedRowData}
                   />
                 </div>
               </div>
