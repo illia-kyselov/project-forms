@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { validateEmptyInputs } from "../../helpers/validate-empty-inputs";
+import Input from "../Input/Input";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 const FormAddWorks = ({
   objectid,
@@ -24,6 +27,8 @@ const FormAddWorks = ({
     pers_work: "",
     uuid: "",
   });
+
+  const [invalidInputs, setInvalidInputs] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -55,7 +60,7 @@ const FormAddWorks = ({
 
   const selectedInfo =
     (selectedPolygon
-      ? `${selectedPolygon.objectid} / ${selectedPolygon.pro_name}`
+    ? `${selectedPolygon.objectid} / ${selectedPolygon.pro_name}`
       : selectedInfoFromTableRowClick);
 
   let objectidInput = null;
@@ -65,9 +70,11 @@ const FormAddWorks = ({
     objectidInput = parts.length > 0 ? parts[0] : null;
   }
 
-
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (!!invalidInputs.length) {
+      setInvalidInputs((inputs) => inputs.filter((input) => input !== name));
+    }
     setFormWorksData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -78,6 +85,13 @@ const FormAddWorks = ({
     e.preventDefault();
 
     if (dataSubmitted) {
+      return;
+    }
+
+    const emptyInputs = validateEmptyInputs(formWorksData);
+
+    if (emptyInputs.length) {
+      setInvalidInputs(emptyInputs);
       return;
     }
 
@@ -167,7 +181,9 @@ const FormAddWorks = ({
                 </option>
               ))}
             </select>
-
+            {invalidInputs.includes("type_work") && (
+              <ErrorMessage errorMessage={"Оберіть варіант із переліку"} />
+            )}
           </div>
           <div className="form__group">
             <label className="form-input_title">Особа, яка виконала роботу</label>
@@ -181,15 +197,20 @@ const FormAddWorks = ({
               <option value="Шевченко Тарас" className="form__input-option">Шевченко Тарас</option>
               <option value="Українка Леся" className="form__input-option">Українка Леся</option>
             </select>
+            {invalidInputs.includes("pers_work") && (
+              <ErrorMessage errorMessage={"Оберіть варіант із переліку"} />
+            )}
           </div>
           <div className="form__group datetime-input">
             <label className="form-input_title">Дата виконання роботи</label>
-            <input
+            <Input
               type="datetime-local"
               id="additionalDatetime"
               className="form__input"
               onChange={handleChange}
               name="date_work"
+              hasError={invalidInputs.includes("date_work")}
+              errorMessage={"Поле не може бути пустим"}
             />
           </div>
         </div>
@@ -210,19 +231,23 @@ const FormAddWorks = ({
           </div>
           <div className="form__group form__group-radio">
             <label className="form-input_title">Адреса роботи</label>
-            <input
+            <Input
               type="text"
               name="address"
               placeholder="Введіть адресу роботи"
               className="form__input"
-              onChange={handleChange}>
-            </input>
+              onChange={handleChange}
+              hasError={invalidInputs.includes("address")}
+              errorMessage={"Поле не може бути пустим"}
+            />
           </div>
           {isChecked && (
             <>
               <div className="form__group">
-                <label className="form-input_title">Документ / підстава проведення роботи</label>
-                <input
+                <label className="form-input_title">
+                  Документ / підстава проведення роботи
+                </label>
+                <Input
                   type="text"
                   placeholder="Документ / підстава"
                   className="form__input"
@@ -230,13 +255,17 @@ const FormAddWorks = ({
                   onChange={handleInputChange}
                   readOnly
                   name="id_doc"
+                  hasError={invalidInputs.includes("id_doc")}
+                  errorMessage={"Поле не може бути пустим"}
                 />
               </div>
               <div className="form__group">
                 <button
                   className="form__button form__button-addForm"
                   onClick={handleButtonClick}
-                  style={{ backgroundColor: buttonAddDocPressed ? '#6cd823' : '' }}
+                  style={{
+                    backgroundColor: buttonAddDocPressed ? "#6cd823" : "",
+                  }}
                 >
                   Зберегти
                 </button>

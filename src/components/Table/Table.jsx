@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Input from "../Input/Input";
 
 const Table = ({
   data,
@@ -152,38 +153,35 @@ const Table = ({
               <form className="form-addDz">
                 <div className="form-addDz__group">
                   <label className="form-addDz-input_title">ID</label>
-                  <input
+                  <Input
                     className="form-addDz__input"
                     type="text"
                     name="id"
                     value={newRowData.id}
                     onChange={handleInputChange}
                     placeholder="ID"
-                    required
                   />
                 </div>
                 <div className="form-addDz__group">
                   <label className="form-addDz-input_title">Ідент. №</label>
-                  <input
+                  <Input
                     className="form-addDz__input"
                     type="text"
                     name="id_znk"
                     value={newRowData.id_znk}
                     onChange={handleInputChange}
                     placeholder="Ідент. №"
-                    required
                   />
                 </div>
                 <div className="form-addDz__group">
                   <label className="form-addDz-input_title">Номер ПДР</label>
-                  <input
+                  <Input
                     className="form-addDz__input"
                     type="text"
                     name="num_sing"
                     value={newRowData.num_sing}
                     onChange={handleInputChange}
                     placeholder="Номер ПДР"
-                    required
                   />
                 </div>
                 <div className="flex">
