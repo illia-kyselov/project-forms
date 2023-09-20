@@ -194,7 +194,7 @@ function App() {
               idFormAddWorks={idFormAddWorks}
               setSelectedRowData={setSelectedRowData}
             />
-            {showSecondTable &&
+            {showSecondTable && 
               <SecondTable
                 dataSecondTable={dataSecondTable}
                 handleSubmitElements={handleSubmitElements}
