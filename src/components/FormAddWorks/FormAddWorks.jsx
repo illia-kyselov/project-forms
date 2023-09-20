@@ -94,6 +94,7 @@ const FormAddWorks = ({
 
     if (emptyInputs.length) {
       setInvalidInputs(emptyInputs);
+      NotificationService.showErrorNotification('Будь ласка, заповніть всі поля!');
       return;
     }
 
