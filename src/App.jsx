@@ -7,6 +7,9 @@ import FormAddElements from "./components/FormAddElements/FormAddElements";
 import Table from "./components/Table/Table";
 import SecondTable from "./components/SecondTable/SecondTable";
 import Navigation from "./components/Navigation/Navigation";
+import { NotificationContainer } from 'react-notifications';
+import "react-notifications/lib/notifications.css";
+import NotificationService from './services/NotificationService';
 
 function App() {
   const [showAddInfoForm, setShowAddInfoForm] = useState(false);
@@ -100,7 +103,10 @@ function App() {
       });
 
       if (!response.ok) {
+        NotificationService.showWarningNotification('Будь ласка, заповніть всі поля та спробуйте ще раз!');
         throw new Error(`Error: ${response.statusText}`);
+      } else {
+        NotificationService.showSuccessNotification('Данні успішно відправлені');
       }
 
       const data = await response.json();
@@ -225,6 +231,7 @@ function App() {
           </div>
         )}
       </div>
+      <NotificationContainer />
     </div>
   );
 }

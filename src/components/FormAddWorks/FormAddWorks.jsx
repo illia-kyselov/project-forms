@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import NotificationService from '../../services/NotificationService';
 
 const FormAddWorks = ({
   objectid,
@@ -107,6 +108,8 @@ const FormAddWorks = ({
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
+        setButtonAddDocPressed(true);
+
         return response.json();
       })
       .then((data) => {
@@ -121,9 +124,12 @@ const FormAddWorks = ({
           date_work: "",
           pers_work: "",
         });
+        NotificationService.showSuccessNotification('Данні успішно відправлені');
         setDataSubmitted(true);
       })
       .catch((error) => {
+        NotificationService.showWarningNotification('Будь ласка, заповніть всі поля та спробуйте ще раз!');
+        setDataSubmitted(false);
         console.error("Error inserting data into the database", error);
       });
   };
@@ -131,11 +137,8 @@ const FormAddWorks = ({
 
   const handleButtonClick = (e) => {
     e.preventDefault();
-    setButtonAddDocPressed(true);
+    handleSubmit(e);
 
-    if (!dataSubmitted) {
-      handleSubmit(e);
-    }
   }
 
   const handleInputChange = (e) => {

@@ -25,6 +25,7 @@
     "react-dom": "^18.2.0",
     "react-leaflet": "^4.2.1",
     "react-leaflet-cluster": "^2.1.0",
+    "react-notifications": "^1.7.4",
     "react-scripts": "5.0.1",
     "stream": "^0.0.2",
     "tls": "^0.0.1",

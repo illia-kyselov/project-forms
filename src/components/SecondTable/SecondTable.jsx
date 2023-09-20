@@ -3,10 +3,10 @@ import FormAddElements from "../FormAddElements/FormAddElements";
 
 const SecondTable = ({
   dataSecondTable,
-  handleSubmitElements,
   handleChange,
   formAddElementsData,
-  selectedRowData
+  selectedRowData,
+  handleSubmitElements,
 }) => {
   const [dataTable, setDataTable] = useState([]);
   const [editRowId, setEditRowId] = useState(null);
@@ -195,7 +195,6 @@ const SecondTable = ({
                 <div className="popup-content">
                   <FormAddElements
                     handleRemoveElements={handleRemoveElements}
-                    handleSubmitElements={handleSubmitElements}
                     handleChange={handleChange}
                     formAddElementsData={formAddElementsData}
                     dataSecondTable={dataSecondTable}

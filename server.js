@@ -375,17 +375,14 @@ app.post("/elements", (req, res) => {
   const formData = req.body;
 
   const query = `
-    INSERT INTO exploitation.elements (id_elmts, expl_dz_id, name_elmns, cnt_elmnt, uuid, uid)
-    VALUES ($1, $2, $3, $4, $5, $6)
+    INSERT INTO exploitation.elements (expl_dz_id, name_elmns, cnt_elmnt)
+    VALUES ($1, $2, $3)
   `;
 
   const values = [
-    formData.fid,
     formData.tableId,
     formData.element,
     formData.quantity,
-    formData.uuid,
-    formData.dztab_uuid,
   ];
 
   client.query(query, values, (err, result) => {

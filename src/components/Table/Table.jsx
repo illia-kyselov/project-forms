@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import NotificationService from '../../services/NotificationService';
 
 const Table = ({
   data,
@@ -72,6 +73,12 @@ const Table = ({
               "Content-Type": "application/json",
             },
             body: JSON.stringify(row),
+          }).then((response) => {
+            if (response.ok) {
+              NotificationService.showSuccessNotification('Данні успішно відправлені');
+            } else {
+              NotificationService.showWarningNotification('Будь ласка, заповніть всі поля та спробуйте ще раз!');
+            }
           })
         )
       );
