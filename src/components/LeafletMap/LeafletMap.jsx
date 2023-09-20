@@ -230,6 +230,7 @@ const LeafletMap = ({
         zoom={zoom}
         style={containerStyle}
         onMoveend={handleMoveEnd}
+        preferCanvas={true}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -237,30 +238,30 @@ const LeafletMap = ({
           noWrap={true}
         />
         {filteredPolygons.map((polygon) => (
-            <Polygon
+          <Polygon
             key={polygon.objectid}
-              positions={polygon.geom.coordinates}
-              pathOptions={{
-                color:
+            positions={polygon.geom.coordinates}
+            pathOptions={{
+              color:
                 selectedPolygon === polygon || selectedPolygonIdFromList === polygon.objectid
-                    ? "red"
-                    : "purple",
-                zIndex:
+                  ? "red"
+                  : "purple",
+              zIndex:
                 selectedPolygon === polygon || selectedPolygonIdFromList === polygon.objectid
                   ? '2147483647'
                   : '',
-                opacity:
+              opacity:
                 selectedPolygon === polygon || selectedPolygonIdFromList === polygon.objectid
                   ? '1'
                   : '0.7',
-              }}
-              eventHandlers={{
-                click: (e) => handleClick(e, polygon),
-              }}
-            >
-              <Popup>{polygon.pro_name}</Popup>
-            </Polygon>
-          ))}
+            }}
+            eventHandlers={{
+              click: (e) => handleClick(e, polygon),
+            }}
+          >
+            <Popup>{polygon.pro_name}</Popup>
+          </Polygon>
+        ))}
         {showDraggableDzMarker && (
           <DraggableDzMarker handleMarkerPosition={handleMarkerDragEnd} />
         )}

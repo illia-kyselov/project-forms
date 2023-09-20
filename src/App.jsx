@@ -7,6 +7,9 @@ import FormAddElements from "./components/FormAddElements/FormAddElements";
 import Table from "./components/Table/Table";
 import SecondTable from "./components/SecondTable/SecondTable";
 import Navigation from "./components/Navigation/Navigation";
+import { NotificationContainer } from 'react-notifications';
+import "react-notifications/lib/notifications.css";
+import NotificationService from './services/NotificationService';
 
 function App() {
   const [showAddInfoForm, setShowAddInfoForm] = useState(false);
@@ -27,6 +30,7 @@ function App() {
   const [idFormAddWorks, setIdFormAddWorks] = useState();
 
   const [buttonAddDocPressed, setButtonAddDocPressed] = useState(false);
+  const [selectedRowData, setSelectedRowData] = useState(null);
 
   const handleRowClick = (markerId) => {
     setFocusMarker(markerId);
@@ -70,12 +74,9 @@ function App() {
   };
 
   const [formAddElementsData, setformAddElementsData] = useState({
-    fid: "",
     tableId: "",
     element: "",
     quantity: 0,
-    uuid: "",
-    dztab_uuid: "",
   });
 
   const handleChange = (e) => {
@@ -99,20 +100,27 @@ function App() {
         },
         body: JSON.stringify(formAddElementsData),
       });
+
+      if (!response.ok) {
+        NotificationService.showWarningNotification('Будь ласка, заповніть всі поля та спробуйте ще раз!');
+        throw new Error(`Error: ${response.statusText}`);
+      } else {
+        NotificationService.showSuccessNotification('Данні успішно відправлені');
+      }
+
       const data = await response.json();
       setformAddElementsData({
-        fid: "",
         tableId: "",
         element: "",
         quantity: 0,
-        uuid: "",
-        dztab_uuid: "",
       });
-      window.location.reload();
+
+      handleRemoveElements(e);
     } catch (error) {
-      console.error("Error sending data", error);
+      console.error("Error sending data:", error);
     }
   };
+
 
   const handleDzClick = (markerId) => {
     setSelectedMarkerId(markerId);
@@ -183,13 +191,15 @@ function App() {
               buttonPressed={buttonPressed}
               buttonAddDocPressed={buttonAddDocPressed}
               idFormAddWorks={idFormAddWorks}
+              setSelectedRowData={setSelectedRowData}
             />
-            {showSecondTable &&
+            {showSecondTable && 
               <SecondTable
                 dataSecondTable={dataSecondTable}
                 handleSubmitElements={handleSubmitElements}
                 handleChange={handleChange}
                 formAddElementsData={formAddElementsData}
+                selectedRowData={selectedRowData}
               />
             }
           </div>
@@ -214,11 +224,13 @@ function App() {
                 handleSubmitElements={handleSubmitElements}
                 handleChange={handleChange}
                 formAddElementsData={formAddElementsData}
+                selectedRowData={selectedRowData}
               />
             </div>
           </div>
         )}
       </div>
+      <NotificationContainer />
     </div>
   );
 }

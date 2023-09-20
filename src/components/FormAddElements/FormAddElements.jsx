@@ -4,13 +4,14 @@ const FormAddElements = ({
   handleRemoveElements,
   handleSubmitElements,
   handleChange,
-  dataSecondTable,
+  selectedRowData,
 }) => {
   const [elements, setElements] = useState([]);
+
   useEffect(() => {
     fetchData();
   }, []);
-
+  
   const fetchData = async () => {
     try {
       const response = await fetch("http://localhost:3001/dict_elmnts");
@@ -26,24 +27,13 @@ const FormAddElements = ({
       <label className="block-label">Додати елементи</label>
       <form className="form form-info" onSubmit={handleSubmitElements}>
         <div className="form__group">
-          <label className="form-input_title">fid</label>
-          <input
-            type="text"
-            name="fid"
-            className="form__input"
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form__group">
           <label className="form-input_title">Ідентифікатор таблиці ДЗ</label>
           <input
             type="text"
             name="tableId"
             className="form__input"
             onChange={handleChange}
-            placeholder={`${dataSecondTable}`}
-            // value={dataSecondTable}
+            placeholder={`${selectedRowData}`}
             required
           />
         </div>
@@ -76,29 +66,9 @@ const FormAddElements = ({
             required
           />
         </div>
-        {/* <div className="form__group">
-          <label className="form-input_title">uuid</label>
-          <input
-            type="text"
-            className="form__input"
-            name="uuid"
-            onChange={handleChange}
-            required
-          />
-        </div> */}
-        {/* <div className="form__group">
-          <label className="form-input_title">dztab_uuid</label>
-          <input
-            type="text"
-            className="form__input"
-            name="dztab_uuid"
-            onChange={handleChange}
-            required
-          />
-        </div> */}
         <div className="form__button-container">
           <button className="form__button" type="submit">
-            Відправити всі поля
+            Додати елементи
           </button>
           <button
             className="form__button button-escape"

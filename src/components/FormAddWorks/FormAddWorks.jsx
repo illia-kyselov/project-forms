@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { validateEmptyInputs } from "../../helpers/validate-empty-inputs";
 import Input from "../Input/Input";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import NotificationService from '../../services/NotificationService';
 
 const FormAddWorks = ({
   objectid,
@@ -25,7 +26,6 @@ const FormAddWorks = ({
     address: "",
     date_work: "",
     pers_work: "",
-    uuid: "",
   });
 
   const [invalidInputs, setInvalidInputs] = useState([]);
@@ -68,6 +68,8 @@ const FormAddWorks = ({
   if (selectedInfo !== selectedMarkerId) {
     const parts = selectedInfo.split('/').map(part => part.trim());
     objectidInput = parts.length > 0 ? parts[0] : null;
+
+    objectidInput = objectidInput.replace(/_/g, '');
   }
 
   const handleChange = (e) => {
@@ -100,6 +102,8 @@ const FormAddWorks = ({
     const date_work =
       formWorksData.date_work || new Date(Date.now()).toISOString();
 
+    const cleanedObjectidInput = objectidInput.replace(/_/g, '');
+
     fetch("http://localhost:3001/work_table", {
       method: "POST",
       headers: {
@@ -108,7 +112,7 @@ const FormAddWorks = ({
       body: JSON.stringify({
         ...formWorksData,
         is_doc: is_doc,
-        id_doc: objectidInput,
+        id_doc: cleanedObjectidInput,
         date_work: date_work,
       }),
     })
@@ -116,6 +120,8 @@ const FormAddWorks = ({
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
+        setButtonAddDocPressed(true);
+
         return response.json();
       })
       .then((data) => {
@@ -130,9 +136,12 @@ const FormAddWorks = ({
           date_work: "",
           pers_work: "",
         });
+        NotificationService.showSuccessNotification('Данні успішно відправлені');
         setDataSubmitted(true);
       })
       .catch((error) => {
+        NotificationService.showWarningNotification('Будь ласка, заповніть всі поля та спробуйте ще раз!');
+        setDataSubmitted(false);
         console.error("Error inserting data into the database", error);
       });
   };
@@ -140,11 +149,8 @@ const FormAddWorks = ({
 
   const handleButtonClick = (e) => {
     e.preventDefault();
-    setButtonAddDocPressed(true);
+    handleSubmit(e);
 
-    if (!dataSubmitted) {
-      handleSubmit(e);
-    }
   }
 
   const handleInputChange = (e) => {

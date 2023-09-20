@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Input from "../Input/Input";
+import NotificationService from '../../services/NotificationService';
 
 const Table = ({
   data,
   setData,
   setShowSecondTable,
   handleClearTable,
-  onRowClick,
   setButtonPressed,
   setDataSecondTable,
   buttonPressed,
@@ -14,6 +14,7 @@ const Table = ({
   idFormAddWorks,
   dzMarkerPosition,
   setDraggableDzMarkerShow,
+  setSelectedRowData
 }) => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -24,6 +25,7 @@ const Table = ({
 
   const [forms, setForms] = useState([]);
   const [selectedFormByRow, setSelectedFormByRow] = useState({});
+  const [showButton, setShowButton] = useState(true);
 
   useEffect(() => {
     fetchForms();
@@ -72,27 +74,21 @@ const Table = ({
               "Content-Type": "application/json",
             },
             body: JSON.stringify(row),
+          }).then((response) => {
+            if (response.ok) {
+              NotificationService.showSuccessNotification('Данні успішно відправлені');
+            } else {
+              NotificationService.showWarningNotification('Будь ласка, заповніть всі поля та спробуйте ще раз!');
+            }
           })
         )
       );
+      setShowSecondTable(true);
+      setShowButton(false);
 
-      const successResponses = responses.filter((response) => response.ok);
-
-      if (successResponses.length === responses.length) {
-        setData([]);
-        setNewRowData({ id: "", num_sing: "" });
-        setShowAddForm(false);
-      } else {
-        console.error("Some requests were not successful");
-      }
     } catch (error) {
       console.error("Error inserting data into the database", error);
     }
-  };
-
-  const handleRowClick = (rowId) => {
-    onRowClick(rowId);
-    setSelectedRow(rowId);
   };
 
   const deleteData = (id) => {
@@ -102,11 +98,22 @@ const Table = ({
     });
   };
 
-  const handleROwDoubleClick = (rowId) => {
+  const handleROwClick = async (rowId) => {
     setSelectedRow(rowId);
-    setShowSecondTable(true);
+
+    try {
+      const response = await fetch(`http://localhost:3001/expl_dz/${rowId}`);
+      const data = await response.json();
+
+      setSelectedRowData(data[0].id_expl_dz);
+
+    } catch (error) {
+      console.error("Error fetching data for SecondTable", error);
+    }
+
     setDataSecondTable(rowId);
   };
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -130,7 +137,6 @@ const Table = ({
       [rowId]: selectedValue,
     }));
   };
-
 
   const hideForm = (event) => {
     event.preventDefault();
@@ -222,8 +228,7 @@ const Table = ({
               {data.map((row) => (
                 <tr
                   key={row.id}
-                  onClick={() => handleRowClick(row.id)}
-                  onDoubleClick={() => handleROwDoubleClick(row.id)}
+                  onClick={() => handleROwClick(row.id)}
                   style={{ background: selectedRow === row.id ? "#b3dcfd" : "" }}
                 >
                   <td>{row.id}</td>
@@ -253,14 +258,15 @@ const Table = ({
               ))}
             </tbody>
           </table>
-          <button
-            className="table-paragraph-button"
-            onClick={handleFormSubmit}
-            style={{ display: data.length > 0 ? 'block' : 'none' }}
-          >
-            Сформувати перелік
-          </button>
-
+          {showButton && (
+            <button
+              className="table-paragraph-button"
+              onClick={handleFormSubmit}
+              style={{ display: data.length > 0 ? 'block' : 'none' }}
+            >
+              Сформувати перелік
+            </button>
+          )}
         </div>
       </div>
     )
