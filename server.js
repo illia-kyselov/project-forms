@@ -206,6 +206,29 @@ app.get("/expl_dz", (req, res) => {
   });
 });
 
+app.get("/expl_dz/:expl_dz_id", (req, res) => {
+  const expl_dz_id = req.params.expl_dz_id;
+  const query = `
+    SELECT id_expl_dz, id_disl_dz 
+    FROM exploitation.expl_dz 
+    WHERE id_disl_dz = $1
+  `;
+  const values = [expl_dz_id];
+
+  client.query(query, values, (err, result) => {
+    if (err) {
+      console.error("Error executing query", err);
+      res.status(500).send("Error executing query");
+    } else {
+      const data = result.rows.map((row) => ({
+        id_expl_dz: row.id_expl_dz,
+        id_disl_dz: row.id_disl_dz,
+      }));
+      res.json(data);
+    }
+  });
+});
+
 app.get("/elements", (req, res) => {
   const query =
     "SELECT id_elmts, expl_dz_id, name_elmns, cnt_elmnt FROM exploitation.elements";
@@ -379,11 +402,7 @@ app.post("/elements", (req, res) => {
     VALUES ($1, $2, $3)
   `;
 
-  const values = [
-    formData.tableId,
-    formData.element,
-    formData.quantity,
-  ];
+  const values = [formData.tableId, formData.element, formData.quantity];
 
   client.query(query, values, (err, result) => {
     if (err) {

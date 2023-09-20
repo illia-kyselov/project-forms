@@ -23,7 +23,6 @@ const FormAddWorks = ({
     address: "",
     date_work: "",
     pers_work: "",
-    uuid: "",
   });
 
   useEffect(() => {
@@ -67,8 +66,6 @@ const FormAddWorks = ({
 
     objectidInput = objectidInput.replace(/_/g, '');
   }
-
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;

@@ -36,6 +36,9 @@ const SecondTable = ({
     } else {
       setDataTable([]);
     }
+
+    console.log('Selected row data in SecondTable:', selectedRowData);
+
   }, [dataSecondTable, selectedRowData]);
 
   useEffect(() => {
@@ -223,6 +226,7 @@ const SecondTable = ({
                     handleChange={handleChange}
                     formAddElementsData={formAddElementsData}
                     dataSecondTable={dataSecondTable}
+                    selectedRowData={selectedRowData}
                   />
                 </div>
               </div>

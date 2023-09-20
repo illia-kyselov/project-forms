@@ -4,7 +4,7 @@ const FormAddElements = ({
   handleRemoveElements,
   handleSubmitElements,
   handleChange,
-  selectedRowData
+  selectedRowData,
 }) => {
   const [elements, setElements] = useState([]);
 

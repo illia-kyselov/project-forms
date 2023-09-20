@@ -32,7 +32,6 @@ function App() {
   const [buttonAddDocPressed, setButtonAddDocPressed] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
 
-
   const handleRowClick = (markerId) => {
     setFocusMarker(markerId);
   };
