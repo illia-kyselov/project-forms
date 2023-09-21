@@ -31,6 +31,7 @@ function App() {
 
   const [buttonAddDocPressed, setButtonAddDocPressed] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
+  const [formSelectedDzShown, setFormSelectedDzShown] = useState(false);
 
   const handleRowClick = (markerId) => {
     setFocusMarker(markerId);
@@ -121,7 +122,6 @@ function App() {
     }
   };
 
-
   const handleDzClick = (markerId) => {
     setSelectedMarkerId(markerId);
   };
@@ -129,7 +129,7 @@ function App() {
   const handleAddMarkerData = (markerData) => {
     const idExists = dataTable.some((row) => row.id === markerData.id);
 
-    if (idExists) {
+    if (idExists || !formSelectedDzShown) {
       return;
     }
 
@@ -178,21 +178,24 @@ function App() {
             setIdFormAddWorks={setIdFormAddWorks}
           />
           <div className=" flex">
-            <Table
-              data={dataTable}
-              setData={setDataTable}
-              setShowSecondTable={setShowSecondTable}
-              handleClearTable={handleClearTable}
-              onRowClick={handleRowClick}
-              setButtonPressed={setButtonPressed}
-              setDataSecondTable={setDataSecondTable}
-              dzMarkerPosition={markerDzPosition}
-              setDraggableDzMarkerShow={handleDraggableDzMarkerShow}
-              buttonPressed={buttonPressed}
-              buttonAddDocPressed={buttonAddDocPressed}
-              idFormAddWorks={idFormAddWorks}
-              setSelectedRowData={setSelectedRowData}
-            />
+            {buttonAddDocPressed && (
+              <Table
+                data={dataTable}
+                setData={setDataTable}
+                setShowSecondTable={setShowSecondTable}
+                handleClearTable={handleClearTable}
+                onRowClick={handleRowClick}
+                setButtonPressed={setButtonPressed}
+                setDataSecondTable={setDataSecondTable}
+                dzMarkerPosition={markerDzPosition}
+                setDraggableDzMarkerShow={handleDraggableDzMarkerShow}
+                buttonPressed={buttonPressed}
+                buttonAddDocPressed={buttonAddDocPressed}
+                idFormAddWorks={idFormAddWorks}
+                setSelectedRowData={setSelectedRowData}
+                setShowSelectedDzForm={setFormSelectedDzShown}
+              />
+            )}
             {showSecondTable && 
               <SecondTable
                 dataSecondTable={dataSecondTable}
