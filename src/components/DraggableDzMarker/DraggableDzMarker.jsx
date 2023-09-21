@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Popup, Marker, useMap } from "react-leaflet";
 import markerImage from "../../img/1.39z.png";
 import L from "leaflet";
@@ -21,6 +21,12 @@ const DraggableDzMarker = ({ handleMarkerPosition }) => {
     handleMarkerPosition(newPosition);
   };
 
+  useEffect(() => {
+    if (selectMarkerRef.current) {
+      selectMarkerRef.current.openPopup();
+    }
+  }, []);
+
   return (
     <Marker
       draggable={true}
@@ -31,7 +37,11 @@ const DraggableDzMarker = ({ handleMarkerPosition }) => {
         dragend: handleDragEnd,
       }}
     >
-      <Popup>Перемістіть знак у потрібне місце</Popup>
+      <Popup
+        openPopup={true}
+      >
+        Перемістіть знак у потрібне місце
+      </Popup>
     </Marker>
   );
 };
