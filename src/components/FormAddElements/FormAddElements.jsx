@@ -4,14 +4,14 @@ const FormAddElements = ({
   handleRemoveElements,
   handleSubmitElements,
   handleChange,
-  selectedRowData,
+  selectedRowData, // id выбранного знака, не убирал так как пригодится для отправки данных
 }) => {
   const [elements, setElements] = useState([]);
 
   useEffect(() => {
     fetchData();
   }, []);
-  
+
   const fetchData = async () => {
     try {
       const response = await fetch("http://localhost:3001/dict_elmnts");
@@ -26,17 +26,6 @@ const FormAddElements = ({
     <div>
       <label className="block-label">Додати елементи</label>
       <form className="form form-info" onSubmit={handleSubmitElements}>
-        <div className="form__group">
-          <label className="form-input_title">Ідентифікатор таблиці ДЗ</label>
-          <input
-            type="text"
-            name="tableId"
-            className="form__input"
-            onChange={handleChange}
-            placeholder={`${selectedRowData}`}
-            required
-          />
-        </div>
         <div className="form__group">
           <label className="form-input_title">Елемент</label>
           <select
