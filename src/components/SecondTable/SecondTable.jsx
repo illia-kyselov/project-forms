@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import FormAddElements from "../FormAddElements/FormAddElements";
+import NotificationService from "../../services/NotificationService";
 
 const SecondTable = ({
   dataSecondTable,
@@ -7,6 +8,9 @@ const SecondTable = ({
   formAddElementsData,
   selectedRowData,
   handleSubmitElements,
+  handleAddElements,
+  showAddElements,
+  handleRemoveElements,
 }) => {
   const [dataTable, setDataTable] = useState([]);
   const [editRowId, setEditRowId] = useState(null);
@@ -14,7 +18,6 @@ const SecondTable = ({
   const tableRef = useRef();
   const blurTimeoutRef = useRef(null);
 
-  const [showAddElements, setShowAddElements] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,7 +42,7 @@ const SecondTable = ({
 
     console.log('Selected row data in SecondTable:', selectedRowData);
 
-  }, [dataSecondTable, selectedRowData]);
+  }, [dataSecondTable, selectedRowData, dataTable]);
 
   useEffect(() => {
     const handleOutsideClick = (e) => {
@@ -114,12 +117,11 @@ const SecondTable = ({
 
   const handleButtonClick = (e) => {
     e.preventDefault();
-    setShowAddElements(true);
-  }
-
-  const handleRemoveElements = (e) => {
-    e.preventDefault();
-    setShowAddElements(false);
+    if (!selectedRowData) {
+      NotificationService.showWarningNotification("Оберіть дорожній знак");
+      return;
+    }
+    handleAddElements(e);
   };
 
   return (
@@ -198,10 +200,10 @@ const SecondTable = ({
                 <div className="popup-content">
                   <FormAddElements
                     handleRemoveElements={handleRemoveElements}
+                    handleSubmitElements={handleSubmitElements}
                     handleChange={handleChange}
-                    formAddElementsData={formAddElementsData}
-                    dataSecondTable={dataSecondTable}
-                    selectedRowData={selectedRowData}
+                  // formAddElementsData={formAddElementsData}
+                  // dataSecondTable={dataSecondTable}
                   />
                 </div>
               </div>
@@ -224,9 +226,8 @@ const SecondTable = ({
                     handleRemoveElements={handleRemoveElements}
                     handleSubmitElements={handleSubmitElements}
                     handleChange={handleChange}
-                    formAddElementsData={formAddElementsData}
-                    dataSecondTable={dataSecondTable}
-                    selectedRowData={selectedRowData}
+                  // formAddElementsData={formAddElementsData}
+                  // dataSecondTable={dataSecondTable}
                   />
                 </div>
               </div>
@@ -239,3 +240,4 @@ const SecondTable = ({
 };
 
 export default SecondTable;
+

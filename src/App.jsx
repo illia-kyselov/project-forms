@@ -12,7 +12,7 @@ import "react-notifications/lib/notifications.css";
 import NotificationService from './services/NotificationService';
 
 function App() {
-  const [showAddInfoForm, setShowAddInfoForm] = useState(false);
+  // const [showAddInfoForm, setShowAddInfoForm] = useState(false);
   const [selectedPolygon, setSelectedPolygon] = useState(null);
   const [showAddElements, setShowAddElements] = useState(false);
   const [objectid, setObjectid] = useState("");
@@ -31,15 +31,16 @@ function App() {
 
   const [buttonAddDocPressed, setButtonAddDocPressed] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
+  const [formSelectedDzShown, setFormSelectedDzShown] = useState(false);
 
   const handleRowClick = (markerId) => {
     setFocusMarker(markerId);
   };
 
-  const handleRemoveInfo = (e) => {
-    e.preventDefault();
-    setShowAddInfoForm(false);
-  };
+  // const handleRemoveInfo = (e) => {
+  //   e.preventDefault();
+  //   setShowAddInfoForm(false);
+  // };
 
   const handleAddElements = (e) => {
     e.preventDefault();
@@ -73,8 +74,9 @@ function App() {
       });
   };
 
+
   const [formAddElementsData, setformAddElementsData] = useState({
-    tableId: "",
+    tableId: selectedRowData,
     element: "",
     quantity: 0,
   });
@@ -98,7 +100,7 @@ function App() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formAddElementsData),
+        body: JSON.stringify({ ...formAddElementsData, tableId: selectedRowData }),
       });
 
       if (!response.ok) {
@@ -106,21 +108,20 @@ function App() {
         throw new Error(`Error: ${response.statusText}`);
       } else {
         NotificationService.showSuccessNotification('Данні успішно відправлені');
+        handleRemoveElements(e);
       }
 
       const data = await response.json();
       setformAddElementsData({
-        tableId: "",
+        tableId: selectedRowData,
         element: "",
         quantity: 0,
       });
 
-      handleRemoveElements(e);
     } catch (error) {
       console.error("Error sending data:", error);
     }
   };
-
 
   const handleDzClick = (markerId) => {
     setSelectedMarkerId(markerId);
@@ -129,7 +130,7 @@ function App() {
   const handleAddMarkerData = (markerData) => {
     const idExists = dataTable.some((row) => row.id === markerData.id);
 
-    if (idExists) {
+    if (idExists || !formSelectedDzShown) {
       return;
     }
 
@@ -178,35 +179,40 @@ function App() {
             setIdFormAddWorks={setIdFormAddWorks}
           />
           <div className=" flex">
-            <Table
-              data={dataTable}
-              setData={setDataTable}
-              setShowSecondTable={setShowSecondTable}
-              handleClearTable={handleClearTable}
-              onRowClick={handleRowClick}
-              setButtonPressed={setButtonPressed}
-              setDataSecondTable={setDataSecondTable}
-              dzMarkerPosition={markerDzPosition}
-              setDraggableDzMarkerShow={handleDraggableDzMarkerShow}
-              buttonPressed={buttonPressed}
-              buttonAddDocPressed={buttonAddDocPressed}
-              idFormAddWorks={idFormAddWorks}
-              setSelectedRowData={setSelectedRowData}
-            />
-            {showSecondTable && 
+            {buttonAddDocPressed && (
+              <Table
+                data={dataTable}
+                setData={setDataTable}
+                setShowSecondTable={setShowSecondTable}
+                handleClearTable={handleClearTable}
+                onRowClick={handleRowClick}
+                setButtonPressed={setButtonPressed}
+                setDataSecondTable={setDataSecondTable}
+                dzMarkerPosition={markerDzPosition}
+                setDraggableDzMarkerShow={handleDraggableDzMarkerShow}
+                buttonPressed={buttonPressed}
+                idFormAddWorks={idFormAddWorks}
+                setSelectedRowData={setSelectedRowData}
+                setShowSelectedDzForm={setFormSelectedDzShown}
+                handleAddElements={handleAddElements}
+              />
+            )}
+            {showSecondTable &&
               <SecondTable
                 dataSecondTable={dataSecondTable}
                 handleSubmitElements={handleSubmitElements}
                 handleChange={handleChange}
                 formAddElementsData={formAddElementsData}
                 selectedRowData={selectedRowData}
+                handleAddElements={handleAddElements}
+                showAddElements={showAddElements}
               />
             }
           </div>
         </div>
       </div>
       <div className="components-container">
-        {showAddInfoForm && (
+        {/* {showAddInfoForm && (
           <div className="popup-overlay">
             <div className="popup-content">
               <FormAddInfo
@@ -215,7 +221,7 @@ function App() {
               />
             </div>
           </div>
-        )}
+        )} */}
         {showAddElements && (
           <div className="popup-overlay">
             <div className="popup-content">
@@ -223,8 +229,8 @@ function App() {
                 handleRemoveElements={handleRemoveElements}
                 handleSubmitElements={handleSubmitElements}
                 handleChange={handleChange}
-                formAddElementsData={formAddElementsData}
-                selectedRowData={selectedRowData}
+              // formAddElementsData={formAddElementsData}
+              // selectedRowData={selectedRowData}
               />
             </div>
           </div>

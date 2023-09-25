@@ -9,16 +9,17 @@ const Table = ({
   setButtonPressed,
   setDataSecondTable,
   buttonPressed,
-  buttonAddDocPressed,
   idFormAddWorks,
   dzMarkerPosition,
   setDraggableDzMarkerShow,
-  setSelectedRowData
+  draggableDzMarkerShow,
+  draggableDzMarkerWKT,
+  setSelectedRowData,
+  setShowSelectedDzForm,
 }) => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [newRowData, setNewRowData] = useState({
-    id: "",
     num_sing: "",
   });
 
@@ -28,6 +29,7 @@ const Table = ({
 
   useEffect(() => {
     fetchForms();
+    setShowSelectedDzForm(true);
   }, []);
 
   useEffect(() => {
@@ -82,6 +84,7 @@ const Table = ({
           })
         )
       );
+
       setShowSecondTable(true);
       setShowButton(false);
 
@@ -89,6 +92,51 @@ const Table = ({
       console.error("Error inserting data into the database", error);
     }
   };
+
+  const convertToWKT = ({ lat, lng }) => {
+    return `MULTIPOINT(${lng} ${lat})`;
+  };
+
+  console.log(draggableDzMarkerWKT);
+
+  const handlePushToDZ = async (e) => {
+    e.preventDefault();
+    setShowSecondTable(false);
+
+    try {
+      if (!draggableDzMarkerWKT) {
+        console.error('Invalid WKT format');
+        return;
+      }
+
+      const wkt = `MULTIPOINT(${draggableDzMarkerWKT[1]} ${draggableDzMarkerWKT[0]})`;
+
+      const insertData = {
+        id: 1111,
+        geom: convertToWKT(draggableDzMarkerWKT),
+        num_sing: 1.39,
+      };
+
+      console.log(insertData);
+
+      const response = await fetch('http://localhost:3001/dz', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(insertData),
+      });
+
+      if (response.ok) {
+        NotificationService.showSuccessNotification('Данні успішно відправлені');
+      } else {
+        NotificationService.showWarningNotification('Будь ласка, заповніть всі поля та спробуйте ще раз!');
+      }
+    } catch (error) {
+      console.error('An error occurred while sending data to the server:', error);
+    }
+  };
+
 
   const deleteData = (id) => {
     setData((prevData) => {
@@ -148,131 +196,107 @@ const Table = ({
   };
 
   return (
-    buttonAddDocPressed && (
-      <div className="form-container-inside form-container-inside-width">
-        <label className="block-label">Обрані дорожні знаки</label>
+    <div className="form-container-inside form-container-inside-width">
+      <label className="block-label">Обрані дорожні знаки</label>
 
-        <div className="table">
-          {showAddForm && (
-            <div>
-              <form className="form-addDz">
-                <div className="form-addDz__group">
-                  <label className="form-addDz-input_title">ID</label>
-                  <input
-                    className="form-addDz__input"
-                    type="text"
-                    name="id"
-                    value={newRowData.id}
-                    onChange={handleInputChange}
-                    placeholder="ID"
-                    required
-                  />
-                </div>
-                <div className="form-addDz__group">
-                  <label className="form-addDz-input_title">Ідент. №</label>
-                  <input
-                    className="form-addDz__input"
-                    type="text"
-                    name="id_znk"
-                    value={newRowData.id_znk}
-                    onChange={handleInputChange}
-                    placeholder="Ідент. №"
-                    required
-                  />
-                </div>
-                <div className="form-addDz__group">
-                  <label className="form-addDz-input_title">Номер ПДР</label>
-                  <input
-                    className="form-addDz__input"
-                    type="text"
-                    name="num_sing"
-                    value={newRowData.num_sing}
-                    onChange={handleInputChange}
-                    placeholder="Номер ПДР"
-                    required
-                  />
-                </div>
-                <div className="flex">
-                  <button type="button" className="button-add-Dz" onClick={showDraggableDzMarker}>
-                    Показати на карті
-                  </button>
-                  <button type="submit" className="button-add-Dz">
+      <div className="table">
+        {showAddForm && (
+          <div>
+            <form className="form-addDz">
+              <div className="form-addDz__group">
+                <label className="form-addDz-input_title">Номер ПДР знаку</label>
+                <input
+                  className="form-addDz__input"
+                  type="text"
+                  name="num_sing"
+                  value={newRowData.num_sing}
+                  onChange={handleInputChange}
+                  placeholder="Номер ПДР"
+                  required
+                />
+              </div>
+              <div className="flex">
+                <button type="button" className="button-add-Dz" onClick={showDraggableDzMarker}>
+                  Показати на карті
+                </button>
+                {draggableDzMarkerShow &&
+                  <button className="button-add-Dz" onClick={handlePushToDZ}>
                     Зберегти
                   </button>
-                  <button className="button-add-Dz" onClick={hideForm}>
-                    Скасувати
-                  </button>
-                </div>
-              </form>
-            </div>
-          )}
-          <div className="flex">
-            <button className="button-add-Dz" onClick={setButtonPressed} style={{ backgroundColor: buttonPressed ? '#46aa03' : '' }}>
-              Додати з полігону
-            </button>
-            <button className="button-add-Dz" onClick={() => setShowAddForm(true)}>
-              Додати ДЗ
-            </button>
-            <button className="button-add-Dz" onClick={handleClearTable}>
-              Очистити
-            </button>
+                }
+                <button className="button-add-Dz" onClick={hideForm}>
+                  Скасувати
+                </button>
+              </div>
+            </form>
           </div>
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Номер ПДР</th>
-                <th>Форма</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((row) => (
-                <tr
-                  key={row.id}
-                  onClick={() => handleROwClick(row.id)}
-                  style={{ background: selectedRow === row.id ? "#b3dcfd" : "" }}
-                >
-                  <td>{row.id}</td>
-                  <td>{row.num_sing || "Немає в БД"}</td>
-                  <td>
-                    <select
-                      className="form__input form__input-select"
-                      value={selectedFormByRow[row.id] || ""}
-                      onChange={(e) => handleFormSelect(e, row.id)}
-                    >
-                      <option value="">Оберіть форму</option>
-                      {forms
-                        .filter((form) => form.num_pdr_new === row.num_sing)
-                        .map((form) => (
-                          <option key={form.id} value={form.form_dz}>
-                            {form.form_dz}
-                          </option>
-                        ))}
-                    </select>
-                  </td>
-                  <td>
-                    <button className="delete-icon" onClick={() => deleteData(row.id)}>
-                      X
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {showButton && (
-            <button
-              className="table-paragraph-button"
-              onClick={handleFormSubmit}
-              style={{ display: data.length > 0 ? 'block' : 'none' }}
-            >
-              Сформувати перелік
-            </button>
-          )}
+        )}
+        <div className="flex">
+          <button className="button-add-Dz" onClick={setButtonPressed} style={{ backgroundColor: buttonPressed ? '#46aa03' : '' }}>
+            Додати з полігону
+          </button>
+          <button className="button-add-Dz" onClick={() => setShowAddForm(true)}>
+            Додати ДЗ
+          </button>
+          <button className="button-add-Dz" onClick={handleClearTable}>
+            Очистити
+          </button>
         </div>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Номер ПДР</th>
+              <th>Форма</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((row) => (
+              <tr
+                key={row.id}
+                onClick={() => handleROwClick(row.id)}
+                style={{ background: selectedRow === row.id ? "#b3dcfd" : "" }}
+              >
+                <td>{row.id}</td>
+                <td>{row.num_sing || "Немає в БД"}</td>
+                <td>
+                  <select
+                    className="form__input form__input-select"
+                    value={selectedFormByRow[row.id] || ""}
+                    onChange={(e) => handleFormSelect(e, row.id)}
+                  >
+                    <option value="">Оберіть форму</option>
+                    {forms
+                      .filter((form) => form.num_pdr_new === row.num_sing)
+                      .map((form) => (
+                        <option key={form.id} value={form.form_dz}>
+                          {form.form_dz}
+                        </option>
+                      ))}
+                  </select>
+                </td>
+                <td>
+                  <button className="delete-icon" onClick={() => deleteData(row.id)}>
+                    X
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {showButton && (
+          <button
+            className="table-paragraph-button"
+            onClick={handleFormSubmit}
+            style={{ display: data.length > 0 ? 'block' : 'none' }}
+          >
+            Сформувати перелік
+          </button>
+        )}
       </div>
-    )
-  );
+    </div>
+  )
 };
 
 export default Table;

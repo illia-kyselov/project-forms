@@ -52,6 +52,7 @@ const LeafletMap = ({
   buttonAddDocPressed,
   handleMarkerDzDragend,
   showDraggableDzMarker,
+  setDraggableDzMarkerWKT,
 }) => {
   const zoom = 17;
   const containerStyle = {
@@ -263,7 +264,10 @@ const LeafletMap = ({
           </Polygon>
         ))}
         {showDraggableDzMarker && (
-          <DraggableDzMarker handleMarkerPosition={handleMarkerDragEnd} />
+          <DraggableDzMarker 
+            handleMarkerPosition={handleMarkerDragEnd} 
+            setDraggableDzMarkerWKT={setDraggableDzMarkerWKT}
+          />
         )}
         {filteredMarkers.map((marker) => (
           <Marker
