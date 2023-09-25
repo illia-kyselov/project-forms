@@ -281,10 +281,10 @@ const Table = ({
                     X
                   </button>
                 </td>
-              </tr >
+              </tr>
             ))}
-          </tbody >
-        </table >
+          </tbody>
+        </table>
         {showButton && (
           <button
             className="table-paragraph-button"
@@ -294,8 +294,8 @@ const Table = ({
             Сформувати перелік
           </button>
         )}
-      </div >
-    </div >
+      </div>
+    </div>
   )
 };
 
