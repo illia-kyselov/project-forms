@@ -179,25 +179,22 @@ function App() {
             setIdFormAddWorks={setIdFormAddWorks}
           />
           <div className=" flex">
-            {buttonAddDocPressed && (
-              <Table
-                data={dataTable}
-                setData={setDataTable}
-                setShowSecondTable={setShowSecondTable}
-                handleClearTable={handleClearTable}
-                onRowClick={handleRowClick}
-                setButtonPressed={setButtonPressed}
-                setDataSecondTable={setDataSecondTable}
-                dzMarkerPosition={markerDzPosition}
-                setDraggableDzMarkerShow={handleDraggableDzMarkerShow}
-                buttonPressed={buttonPressed}
-                idFormAddWorks={idFormAddWorks}
-                setSelectedRowData={setSelectedRowData}
-                setShowSelectedDzForm={setFormSelectedDzShown}
-                handleAddElements={handleAddElements}
-              />
-            )}
-            {showSecondTable &&
+            <Table
+              data={dataTable}
+              setData={setDataTable}
+              setShowSecondTable={setShowSecondTable}
+              handleClearTable={handleClearTable}
+              onRowClick={handleRowClick}
+              setButtonPressed={setButtonPressed}
+              setDataSecondTable={setDataSecondTable}
+              dzMarkerPosition={markerDzPosition}
+              setDraggableDzMarkerShow={handleDraggableDzMarkerShow}
+              buttonPressed={buttonPressed}
+              buttonAddDocPressed={buttonAddDocPressed}
+              idFormAddWorks={idFormAddWorks}
+              setSelectedRowData={setSelectedRowData}
+            />
+            {showSecondTable && 
               <SecondTable
                 dataSecondTable={dataSecondTable}
                 handleSubmitElements={handleSubmitElements}
