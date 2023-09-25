@@ -335,6 +335,31 @@ app.post("/odr_proekty_plg", (req, res) => {
   });
 });
 
+app.post("/dz", (req, res) => {
+  const id = req.body.id;
+  const geom = req.body.geom; // Assuming geom is an object with latitude and longitude properties
+  const num_sing = req.body.num_sing;
+
+  // Convert single point to WKT format for MULTIPOINT geometry
+  const wktGeom = `MULTIPOINT(${geom.longitude} ${geom.latitude})`;
+
+  const query = `
+    INSERT INTO exploitation.dz (id, geom, num_pdr)
+    VALUES ($1, ST_GeomFromText($2, 4326), $3)
+  `;
+
+  const values = [id, wktGeom, num_sing];
+
+  client.query(query, values, (err, result) => {
+    if (err) {
+      console.error("Error inserting data into database", err);
+      res.status(500).send("Error inserting data into database");
+    } else {
+      res.json({ message: "Data successfully inserted into the database" });
+    }
+  });
+});
+
 app.post("/work_table", (req, res) => {
   const formWorksData = req.body;
 

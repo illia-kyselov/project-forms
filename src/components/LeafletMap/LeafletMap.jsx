@@ -52,6 +52,7 @@ const LeafletMap = ({
   buttonAddDocPressed,
   handleMarkerDzDragend,
   showDraggableDzMarker,
+  setDraggableDzMarkerWKT,
 }) => {
   const zoom = 17;
   const containerStyle = {
@@ -221,8 +222,6 @@ const LeafletMap = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapBounds, polygons]);
 
-  ;
-
   return (
     <div className="LeafletMapContainer ">
       <MapContainer
@@ -263,7 +262,10 @@ const LeafletMap = ({
           </Polygon>
         ))}
         {showDraggableDzMarker && (
-          <DraggableDzMarker handleMarkerPosition={handleMarkerDragEnd} />
+          <DraggableDzMarker
+            handleMarkerPosition={handleMarkerDragEnd}
+            setDraggableDzMarkerWKT={setDraggableDzMarkerWKT}
+          />
         )}
         {filteredMarkers.map((marker) => (
           <Marker

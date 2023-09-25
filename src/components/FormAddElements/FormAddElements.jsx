@@ -24,7 +24,7 @@ const FormAddElements = ({
   return (
     <div>
       <label className="block-label">Додати елементи</label>
-      <form className="form form-info" onSubmit={handleSubmitElements}>
+      <form className="form form-info">
         <div className="form__group">
           <label className="form-input_title">Елемент</label>
           <select
@@ -33,6 +33,7 @@ const FormAddElements = ({
             onChange={handleChange}
             required
           >
+            <option value="" selected hidden>Оберіть елемент</option>
             {elements.map((element) => (
               <option
                 key={element}
@@ -55,7 +56,7 @@ const FormAddElements = ({
           />
         </div>
         <div className="form__button-container">
-          <button className="form__button" type="submit">
+          <button className="form__button" onClick={handleSubmitElements}>
             Додати елементи
           </button>
           <button
