@@ -3,8 +3,7 @@ import React, { useState, useEffect } from "react";
 const FormAddElements = ({
   handleRemoveElements,
   handleSubmitElements,
-  handleChange,
-  selectedRowData, // id выбранного знака, не убирал так как пригодится для отправки данных
+  handleChange
 }) => {
   const [elements, setElements] = useState([]);
 

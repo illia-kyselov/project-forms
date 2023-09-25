@@ -206,7 +206,6 @@ const SecondTable = ({
                     handleChange={handleChange}
                     formAddElementsData={formAddElementsData}
                     dataSecondTable={dataSecondTable}
-                    selectedRowData={selectedRowData}
                   />
                 </div>
               </div>

@@ -99,7 +99,7 @@ function App() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formAddElementsData),
+        body: JSON.stringify({...formAddElementsData, tableId: selectedRowData}),
       });
 
       if (!response.ok) {
