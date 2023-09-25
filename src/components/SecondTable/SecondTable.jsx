@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import FormAddElements from "../FormAddElements/FormAddElements";
+import NotificationService from "../../services/NotificationService";
 
 const SecondTable = ({
   dataSecondTable,
@@ -114,8 +115,12 @@ const SecondTable = ({
 
   const handleButtonClick = (e) => {
     e.preventDefault();
+    if (!selectedRowData) {
+      NotificationService.showWarningNotification("Оберіть дорожній знак");
+      return;
+    }
     setShowAddElements(true);
-  }
+  };
 
   const handleRemoveElements = (e) => {
     e.preventDefault();
