@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 const FormAddElements = ({
   handleRemoveElements,
   handleSubmitElements,
-  handleChange,
+  handleChange
 }) => {
   const [elements, setElements] = useState([]);
 
