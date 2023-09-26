@@ -53,6 +53,8 @@ const LeafletMap = ({
   handleMarkerDzDragend,
   showDraggableDzMarker,
   setDraggableDzMarkerWKT,
+  pushToDZCalled,
+  setPushToDZCalled,
 }) => {
   const zoom = 17;
   const containerStyle = {
@@ -97,7 +99,9 @@ const LeafletMap = ({
       .catch((error) => {
         console.error("Error fetching polygons data", error);
       });
+  }, []);
 
+  useEffect(() => {
     fetch("http://localhost:3001/dz")
       .then((response) => response.json())
       .then((data) => {
@@ -113,7 +117,8 @@ const LeafletMap = ({
       .catch((error) => {
         console.error("Error fetching marker data", error);
       });
-  }, []);
+    setPushToDZCalled(false);
+  }, [pushToDZCalled, setPushToDZCalled]);
 
   const filterMarkersWithinPolygon = (polygonCoordinates) => {
     const filtered = markers.filter((marker) => {

@@ -26,12 +26,14 @@ function App() {
   const [polygonTableRowClick, setPolygonTableRowClick] = useState([]);
   const [markerDzPosition, setMarkerDzPosition] = useState(null);
   const [draggableDzMarkerShow, setDraggableDzMarkerShow] = useState(false);
+  const [draggableDzMarkerWKT, setDraggableDzMarkerWKT] = useState(false);
 
   const [idFormAddWorks, setIdFormAddWorks] = useState();
 
   const [buttonAddDocPressed, setButtonAddDocPressed] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [formSelectedDzShown, setFormSelectedDzShown] = useState(false);
+  const [pushToDZCalled, setPushToDZCalled] = useState(false);
 
   const handleRowClick = (markerId) => {
     setFocusMarker(markerId);
@@ -167,6 +169,9 @@ function App() {
           setSelectedPolygonApp={setSelectedPolygon}
           buttonAddDocPressed={buttonAddDocPressed}
           showDraggableDzMarker={draggableDzMarkerShow}
+          setDraggableDzMarkerWKT={setDraggableDzMarkerWKT}
+          pushToDZCalled={pushToDZCalled}
+          setPushToDZCalled={setPushToDZCalled}
         />
         <div className="form-container">
           <FormAddWorks
@@ -195,6 +200,8 @@ function App() {
                 setSelectedRowData={setSelectedRowData}
                 setShowSelectedDzForm={setFormSelectedDzShown}
                 handleAddElements={handleAddElements}
+                draggableDzMarkerWKT={draggableDzMarkerWKT}
+                setPushToDZCalled={setPushToDZCalled}
               />
             )}
             {showSecondTable &&
