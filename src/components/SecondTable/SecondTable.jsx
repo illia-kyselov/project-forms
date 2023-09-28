@@ -44,6 +44,28 @@ const SecondTable = ({
 
   }, [dataSecondTable, selectedRowData, dataTable]);
 
+  const deleteData = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:3001/elements/${id}`, {
+        method: 'DELETE'
+      });
+
+      if (response.ok) {
+        setDataTable((prevData) => {
+          const updatedData = prevData.filter((element) => element.id_elmts !== id);
+          return updatedData;
+        });
+        NotificationService.showSuccessNotification('Данні успішно видалено');
+      } else {
+        console.error('Error deleting data from the server');
+        NotificationService.showErrorNotification('Щось пішло не так');
+      }
+    } catch (error) {
+      console.error('Error deleting data', error);
+    }
+  };
+
+
   useEffect(() => {
     const handleOutsideClick = (e) => {
       if (!tableRef.current.contains(e.target)) {
@@ -108,12 +130,12 @@ const SecondTable = ({
     }
   };
 
-  const deleteData = (id) => {
-    setDataTable((prevData) => {
-      const updatedData = prevData.filter((element) => element.id_elmts !== id);
-      return updatedData;
-    });
-  };
+  // const deleteData = (id) => {
+  //   setDataTable((prevData) => {
+  //     const updatedData = prevData.filter((element) => element.id_elmts !== id);
+  //     return updatedData;
+  //   });
+  // };
 
   const handleButtonClick = (e) => {
     e.preventDefault();

@@ -19,7 +19,8 @@ const DraggableDzMarker = ({ handleMarkerPosition, setDraggableDzMarkerWKT }) =>
     const newPosition = e.target.getLatLng();
     setMarkerPosition([newPosition.lat, newPosition.lng]);
     handleMarkerPosition(newPosition);
-    setDraggableDzMarkerWKT(markerPosition);
+    
+    setDraggableDzMarkerWKT([newPosition.lat, newPosition.lng]);
   };
 
   useEffect(() => {

@@ -108,6 +108,8 @@ const Table = ({
         num_pdr: newRowData.num_sing,
       };
 
+      console.log(insertData);
+
       const response = await fetch('http://localhost:3001/dz', {
         method: 'POST',
         headers: {

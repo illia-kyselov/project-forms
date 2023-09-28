@@ -435,3 +435,25 @@ app.post("/elements", (req, res) => {
     }
   });
 });
+
+//delete
+
+app.delete("/elements/:id", (req, res) => {
+  const elementId = req.params.id;
+
+  const query = `
+    DELETE FROM exploitation.elements
+    WHERE id_elmts = $1
+  `;
+
+  const values = [elementId];
+
+  client.query(query, values, (err, result) => {
+    if (err) {
+      console.error("Error deleting data from database", err);
+      res.status(500).send("Error deleting data from database");
+    } else {
+      res.json({ message: "Data successfully deleted from database" });
+    }
+  });
+});
