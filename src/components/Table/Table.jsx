@@ -98,8 +98,6 @@ const Table = ({
     e.preventDefault();
     setShowSecondTable(false);
 
-    console.log(newRowData);
-
     try {
       const wktMultiPoint = `MULTIPOINT(${draggableDzMarkerWKT[1]} ${draggableDzMarkerWKT[0]} 0)`;
       const insertData = {
@@ -107,8 +105,6 @@ const Table = ({
         num_sing: newRowData.num_sing,
         num_pdr: newRowData.num_sing,
       };
-
-      console.log(insertData);
 
       const response = await fetch('http://localhost:3001/dz', {
         method: 'POST',
@@ -129,7 +125,6 @@ const Table = ({
       console.error('An error occurred while sending data to the server:', error);
     }
   };
-
 
   const deleteData = (id) => {
     setData((prevData) => {
@@ -153,7 +148,6 @@ const Table = ({
 
     setDataSecondTable(rowId);
   };
-
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -270,7 +264,10 @@ const Table = ({
                     {forms
                       .filter((form) => form.num_pdr_new === row.num_sing)
                       .map((form) => (
-                        <option key={form.id} value={form.form_dz}>
+                        <option 
+                          key={form.id} 
+                          value={form.form_dz}
+                        >
                           {form.form_dz}
                         </option>
                       ))}

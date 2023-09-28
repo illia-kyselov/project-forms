@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import FormAddElements from "../FormAddElements/FormAddElements";
 import NotificationService from "../../services/NotificationService";
+import FormUpdateElementsInfo from "../FormUpdateElementsInfo/FormUpdateElementsInfo";
 
 const SecondTable = ({
   dataSecondTable,
@@ -13,11 +14,9 @@ const SecondTable = ({
   handleRemoveElements,
 }) => {
   const [dataTable, setDataTable] = useState([]);
-  const [editRowId, setEditRowId] = useState(null);
-  const [editedData, setEditedData] = useState({});
   const tableRef = useRef();
-  const blurTimeoutRef = useRef(null);
-
+  const [showUpdateElements, setShowUpdateElements] = useState(false);
+  const [selectedElement, setSelectedElement] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,9 +38,6 @@ const SecondTable = ({
     } else {
       setDataTable([]);
     }
-
-    console.log('Selected row data in SecondTable:', selectedRowData);
-
   }, [dataSecondTable, selectedRowData, dataTable]);
 
   const deleteData = async (id) => {
@@ -57,85 +53,12 @@ const SecondTable = ({
         });
         NotificationService.showSuccessNotification('Данні успішно видалено');
       } else {
-        console.error('Error deleting data from the server');
         NotificationService.showErrorNotification('Щось пішло не так');
       }
     } catch (error) {
       console.error('Error deleting data', error);
     }
   };
-
-
-  useEffect(() => {
-    const handleOutsideClick = (e) => {
-      if (!tableRef.current.contains(e.target)) {
-        handleCellBlur();
-      }
-    };
-
-    document.addEventListener("click", handleOutsideClick);
-
-    return () => {
-      document.removeEventListener("click", handleOutsideClick);
-    };
-  });
-
-  const handleRowDoubleClick = (rowId) => {
-    setEditRowId(rowId);
-    const originalData = dataTable.find(
-      (element) => element.id_elmts === rowId
-    );
-    setEditedData(originalData);
-  };
-
-  const handleCellChange = (e, field) => {
-    const { value } = e.target;
-    setEditedData((prevData) => ({
-      ...prevData,
-      [field]: value,
-    }));
-  };
-
-  const handleCellBlur = () => {
-    setEditRowId(null);
-    if (editedData.id_elmts) {
-      setDataTable((prevData) =>
-        prevData.map((element) =>
-          element.id_elmts === editedData.id_elmts ? { ...editedData } : element
-        )
-      );
-    }
-    setEditedData({});
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleCellBlur();
-    }
-  };
-
-  const handleTableClick = (e) => {
-    e.stopPropagation();
-  };
-
-  const handleInputBlur = () => {
-    blurTimeoutRef.current = setTimeout(() => {
-      handleCellBlur();
-    }, 100);
-  };
-
-  const handleInputFocus = () => {
-    if (blurTimeoutRef.current) {
-      clearTimeout(blurTimeoutRef.current);
-    }
-  };
-
-  // const deleteData = (id) => {
-  //   setDataTable((prevData) => {
-  //     const updatedData = prevData.filter((element) => element.id_elmts !== id);
-  //     return updatedData;
-  //   });
-  // };
 
   const handleButtonClick = (e) => {
     e.preventDefault();
@@ -146,12 +69,17 @@ const SecondTable = ({
     handleAddElements(e);
   };
 
+  const handleShowUpdateForm = (element) => {
+    setSelectedElement(element);
+    setShowUpdateElements(true);
+  }
+
   return (
     <div className="form-container-inside form-container-inside-width">
-      <label className="block-label">Елементи до ДЗ № {dataSecondTable}</label>
+      <label className="block-label">Елементи до ДЗ № {dataSecondTable || '______'}</label>
       <div className="table" ref={tableRef}>
         {Array.isArray(dataTable) && dataTable.length > 0 ? (
-          <table onClick={handleTableClick}>
+          <table>
             <thead>
               <tr>
                 <th>№ з/п</th>
@@ -166,39 +94,17 @@ const SecondTable = ({
               {dataTable.map((element) => (
                 <tr
                   key={element.id_elmts}
-                  onDoubleClick={() => handleRowDoubleClick(element.id_elmts)}
+                  onDoubleClick={() => handleShowUpdateForm(element)}
                 >
                   <td>{element.id_elmts}</td>
                   <td>
                     <span>{element.expl_dz_id}</span>
                   </td>
                   <td>
-                    {editRowId === element.id_elmts ? (
-                      <input
-                        type="text"
-                        value={editedData.name_elmns || ""}
-                        onChange={(e) => handleCellChange(e, "name_elmns")}
-                        onBlur={handleInputBlur}
-                        onFocus={handleInputFocus}
-                        onKeyDown={handleKeyDown}
-                      />
-                    ) : (
-                      <span>{element.name_elmns}</span>
-                    )}
+                    <span>{element.name_elmns}</span>
                   </td>
                   <td>
-                    {editRowId === element.id_elmts ? (
-                      <input
-                        type="text"
-                        value={editedData.cnt_elmnt || ""}
-                        onChange={(e) => handleCellChange(e, "cnt_elmnt")}
-                        onBlur={handleInputBlur}
-                        onFocus={handleInputFocus}
-                        onKeyDown={handleKeyDown}
-                      />
-                    ) : (
-                      <span>{element.cnt_elmnt}</span>
-                    )}
+                    <span>{element.cnt_elmnt}</span>
                   </td>
                   <td>
                     <button
@@ -224,9 +130,14 @@ const SecondTable = ({
                     handleRemoveElements={handleRemoveElements}
                     handleSubmitElements={handleSubmitElements}
                     handleChange={handleChange}
-                  // formAddElementsData={formAddElementsData}
-                  // dataSecondTable={dataSecondTable}
                   />
+                </div>
+              </div>
+            )}
+            {showUpdateElements && (
+              <div className="popup-overlay">
+                <div className="popup-content">
+                  <FormUpdateElementsInfo selectedElement={selectedElement} />
                 </div>
               </div>
             )}
@@ -248,8 +159,6 @@ const SecondTable = ({
                     handleRemoveElements={handleRemoveElements}
                     handleSubmitElements={handleSubmitElements}
                     handleChange={handleChange}
-                  // formAddElementsData={formAddElementsData}
-                  // dataSecondTable={dataSecondTable}
                   />
                 </div>
               </div>

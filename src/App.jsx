@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./App.scss";
 import FormAddWorks from "./components/FormAddWorks/FormAddWorks";
-import FormAddInfo from "./components/FormAddInfo/FormAddInfo";
 import LeafletMap from "./components/LeafletMap/LeafletMap";
 import FormAddElements from "./components/FormAddElements/FormAddElements";
 import Table from "./components/Table/Table";
@@ -38,11 +37,6 @@ function App() {
   const handleRowClick = (markerId) => {
     setFocusMarker(markerId);
   };
-
-  // const handleRemoveInfo = (e) => {
-  //   e.preventDefault();
-  //   setShowAddInfoForm(false);
-  // };
 
   const handleAddElements = (e) => {
     e.preventDefault();
@@ -219,16 +213,6 @@ function App() {
         </div>
       </div>
       <div className="components-container">
-        {/* {showAddInfoForm && (
-          <div className="popup-overlay">
-            <div className="popup-content">
-              <FormAddInfo
-                handleRemoveInfo={handleRemoveInfo}
-                handleAddElements={handleAddElements}
-              />
-            </div>
-          </div>
-        )} */}
         {showAddElements && (
           <div className="popup-overlay">
             <div className="popup-content">
@@ -236,8 +220,6 @@ function App() {
                 handleRemoveElements={handleRemoveElements}
                 handleSubmitElements={handleSubmitElements}
                 handleChange={handleChange}
-              // formAddElementsData={formAddElementsData}
-              // selectedRowData={selectedRowData}
               />
             </div>
           </div>
