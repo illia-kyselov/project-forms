@@ -137,7 +137,10 @@ const SecondTable = ({
             {showUpdateElements && (
               <div className="popup-overlay">
                 <div className="popup-content">
-                  <FormUpdateElementsInfo selectedElement={selectedElement} />
+                  <FormUpdateElementsInfo
+                    selectedElement={selectedElement}
+                    setShowUpdateElements={setShowUpdateElements}
+                  />
                 </div>
               </div>
             )}

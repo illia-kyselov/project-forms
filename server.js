@@ -457,3 +457,27 @@ app.delete("/elements/:id", (req, res) => {
     }
   });
 });
+
+//put
+
+app.put("/elements/:id", (req, res) => {
+  const elementId = req.params.id;
+  const { element, quantity } = req.body;
+
+  const query = `
+    UPDATE exploitation.elements 
+    SET name_elmns = $1, cnt_elmnt = $2
+    WHERE id_elmts = $3
+  `;
+
+  const values = [element, quantity, elementId];
+
+  client.query(query, values, (err, result) => {
+    if (err) {
+      console.error("Error updating data in the database", err);
+      res.status(500).send("Error updating data in the database");
+    } else {
+      res.json({ message: "Data successfully updated in the database" });
+    }
+  });
+});
