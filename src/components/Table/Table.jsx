@@ -1,5 +1,10 @@
-import React, { useState, useEffect } from "react";
-import NotificationService from '../../services/NotificationService';
+import React, { useState, useEffect, useRef } from "react";
+import NotificationService from "../../services/NotificationService";
+
+const KeyCodesEnum = {
+  ArrowUp: 38,
+  ArrowDown: 40,
+};
 
 const Table = ({
   data,
@@ -19,6 +24,7 @@ const Table = ({
   setPushToDZCalled,
 }) => {
   const [selectedRow, setSelectedRow] = useState(null);
+  const selectedRowRef = useRef(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [newRowData, setNewRowData] = useState({
     num_sing: "",
@@ -26,12 +32,32 @@ const Table = ({
   const [forms, setForms] = useState([]);
   const [selectedFormByRow, setSelectedFormByRow] = useState({});
   const [showButton, setShowButton] = useState(true);
+  const rowIdsRef = useRef([]);
+  const [arrowsListenerAdded, setArrowsListenerAdded] = useState(false);
+  const arrowsListenerAddedRef = useRef(false);
   const [showSaveButton, setShowSaveButton] = useState(false);
 
   useEffect(() => {
     fetchForms();
     setShowSelectedDzForm(true);
+
+    if (!arrowsListenerAdded) {
+      document.addEventListener("keydown", handleArrowsPressEvent);
+      setArrowsListenerAdded(true);
+      arrowsListenerAddedRef.current = true;
+    }
+    return () => {
+      if (arrowsListenerAddedRef.current) {
+        document.addEventListener("keydown", handleArrowsPressEvent);
+      }
+    };
   }, []);
+
+  useEffect(() => {
+    const ids = data.map((item) => item.id);
+    rowIdsRef.current = ids;
+    handleROwClick(ids[0]);
+  }, [data]);
 
   useEffect(() => {
     setNewRowData((prevData) => ({
@@ -47,6 +73,31 @@ const Table = ({
       setForms(formData);
     } catch (error) {
       console.error("Error fetching forms data", error);
+    }
+  };
+
+  const handleArrowsPressEvent = (e) => {
+    const selectedRow = selectedRowRef.current;
+    const rowIds = rowIdsRef.current;
+    const lastRowId = rowIds.length - 1;
+
+    if (!selectedRow) {
+      return;
+    }
+
+    const selectedRowIndex = rowIds.indexOf(selectedRow);
+    if (e.keyCode === KeyCodesEnum.ArrowDown) {
+      if (selectedRowIndex === lastRowId) {
+        return;
+      }
+      const newSelectedRowId = rowIds[selectedRowIndex + 1];
+      handleROwClick(newSelectedRowId);
+    } else if (e.keyCode === KeyCodesEnum.ArrowUp) {
+      if (selectedRowIndex === 0) {
+        return;
+      }
+      const newSelectedRowId = rowIds[selectedRowIndex - 1];
+      handleROwClick(newSelectedRowId);
     }
   };
 
@@ -135,6 +186,7 @@ const Table = ({
 
   const handleROwClick = async (rowId) => {
     setSelectedRow(rowId);
+    selectedRowRef.current = rowId;
 
     try {
       const response = await fetch(`http://localhost:3001/expl_dz/${rowId}`);
