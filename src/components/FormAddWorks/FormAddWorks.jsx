@@ -241,7 +241,7 @@ const FormAddWorks = ({
                 <button
                   className="form__button form__button-addForm"
                   onClick={handleButtonClick}
-                  style={{ backgroundColor: buttonAddDocPressed ? '#6cd823' : '' }}
+                  style={{ backgroundColor: buttonAddDocPressed ? '#a5d565  ' : '' }}
                 >
                   Зберегти
                 </button>

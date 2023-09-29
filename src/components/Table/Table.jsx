@@ -21,6 +21,7 @@ const Table = ({
   draggableDzMarkerWKT,
   setSelectedRowData,
   setShowSelectedDzForm,
+  setPushToDZCalled,
 }) => {
   const [selectedRow, setSelectedRow] = useState(null);
   const selectedRowRef = useRef(null);
@@ -28,13 +29,13 @@ const Table = ({
   const [newRowData, setNewRowData] = useState({
     num_sing: "",
   });
-
   const [forms, setForms] = useState([]);
   const [selectedFormByRow, setSelectedFormByRow] = useState({});
   const [showButton, setShowButton] = useState(true);
   const rowIdsRef = useRef([]);
   const [arrowsListenerAdded, setArrowsListenerAdded] = useState(false);
   const arrowsListenerAddedRef = useRef(false);
+  const [showSaveButton, setShowSaveButton] = useState(false);
 
   useEffect(() => {
     fetchForms();
@@ -144,31 +145,17 @@ const Table = ({
     }
   };
 
-  const convertToWKT = ({ lat, lng }) => {
-    return `MULTIPOINT(${lng} ${lat})`;
-  };
-
-  console.log(draggableDzMarkerWKT);
-
   const handlePushToDZ = async (e) => {
     e.preventDefault();
     setShowSecondTable(false);
 
     try {
-      if (!draggableDzMarkerWKT) {
-        console.error('Invalid WKT format');
-        return;
-      }
-
-      const wkt = `MULTIPOINT(${draggableDzMarkerWKT[1]} ${draggableDzMarkerWKT[0]})`;
-
+      const wktMultiPoint = `MULTIPOINT(${draggableDzMarkerWKT[1]} ${draggableDzMarkerWKT[0]} 0)`;
       const insertData = {
-        id: 1111,
-        geom: convertToWKT(draggableDzMarkerWKT),
-        num_sing: 1.39,
+        geom: wktMultiPoint,
+        num_sing: newRowData.num_sing,
+        num_pdr: newRowData.num_sing,
       };
-
-      console.log(insertData);
 
       const response = await fetch('http://localhost:3001/dz', {
         method: 'POST',
@@ -180,6 +167,8 @@ const Table = ({
 
       if (response.ok) {
         NotificationService.showSuccessNotification('Данні успішно відправлені');
+        setPushToDZCalled(true);
+        hideForm(e);
       } else {
         NotificationService.showWarningNotification('Будь ласка, заповніть всі поля та спробуйте ще раз!');
       }
@@ -212,7 +201,6 @@ const Table = ({
     setDataSecondTable(rowId);
   };
 
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewRowData((prevData) => ({
@@ -238,12 +226,17 @@ const Table = ({
 
   const hideForm = (event) => {
     event.preventDefault();
+    setNewRowData({
+      num_sing: "",
+    });
+    setShowSaveButton(false);
     setShowAddForm(false);
     setDraggableDzMarkerShow(false);
   };
 
   const showDraggableDzMarker = () => {
     setDraggableDzMarkerShow(true);
+    setShowSaveButton(true);
   };
 
   return (
@@ -267,14 +260,16 @@ const Table = ({
                 />
               </div>
               <div className="flex">
-                <button type="button" className="button-add-Dz" onClick={showDraggableDzMarker}>
-                  Показати на карті
-                </button>
-                {draggableDzMarkerShow &&
+                {!showSaveButton && (
+                  <button type="button" className="button-add-Dz" onClick={showDraggableDzMarker}>
+                    Показати на карті
+                  </button>
+                )}
+                {showSaveButton && (
                   <button className="button-add-Dz" onClick={handlePushToDZ}>
                     Зберегти
                   </button>
-                }
+                )}
                 <button className="button-add-Dz" onClick={hideForm}>
                   Скасувати
                 </button>
@@ -307,7 +302,7 @@ const Table = ({
               <tr
                 key={row.id}
                 onClick={() => handleROwClick(row.id)}
-                style={{ background: selectedRow === row.id ? "#b3dcfd" : "" }}
+                style={{ background: selectedRow === row.id ? "#a5d565" : "" }}
               >
                 <td>{row.id}</td>
                 <td>{row.num_sing || "Немає в БД"}</td>
@@ -321,7 +316,10 @@ const Table = ({
                     {forms
                       .filter((form) => form.num_pdr_new === row.num_sing)
                       .map((form) => (
-                        <option key={form.id} value={form.form_dz}>
+                        <option 
+                          key={form.id} 
+                          value={form.form_dz}
+                        >
                           {form.form_dz}
                         </option>
                       ))}

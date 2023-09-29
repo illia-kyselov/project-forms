@@ -336,24 +336,21 @@ app.post("/odr_proekty_plg", (req, res) => {
 });
 
 app.post("/dz", (req, res) => {
-  const id = req.body.id;
-  const geom = req.body.geom; // Assuming geom is an object with latitude and longitude properties
+  const wktGeom = req.body.geom;
+  const num_pdr = req.body.num_pdr;
   const num_sing = req.body.num_sing;
 
-  // Convert single point to WKT format for MULTIPOINT geometry
-  const wktGeom = `MULTIPOINT(${geom.longitude} ${geom.latitude})`;
-
   const query = `
-    INSERT INTO exploitation.dz (id, geom, num_pdr)
-    VALUES ($1, ST_GeomFromText($2, 4326), $3)
+    INSERT INTO exploitation.dz (geom, num_pdr, num_sing)
+    VALUES (ST_GeomFromText($1, 4326), $2, $3)
   `;
 
-  const values = [id, wktGeom, num_sing];
+  const values = [wktGeom, num_pdr, num_sing];
 
   client.query(query, values, (err, result) => {
     if (err) {
-      console.error("Error inserting data into database", err);
-      res.status(500).send("Error inserting data into database");
+      console.error("Error inserting data into the database", err);
+      res.status(500).send("Error inserting data into the database");
     } else {
       res.json({ message: "Data successfully inserted into the database" });
     }
@@ -435,6 +432,28 @@ app.post("/elements", (req, res) => {
       res.status(500).send("Error inserting data into database");
     } else {
       res.json({ message: "Data successfully inserted into database" });
+    }
+  });
+});
+
+//delete
+
+app.delete("/elements/:id", (req, res) => {
+  const elementId = req.params.id;
+
+  const query = `
+    DELETE FROM exploitation.elements
+    WHERE id_elmts = $1
+  `;
+
+  const values = [elementId];
+
+  client.query(query, values, (err, result) => {
+    if (err) {
+      console.error("Error deleting data from database", err);
+      res.status(500).send("Error deleting data from database");
+    } else {
+      res.json({ message: "Data successfully deleted from database" });
     }
   });
 });

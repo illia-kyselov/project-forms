@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const FormAddElements = ({
-  handleRemoveElements,
-  handleSubmitElements,
-  handleChange
-}) => {
+const FormUpdateElementsInfo = () => {
   const [elements, setElements] = useState([]);
 
   useEffect(() => {
@@ -23,14 +19,13 @@ const FormAddElements = ({
 
   return (
     <div>
-      <label className="block-label">Додати елементи</label>
+      <label className="block-label">Оновити данні елемента</label>
       <form className="form form-info">
         <div className="form__group">
           <label className="form-input_title">Елемент</label>
           <select
             className="form__input form__input-select"
             name="element"
-            onChange={handleChange}
           >
             <option value="" selected hidden>Оберіть елемент</option>
             {elements.map((element) => (
@@ -50,16 +45,14 @@ const FormAddElements = ({
             type="number"
             name="quantity"
             className="form__input"
-            onChange={handleChange}
           />
         </div>
         <div className="form__button-container">
-          <button className="form__button" onClick={handleSubmitElements}>
-            Додати елементи
+          <button className="form__button">
+            Оновити данні
           </button>
           <button
             className="form__button button-escape"
-            onClick={handleRemoveElements}
           >
             Скасувати
           </button>
@@ -69,4 +62,4 @@ const FormAddElements = ({
   );
 };
 
-export default FormAddElements;
+export default FormUpdateElementsInfo;
