@@ -188,7 +188,6 @@ const Table = ({
     if (!rowId) {
       return;
     }
-
     setSelectedRow(rowId);
     selectedRowRef.current = rowId;
 
