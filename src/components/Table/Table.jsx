@@ -185,6 +185,10 @@ const Table = ({
   };
 
   const handleROwClick = async (rowId) => {
+    if (!rowId) {
+      return;
+    }
+
     setSelectedRow(rowId);
     selectedRowRef.current = rowId;
 
@@ -316,8 +320,8 @@ const Table = ({
                     {forms
                       .filter((form) => form.num_pdr_new === row.num_sing)
                       .map((form) => (
-                        <option 
-                          key={form.id} 
+                        <option
+                          key={form.id}
                           value={form.form_dz}
                         >
                           {form.form_dz}
