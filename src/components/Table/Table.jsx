@@ -185,6 +185,10 @@ const Table = ({
   };
 
   const handleROwClick = async (rowId) => {
+    if (!rowId) {
+      return;
+    }
+    
     setSelectedRow(rowId);
     selectedRowRef.current = rowId;
 
