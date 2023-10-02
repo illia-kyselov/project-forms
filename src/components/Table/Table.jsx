@@ -315,7 +315,7 @@ const Table = ({
                     value={selectedFormByRow[row.id] || ""}
                     onChange={(e) => handleFormSelect(e, row.id)}
                   >
-                    <option value="">Оберіть форму</option>
+                    <option value="" disabled hidden>Оберіть форму</option>
                     {forms
                       .filter((form) => form.num_pdr_new === row.num_sing)
                       .map((form) => (

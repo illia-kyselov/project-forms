@@ -87,7 +87,11 @@ const FormAddWorks = ({
     const date_work =
       formWorksData.date_work || new Date(Date.now()).toISOString();
 
-    const cleanedObjectidInput = objectidInput.replace(/_/g, '');
+    let cleanedObjectidInput = objectidInput.replace(/_/g, '');
+
+    if (isChecked === false) {
+      cleanedObjectidInput = null;
+    }
 
     fetch("http://localhost:3001/work_table", {
       method: "POST",
@@ -237,22 +241,22 @@ const FormAddWorks = ({
                   name="id_doc"
                 />
               </div>
-              <div className="form__group">
-                <button
-                  className="form__button form__button-addForm"
-                  onClick={handleButtonClick}
-                  style={{ backgroundColor: buttonAddDocPressed ? '#a5d565  ' : '' }}
-                >
-                  Зберегти
-                </button>
-                <button
-                  className="form__button form__button-addForm"
-                >
-                  Скасувати
-                </button>
-              </div>
             </>
           )}
+          <div className="form__group">
+            <button
+              className="form__button form__button-addForm"
+              onClick={handleButtonClick}
+              style={{ backgroundColor: buttonAddDocPressed ? '#a5d565  ' : '' }}
+            >
+              Зберегти
+            </button>
+            <button
+              className="form__button form__button-addForm"
+            >
+              Скасувати
+            </button>
+          </div>
         </div>
       </form>
     </div>
