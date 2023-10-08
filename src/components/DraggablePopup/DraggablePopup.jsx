@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-const DraggableDiv = ({ children }) => {
+const DraggablePopup = ({ children }) => {
   const [dragging, setDragging] = useState(false);
   const [relX, setRelX] = useState(0);
   const [relY, setRelY] = useState(0);
@@ -8,6 +8,8 @@ const DraggableDiv = ({ children }) => {
   const [y, setY] = useState(0);
 
   const divRef = useRef(null);
+
+  const excludedElementsToClick = ["INPUT", "SELECT", "TEXTAREA"];
 
   useEffect(() => {
     if (dragging) {
@@ -42,6 +44,7 @@ const DraggableDiv = ({ children }) => {
 
   const onMouseDown = (e) => {
     if (e.button !== 0) return;
+    if (excludedElementsToClick.includes(e.target.tagName)) return;
     const { clientX, clientY } = e;
     setDragging(true);
     setRelX(clientX - x);
@@ -85,4 +88,4 @@ const DraggableDiv = ({ children }) => {
   );
 };
 
-export default DraggableDiv;
+export default DraggablePopup;

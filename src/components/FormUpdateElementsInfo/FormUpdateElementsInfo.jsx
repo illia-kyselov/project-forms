@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import NotificationService from '../../services/NotificationService';
-import DraggableDiv from "../DraggableDiv/DraggableDiv";
 
 const FormUpdateElementsInfo = ({ selectedElement, setShowUpdateElements, }) => {
   const [elements, setElements] = useState([]);
