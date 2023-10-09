@@ -38,7 +38,7 @@ const SecondTable = ({
     } else {
       setDataTable([]);
     }
-  }, [dataSecondTable, selectedRowData, dataTable]);
+  }, [dataSecondTable, selectedRowData]);
 
   const deleteData = async (id) => {
     try {
