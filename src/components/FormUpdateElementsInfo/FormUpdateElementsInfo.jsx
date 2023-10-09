@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import NotificationService from '../../services/NotificationService';
-import DraggableDiv from "../DraggableDiv/DraggableDiv";
+import DraggablePopup from "../DraggablePopup/DraggablePopup";
 
 const FormUpdateElementsInfo = ({ selectedElement, setShowUpdateElements, }) => {
   const [elements, setElements] = useState([]);
@@ -61,55 +61,58 @@ const FormUpdateElementsInfo = ({ selectedElement, setShowUpdateElements, }) => 
   }
 
   return (
-    <div>
-      <label className="block-label">Оновити дані елемента</label>
-      <form className="form form-info">
-        <div className="form__group">
-          <label className="form-input_title">Елемент</label>
-          <select
-            className="form__input form__input-select"
-            name="element"
-            value={formData.element}
-            onChange={handleChange}
-          >
-            <option value="" selected hidden>Оберіть елемент</option>
-            {elements.map((element) => (
-              <option
-                key={element}
-                value={element}
-                className="form__input-option"
-              >
-                {element}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="form__group">
-          <label className="form-input_title">Кількість елементів</label>
-          <input
-            type="number"
-            name="quantity"
-            className="form__input"
-            value={formData.quantity}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="form__button-container">
-          <button
-            className="form__button"
-            onClick={handleUpdateElements}
-          >
-            Оновити данні
-          </button>
-          <button
-            className="form__button button-escape"
-            onClick={handleEscapeClick}
-          >
-            Скасувати
-          </button>
-        </div>
-      </form>
-    </div>
+    <DraggablePopup>
+      <div>
+        <label className="block-label">Оновити дані елемента</label>
+        <form className="form form-info">
+          <div className="form__group">
+            <label className="form-input_title">Елемент</label>
+            <select
+              className="form__input form__input-select"
+              name="element"
+              value={formData.element}
+              onChange={handleChange}
+            >
+              <option value="" selected hidden>Оберіть елемент</option>
+              {elements.map((element) => (
+                <option
+                  key={element}
+                  value={element}
+                  className="form__input-option"
+                >
+                  {element}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="form__group">
+            <label className="form-input_title">Кількість елементів</label>
+            <input
+              type="number"
+              name="quantity"
+              className="form__input"
+              value={formData.quantity}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form__button-container">
+            <button
+              className="form__button"
+              onClick={handleUpdateElements}
+            >
+              Оновити данні
+            </button>
+            <button
+              className="form__button button-escape"
+              onClick={handleEscapeClick}
+            >
+              Скасувати
+            </button>
+          </div>
+        </form>
+      </div>
+    </DraggablePopup>
+
   );
 };
 

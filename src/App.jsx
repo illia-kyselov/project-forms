@@ -33,6 +33,7 @@ function App() {
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [formSelectedDzShown, setFormSelectedDzShown] = useState(false);
   const [pushToDZCalled, setPushToDZCalled] = useState(false);
+  const [isChecked, setIsChecked] = useState(true);
 
   const handleRowClick = (markerId) => {
     setFocusMarker(markerId);
@@ -166,6 +167,7 @@ function App() {
           setDraggableDzMarkerWKT={setDraggableDzMarkerWKT}
           pushToDZCalled={pushToDZCalled}
           setPushToDZCalled={setPushToDZCalled}
+          isChecked={isChecked}
         />
         <div className="form-container">
           <FormAddWorks
@@ -176,6 +178,8 @@ function App() {
             setButtonAddDocPressed={setButtonAddDocPressed}
             buttonAddDocPressed={buttonAddDocPressed}
             setIdFormAddWorks={setIdFormAddWorks}
+            isChecked={isChecked}
+            setIsChecked={setIsChecked}
           />
           <div className=" flex">
             {buttonAddDocPressed && (
@@ -184,7 +188,7 @@ function App() {
                 setData={setDataTable}
                 setShowSecondTable={setShowSecondTable}
                 handleClearTable={handleClearTable}
-                onRowClick={handleRowClick}
+                handleRowClick={handleRowClick}
                 setButtonPressed={setButtonPressed}
                 setDataSecondTable={setDataSecondTable}
                 dzMarkerPosition={markerDzPosition}
@@ -211,19 +215,6 @@ function App() {
             }
           </div>
         </div>
-      </div>
-      <div className="components-container">
-        {showAddElements && (
-          <div className="popup-overlay">
-            <div className="popup-content">
-              <FormAddElements
-                handleRemoveElements={handleRemoveElements}
-                handleSubmitElements={handleSubmitElements}
-                handleChange={handleChange}
-              />
-            </div>
-          </div>
-        )}
       </div>
       <NotificationContainer />
     </div>

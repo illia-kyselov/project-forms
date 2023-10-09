@@ -22,12 +22,13 @@ const Table = ({
   setSelectedRowData,
   setShowSelectedDzForm,
   setPushToDZCalled,
+  handleRowClick,
 }) => {
   const [selectedRow, setSelectedRow] = useState(null);
   const selectedRowRef = useRef(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [newRowData, setNewRowData] = useState({
-    num_sing: "",
+    num_pdr: "",
   });
   const [forms, setForms] = useState([]);
   const [selectedFormByRow, setSelectedFormByRow] = useState({});
@@ -92,12 +93,14 @@ const Table = ({
       }
       const newSelectedRowId = rowIds[selectedRowIndex + 1];
       handleROwClick(newSelectedRowId);
+      handleRowClick(newSelectedRowId);
     } else if (e.keyCode === KeyCodesEnum.ArrowUp) {
       if (selectedRowIndex === 0) {
         return;
       }
       const newSelectedRowId = rowIds[selectedRowIndex - 1];
       handleROwClick(newSelectedRowId);
+      handleRowClick(newSelectedRowId);
     }
   };
 
@@ -113,7 +116,7 @@ const Table = ({
     try {
       const rowsToInsert = data.map((row) => ({
         is_dz: true,
-        num_dz: row.num_sing,
+        num_dz: row.num_pdr,
         dz_form: selectedFormByRow[row.id],
         id_disl_dz: row.id,
         work_id: idFormAddWorks,
@@ -153,8 +156,8 @@ const Table = ({
       const wktMultiPoint = `MULTIPOINT(${draggableDzMarkerWKT[1]} ${draggableDzMarkerWKT[0]} 0)`;
       const insertData = {
         geom: wktMultiPoint,
-        num_sing: newRowData.num_sing,
-        num_pdr: newRowData.num_sing,
+        num_pdr: newRowData.num_pdr,
+        num_pdr: newRowData.num_pdr,
       };
 
       const response = await fetch('http://localhost:3001/dz', {
@@ -189,6 +192,7 @@ const Table = ({
       return;
     }
     setSelectedRow(rowId);
+    handleRowClick(rowId);
     selectedRowRef.current = rowId;
 
     try {
@@ -230,7 +234,7 @@ const Table = ({
   const hideForm = (event) => {
     event.preventDefault();
     setNewRowData({
-      num_sing: "",
+      num_pdr: "",
     });
     setShowSaveButton(false);
     setShowAddForm(false);
@@ -241,6 +245,12 @@ const Table = ({
     setDraggableDzMarkerShow(true);
     setShowSaveButton(true);
   };
+
+  const handleClickRemoveButton = (e) => {
+    e.preventDefault();
+    handleClearTable(e);
+    setShowButton(true);
+  }
 
   return (
     <div className="form-container-inside form-container-inside-width">
@@ -255,8 +265,8 @@ const Table = ({
                 <input
                   className="form-addDz__input"
                   type="text"
-                  name="num_sing"
-                  value={newRowData.num_sing}
+                  name="num_pdr"
+                  value={newRowData.num_pdr}
                   onChange={handleInputChange}
                   placeholder="Номер ПДР"
                   required
@@ -287,7 +297,7 @@ const Table = ({
           <button className="button-add-Dz" onClick={() => setShowAddForm(true)}>
             Додати ДЗ
           </button>
-          <button className="button-add-Dz" onClick={handleClearTable}>
+          <button className="button-add-Dz" onClick={handleClickRemoveButton}>
             Очистити
           </button>
         </div>
@@ -308,7 +318,7 @@ const Table = ({
                 style={{ background: selectedRow === row.id ? "#a5d565" : "" }}
               >
                 <td>{row.id}</td>
-                <td>{row.num_sing || "Немає в БД"}</td>
+                <td>{row.num_pdr || "Немає в БД"}</td>
                 <td>
                   <select
                     className="form__input form__input-select"
@@ -317,7 +327,7 @@ const Table = ({
                   >
                     <option value="" disabled hidden>Оберіть форму</option>
                     {forms
-                      .filter((form) => form.num_pdr_new === row.num_sing)
+                      .filter((form) => form.num_pdr_new === row.num_pdr)
                       .map((form) => (
                         <option
                           key={form.id}

@@ -11,7 +11,7 @@ app.use(express.json());
 const client = new Client({
   user: "postgres",
   host: "localhost",
-  database: "mydatabase",
+  database: "mydatabase", 
   password: "6006059a",
   port: 5432,
 });
@@ -144,7 +144,7 @@ app.get("/dict_dz_form", (req, res) => {
 
 app.get("/dz", (req, res) => {
   const query =
-    "SELECT id, ST_AsGeoJSON(geom) AS geom, id_znk, topocode, num_sing, num_pdr FROM exploitation.dz";
+    "SELECT id, ST_AsGeoJSON(geom) AS geom, num_pdr, ang_map FROM exploitation.dz";
   client.query(query, (err, result) => {
     if (err) {
       console.error("Error executing query", err);
@@ -153,10 +153,8 @@ app.get("/dz", (req, res) => {
       const data = result.rows.map((row) => ({
         id: row.id,
         geom: swapCoordinates(JSON.parse(row.geom)),
-        id_znk: row.id_znk,
         num_pdr: row.num_pdr,
-        topocode: row.topocode,
-        num_sing: row.num_sing,
+        ang_map: row.ang_map,
       }));
       res.json(data);
     }

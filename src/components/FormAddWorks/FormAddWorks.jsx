@@ -9,9 +9,10 @@ const FormAddWorks = ({
   setButtonAddDocPressed,
   buttonAddDocPressed,
   setIdFormAddWorks,
+  isChecked,
+  setIsChecked,
 }) => {
   const [options, setOptions] = useState([]);
-  const [isChecked, setIsChecked] = useState(true);
   const [formObjectId, setFormObjectId] = useState("");
   const [selectedDocValue, setSelectedDocValue] = useState("");
   const [dataSubmitted, setDataSubmitted] = useState(false);
@@ -248,6 +249,7 @@ const FormAddWorks = ({
               className="form__button form__button-addForm"
               onClick={handleButtonClick}
               style={{ backgroundColor: buttonAddDocPressed ? '#a5d565  ' : '' }}
+              disabled={buttonAddDocPressed}
             >
               Зберегти
             </button>

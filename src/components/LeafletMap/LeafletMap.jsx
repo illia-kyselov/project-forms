@@ -1,9 +1,9 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Polygon, Popup, Marker } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import markerImage from "../../img/1.39z.png";
+import markerImage from "../../img";
+import image from '../../img/1.39z.png';
 import MouseCoordinates from "../CursorCoordinates/MapEvents";
 import ListPolygons from "../ListPolygons/ListPolygons";
 import DraggableDzMarker from "../DraggableDzMarker/DraggableDzMarker";
@@ -16,19 +16,20 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require("leaflet/dist/images/marker-shadow.png").default,
 });
 
-const customIcon = new L.Icon({
-  iconUrl: markerImage,
-  iconRetinaUrl: markerImage,
-  iconSize: [50, 50],
-  iconAngle: 100,
-});
+// const customIcon = new L.Icon({
+//   iconUrl: markerImage,
+//   iconRetinaUrl: markerImage,
+//   iconSize: [60, 60],
+//   iconAnchor: [30, 30],
+//   popupAnchor: [0, 50],
+// });
 
-const customIconFocus = new L.Icon({
-  iconUrl: markerImage,
-  iconRetinaUrl: markerImage,
-  iconSize: [70, 70],
-  iconAngle: 100,
-});
+// const customIconFocus = new L.Icon({
+//   iconUrl: markerImage,
+//   iconRetinaUrl: markerImage,
+//   iconSize: [70, 70],
+//   iconAngle: 100,
+// });
 
 const coordinatesStyle = {
   position: "absolute",
@@ -55,8 +56,8 @@ const LeafletMap = ({
   setDraggableDzMarkerWKT,
   pushToDZCalled,
   setPushToDZCalled,
+  isChecked,
 }) => {
-  const zoom = 17;
   const containerStyle = {
     height: "95.5vh",
   };
@@ -109,8 +110,7 @@ const LeafletMap = ({
           id: marker.id,
           coordinates: marker.geom.coordinates[0],
           num_pdr: marker.num_pdr,
-          id_znk: marker.id_znk,
-          num_sing: marker.num_sing,
+          ang_map: marker.ang_map,
         }));
         setMarkers(dzMarkers);
       })
@@ -121,13 +121,23 @@ const LeafletMap = ({
   }, [pushToDZCalled, setPushToDZCalled]);
 
   const filterMarkersWithinPolygon = (polygonCoordinates) => {
+    if (!markers || markers.length === 0) {
+      return [];
+    }
+
     const filtered = markers.filter((marker) => {
+      if (!marker.coordinates || !Array.isArray(marker.coordinates) || marker.coordinates.length < 2) {
+        return false;
+      }
+
       const point = L.latLng(marker.coordinates[1], marker.coordinates[0]);
       return isPointWithinPolygon(point, polygonCoordinates);
     });
+
     setFilteredMarkers(filtered);
     handleAddFromPolygon(filtered);
   };
+
 
   const isPointWithinPolygon = (point, polygonCoordinates) => {
     const x = point.lng;
@@ -145,7 +155,7 @@ const LeafletMap = ({
       const yj = polygonCoordinates[j][1];
 
       const intersect =
-        yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi;
+        (yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi;
       if (intersect) isInside = !isInside;
     }
 
@@ -174,8 +184,11 @@ const LeafletMap = ({
 
     handleAsyncClick();
 
+
     const polygonCoordinates = polygon.geom.coordinates;
+    console.log(polygonCoordinates);
     const filteredMarkers = filterMarkersWithinPolygon(polygonCoordinates);
+    console.log(filteredMarkers);
     setSelectedPolygonMarkers(filteredMarkers);
   };
 
@@ -227,11 +240,36 @@ const LeafletMap = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapBounds, polygons]);
 
+  const createMarkerIcon = (num_pdr, ang_map, isFocused) => {
+    let rotationClass = 'rotate-0';
+    if (ang_map !== undefined) {
+      const roundedAngle = Math.round(ang_map / 45) * 45;
+      rotationClass = `rotate-${roundedAngle}`;
+    }
+
+    const iconSize = isFocused ? [65, 65] : [55, 55];
+
+    return L.divIcon({
+      className: `custom-icon ${rotationClass}`,
+      html: `
+      <img 
+        src="${markerImage[num_pdr]}" 
+        class="custom-icon-img" 
+        style="transform: rotate(${ang_map}deg); width: ${iconSize[0]}px; height: ${iconSize[0]}px" 
+      />`,
+      iconSize,
+      iconAnchor: [iconSize[0] / 2, iconSize[1] / 2],
+      popupAnchor: [0, 0],
+    });
+  };
+
+
   return (
     <div className="LeafletMapContainer ">
       <MapContainer
         center={center}
-        zoom={zoom}
+        maxZoom={25}
+        zoom={17}
         style={containerStyle}
         onMoveend={handleMoveEnd}
         preferCanvas={true}
@@ -241,7 +279,7 @@ const LeafletMap = ({
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           noWrap={true}
         />
-        {filteredPolygons.map((polygon) => (
+        {isChecked && filteredPolygons.map((polygon) => (
           <Polygon
             key={polygon.objectid}
             positions={polygon.geom.coordinates}
@@ -272,11 +310,17 @@ const LeafletMap = ({
             setDraggableDzMarkerWKT={setDraggableDzMarkerWKT}
           />
         )}
-        {filteredMarkers.map((marker) => (
+        {isChecked && filteredMarkers.map((marker) => (
           <Marker
             key={marker.id}
             position={marker.coordinates}
-            icon={marker.id === focusMarker ? customIconFocus : customIcon}
+            icon={
+              createMarkerIcon(
+                marker.num_pdr,
+                marker.ang_map,
+                marker.id === focusMarker
+              )
+            }
             eventHandlers={{
               click: () => handleMarkerClick(marker.id),
             }}
@@ -300,7 +344,7 @@ const LeafletMap = ({
         }
 
       </MapContainer>
-    </div>
+    </div >
   );
 };
 
