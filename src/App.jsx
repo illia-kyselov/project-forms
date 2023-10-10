@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./App.scss";
 import FormAddWorks from "./components/FormAddWorks/FormAddWorks";
-import FormAddInfo from "./components/FormAddInfo/FormAddInfo";
 import LeafletMap from "./components/LeafletMap/LeafletMap";
 import FormAddElements from "./components/FormAddElements/FormAddElements";
 import Table from "./components/Table/Table";
@@ -12,7 +11,7 @@ import "react-notifications/lib/notifications.css";
 import NotificationService from './services/NotificationService';
 
 function App() {
-  const [showAddInfoForm, setShowAddInfoForm] = useState(false);
+  // const [showAddInfoForm, setShowAddInfoForm] = useState(false);
   const [selectedPolygon, setSelectedPolygon] = useState(null);
   const [showAddElements, setShowAddElements] = useState(false);
   const [objectid, setObjectid] = useState("");
@@ -26,20 +25,18 @@ function App() {
   const [polygonTableRowClick, setPolygonTableRowClick] = useState([]);
   const [markerDzPosition, setMarkerDzPosition] = useState(null);
   const [draggableDzMarkerShow, setDraggableDzMarkerShow] = useState(false);
+  const [draggableDzMarkerWKT, setDraggableDzMarkerWKT] = useState(false);
 
   const [idFormAddWorks, setIdFormAddWorks] = useState();
 
   const [buttonAddDocPressed, setButtonAddDocPressed] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [formSelectedDzShown, setFormSelectedDzShown] = useState(false);
+  const [pushToDZCalled, setPushToDZCalled] = useState(false);
+  const [isChecked, setIsChecked] = useState(true);
 
   const handleRowClick = (markerId) => {
     setFocusMarker(markerId);
-  };
-
-  const handleRemoveInfo = (e) => {
-    e.preventDefault();
-    setShowAddInfoForm(false);
   };
 
   const handleAddElements = (e) => {
@@ -74,8 +71,9 @@ function App() {
       });
   };
 
+
   const [formAddElementsData, setformAddElementsData] = useState({
-    tableId: "",
+    tableId: selectedRowData,
     element: "",
     quantity: 0,
   });
@@ -99,7 +97,7 @@ function App() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formAddElementsData),
+        body: JSON.stringify({ ...formAddElementsData, tableId: selectedRowData }),
       });
 
       if (!response.ok) {
@@ -107,16 +105,16 @@ function App() {
         throw new Error(`Error: ${response.statusText}`);
       } else {
         NotificationService.showSuccessNotification('Данні успішно відправлені');
+        handleRemoveElements(e);
       }
 
       const data = await response.json();
       setformAddElementsData({
-        tableId: "",
+        tableId: selectedRowData,
         element: "",
         quantity: 0,
       });
 
-      handleRemoveElements(e);
     } catch (error) {
       console.error("Error sending data:", error);
     }
@@ -166,6 +164,10 @@ function App() {
           setSelectedPolygonApp={setSelectedPolygon}
           buttonAddDocPressed={buttonAddDocPressed}
           showDraggableDzMarker={draggableDzMarkerShow}
+          setDraggableDzMarkerWKT={setDraggableDzMarkerWKT}
+          pushToDZCalled={pushToDZCalled}
+          setPushToDZCalled={setPushToDZCalled}
+          isChecked={isChecked}
         />
         <div className="form-container">
           <FormAddWorks
@@ -176,6 +178,8 @@ function App() {
             setButtonAddDocPressed={setButtonAddDocPressed}
             buttonAddDocPressed={buttonAddDocPressed}
             setIdFormAddWorks={setIdFormAddWorks}
+            isChecked={isChecked}
+            setIsChecked={setIsChecked}
           />
           <div className=" flex">
             {buttonAddDocPressed && (
@@ -184,54 +188,33 @@ function App() {
                 setData={setDataTable}
                 setShowSecondTable={setShowSecondTable}
                 handleClearTable={handleClearTable}
-                onRowClick={handleRowClick}
+                handleRowClick={handleRowClick}
                 setButtonPressed={setButtonPressed}
                 setDataSecondTable={setDataSecondTable}
                 dzMarkerPosition={markerDzPosition}
                 setDraggableDzMarkerShow={handleDraggableDzMarkerShow}
                 buttonPressed={buttonPressed}
-                buttonAddDocPressed={buttonAddDocPressed}
                 idFormAddWorks={idFormAddWorks}
                 setSelectedRowData={setSelectedRowData}
                 setShowSelectedDzForm={setFormSelectedDzShown}
+                handleAddElements={handleAddElements}
+                draggableDzMarkerWKT={draggableDzMarkerWKT}
+                setPushToDZCalled={setPushToDZCalled}
               />
             )}
-            {showSecondTable && 
+            {showSecondTable &&
               <SecondTable
                 dataSecondTable={dataSecondTable}
                 handleSubmitElements={handleSubmitElements}
                 handleChange={handleChange}
                 formAddElementsData={formAddElementsData}
                 selectedRowData={selectedRowData}
+                handleAddElements={handleAddElements}
+                showAddElements={showAddElements}
               />
             }
           </div>
         </div>
-      </div>
-      <div className="components-container">
-        {showAddInfoForm && (
-          <div className="popup-overlay">
-            <div className="popup-content">
-              <FormAddInfo
-                handleRemoveInfo={handleRemoveInfo}
-                handleAddElements={handleAddElements}
-              />
-            </div>
-          </div>
-        )}
-        {showAddElements && (
-          <div className="popup-overlay">
-            <div className="popup-content">
-              <FormAddElements
-                handleRemoveElements={handleRemoveElements}
-                handleSubmitElements={handleSubmitElements}
-                handleChange={handleChange}
-                formAddElementsData={formAddElementsData}
-                selectedRowData={selectedRowData}
-              />
-            </div>
-          </div>
-        )}
       </div>
       <NotificationContainer />
     </div>

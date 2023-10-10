@@ -11,7 +11,7 @@ app.use(express.json());
 const client = new Client({
   user: "postgres",
   host: "localhost",
-  database: "mydatabase",
+  database: "mydatabase", 
   password: "6006059a",
   port: 5432,
 });
@@ -144,7 +144,7 @@ app.get("/dict_dz_form", (req, res) => {
 
 app.get("/dz", (req, res) => {
   const query =
-    "SELECT id, ST_AsGeoJSON(geom) AS geom, id_znk, topocode, num_sing, num_pdr FROM exploitation.dz";
+    "SELECT id, ST_AsGeoJSON(geom) AS geom, num_pdr, ang_map FROM exploitation.dz";
   client.query(query, (err, result) => {
     if (err) {
       console.error("Error executing query", err);
@@ -153,10 +153,8 @@ app.get("/dz", (req, res) => {
       const data = result.rows.map((row) => ({
         id: row.id,
         geom: swapCoordinates(JSON.parse(row.geom)),
-        id_znk: row.id_znk,
         num_pdr: row.num_pdr,
-        topocode: row.topocode,
-        num_sing: row.num_sing,
+        ang_map: row.ang_map,
       }));
       res.json(data);
     }
@@ -335,6 +333,28 @@ app.post("/odr_proekty_plg", (req, res) => {
   });
 });
 
+app.post("/dz", (req, res) => {
+  const wktGeom = req.body.geom;
+  const num_pdr = req.body.num_pdr;
+  const num_sing = req.body.num_sing;
+
+  const query = `
+    INSERT INTO exploitation.dz (geom, num_pdr, num_sing)
+    VALUES (ST_GeomFromText($1, 4326), $2, $3)
+  `;
+
+  const values = [wktGeom, num_pdr, num_sing];
+
+  client.query(query, values, (err, result) => {
+    if (err) {
+      console.error("Error inserting data into the database", err);
+      res.status(500).send("Error inserting data into the database");
+    } else {
+      res.json({ message: "Data successfully inserted into the database" });
+    }
+  });
+});
+
 app.post("/work_table", (req, res) => {
   const formWorksData = req.body;
 
@@ -410,6 +430,51 @@ app.post("/elements", (req, res) => {
       res.status(500).send("Error inserting data into database");
     } else {
       res.json({ message: "Data successfully inserted into database" });
+    }
+  });
+});
+
+//delete
+
+app.delete("/elements/:id", (req, res) => {
+  const elementId = req.params.id;
+
+  const query = `
+    DELETE FROM exploitation.elements
+    WHERE id_elmts = $1
+  `;
+
+  const values = [elementId];
+
+  client.query(query, values, (err, result) => {
+    if (err) {
+      console.error("Error deleting data from database", err);
+      res.status(500).send("Error deleting data from database");
+    } else {
+      res.json({ message: "Data successfully deleted from database" });
+    }
+  });
+});
+
+//put
+app.put("/elements/:id", (req, res) => {
+  const elementId = req.params.id;
+  const { element, quantity } = req.body;
+
+  const query = `
+    UPDATE exploitation.elements 
+    SET name_elmns = $1, cnt_elmnt = $2
+    WHERE id_elmts = $3
+  `;
+
+  const values = [element, quantity, elementId];
+
+  client.query(query, values, (err, result) => {
+    if (err) {
+      console.error("Error updating data in the database", err);
+      res.status(500).send("Error updating data in the database");
+    } else {
+      res.json({ message: "Data successfully updated in the database" });
     }
   });
 });

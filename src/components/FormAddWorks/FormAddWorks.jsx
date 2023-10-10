@@ -12,9 +12,10 @@ const FormAddWorks = ({
   setButtonAddDocPressed,
   buttonAddDocPressed,
   setIdFormAddWorks,
+  isChecked,
+  setIsChecked,
 }) => {
   const [options, setOptions] = useState([]);
-  const [isChecked, setIsChecked] = useState(true);
   const [formObjectId, setFormObjectId] = useState("");
   const [selectedDocValue, setSelectedDocValue] = useState("");
   const [dataSubmitted, setDataSubmitted] = useState(false);
@@ -103,7 +104,11 @@ const FormAddWorks = ({
     const date_work =
       formWorksData.date_work || new Date(Date.now()).toISOString();
 
-    const cleanedObjectidInput = objectidInput.replace(/_/g, '');
+    let cleanedObjectidInput = objectidInput.replace(/_/g, '');
+
+    if (isChecked === false) {
+      cleanedObjectidInput = null;
+    }
 
     fetch("http://localhost:3001/work_table", {
       method: "POST",
@@ -273,6 +278,7 @@ const FormAddWorks = ({
                   style={{
                     backgroundColor: buttonAddDocPressed ? "#6cd823" : "",
                   }}
+                  disabled={buttonAddDocPressed}
                 >
                   Зберегти
                 </button>

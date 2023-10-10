@@ -192,6 +192,7 @@ body {
 .leaflet-container {
   z-index: 2;
   width: 50vw;
+  // background-color: transparent !important;
 }
 
 .leaflet-control-attribution {
@@ -313,9 +314,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.leaflet-container {
 }
 
 .leaflet-control-coordination {
@@ -490,7 +488,6 @@ input:checked+.slider:before {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -643,3 +640,10 @@ input:checked+.slider:before {
     display: inline-block;
   }
 }
+
+.custom-icon-img {
+  object-fit: cover;
+
+  overflow: hidden;
+}
+

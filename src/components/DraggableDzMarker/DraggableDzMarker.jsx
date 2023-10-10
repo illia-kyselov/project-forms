@@ -10,7 +10,7 @@ const customIcon = new L.Icon({
   iconAngle: 100,
 });
 
-const DraggableDzMarker = ({ handleMarkerPosition }) => {
+const DraggableDzMarker = ({ handleMarkerPosition, setDraggableDzMarkerWKT }) => {
   const map = useMap();
   const [markerPosition, setMarkerPosition] = useState(map.getCenter());
   const selectMarkerRef = useRef(null);
@@ -19,6 +19,8 @@ const DraggableDzMarker = ({ handleMarkerPosition }) => {
     const newPosition = e.target.getLatLng();
     setMarkerPosition([newPosition.lat, newPosition.lng]);
     handleMarkerPosition(newPosition);
+    
+    setDraggableDzMarkerWKT([newPosition.lat, newPosition.lng]);
   };
 
   useEffect(() => {
