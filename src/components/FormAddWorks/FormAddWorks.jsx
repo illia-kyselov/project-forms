@@ -9,6 +9,7 @@ const FormAddWorks = ({
   setButtonAddDocPressed,
   buttonAddDocPressed,
   setIdFormAddWorks,
+  idFormAddWorks,
   isChecked,
   setIsChecked,
 }) => {
@@ -16,6 +17,7 @@ const FormAddWorks = ({
   const [formObjectId, setFormObjectId] = useState("");
   const [selectedDocValue, setSelectedDocValue] = useState("");
   const [dataSubmitted, setDataSubmitted] = useState(false);
+  const [idTable, setIdTable] = useState();
 
   const [formWorksData, setFormWorksData] = useState({
     type_work: "",
@@ -48,6 +50,51 @@ const FormAddWorks = ({
     setIsChecked(!isChecked);
     handleChange(e);
   };
+
+  async function deleteRecordsById(id) {
+    try {
+      const elementsResponse = await fetch(`http://localhost:3001/elements/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!elementsResponse.ok) {
+        NotificationService.showErrorNotification('Дані не видалені');
+        return;
+      }
+
+      const explDzResponse = await fetch(`http://localhost:3001/expl_dz/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!explDzResponse.ok) {
+        NotificationService.showErrorNotification('Дані не видалені');
+        return;
+      }
+
+      const workTableResponse = await fetch(`http://localhost:3001/work_table/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!workTableResponse.ok) {
+        NotificationService.showErrorNotification('Дані не видалені');
+        return;
+      }
+
+      NotificationService.showSuccessNotification('Дані успішно видалені');
+    } catch (error) {
+      console.error('Error deleting record:', error);
+    }
+  }
+
 
   const selectedInfoFromTableRowClick =
     polygonTableRowClick.objectid && polygonTableRowClick.pro_name
@@ -116,6 +163,7 @@ const FormAddWorks = ({
       })
       .then((data) => {
         setIdFormAddWorks(data.id_wrk_tbl);
+        setIdTable(data.id_wrk_tbl);
       })
       .then((data) => {
         setFormWorksData({
@@ -140,7 +188,6 @@ const FormAddWorks = ({
   const handleButtonClick = (e) => {
     e.preventDefault();
     handleSubmit(e);
-
   }
 
   const handleInputChange = (e) => {
@@ -172,6 +219,7 @@ const FormAddWorks = ({
                   key={option}
                   value={option}
                   className="form__input-option"
+                  disabled={buttonAddDocPressed}
                 >
                   {option}
                 </option>
@@ -185,6 +233,7 @@ const FormAddWorks = ({
             <select
               className="form__input form__input-select"
               name="pers_work"
+              disabled={buttonAddDocPressed}
               onChange={handleChange}
             >
               <option value="" selected hidden>Оберіть особу</option>
@@ -199,6 +248,7 @@ const FormAddWorks = ({
               id="additionalDatetime"
               className="form__input"
               onChange={handleChange}
+              disabled={buttonAddDocPressed}
               name="date_work"
             />
           </div>
@@ -213,6 +263,7 @@ const FormAddWorks = ({
                 name="is_doc"
                 className="form__input form__input-radio"
                 checked={isChecked}
+                disabled={buttonAddDocPressed}
                 onChange={handleCheckboxChange}>
               </input>
               <span className="slider round"></span>
@@ -225,6 +276,7 @@ const FormAddWorks = ({
               name="address"
               placeholder="Введіть адресу роботи"
               className="form__input"
+              disabled={buttonAddDocPressed}
               onChange={handleChange}>
             </input>
           </div>
@@ -240,6 +292,7 @@ const FormAddWorks = ({
                   onChange={handleInputChange}
                   readOnly
                   name="id_doc"
+                  disabled={buttonAddDocPressed}
                 />
               </div>
             </>
@@ -253,11 +306,13 @@ const FormAddWorks = ({
             >
               Зберегти
             </button>
-            <button
-              className="form__button form__button-addForm"
-            >
-              Скасувати
-            </button>
+            {buttonAddDocPressed &&
+              <button
+                className="form__button form__button-addForm"
+                onClick={() => deleteRecordsById(idTable)}
+              >
+                Скасувати
+              </button>}
           </div>
         </div>
       </form>

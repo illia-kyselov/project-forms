@@ -131,11 +131,10 @@ const Table = ({
             },
             body: JSON.stringify(row),
           }).then((response) => {
-            if (response.ok) {
-              NotificationService.showSuccessNotification('Данні успішно відправлені');
-            } else {
+            if (!response.ok) {
               NotificationService.showWarningNotification('Будь ласка, заповніть всі поля та спробуйте ще раз!');
             }
+            NotificationService.showSuccessNotification('Данні успішно відправлені');
           })
         )
       );
@@ -156,7 +155,6 @@ const Table = ({
       const wktMultiPoint = `MULTIPOINT(${draggableDzMarkerWKT[1]} ${draggableDzMarkerWKT[0]} 0)`;
       const insertData = {
         geom: wktMultiPoint,
-        num_pdr: newRowData.num_pdr,
         num_pdr: newRowData.num_pdr,
       };
 
@@ -290,17 +288,18 @@ const Table = ({
             </form>
           </div>
         )}
-        <div className="flex">
-          <button className="button-add-Dz" onClick={setButtonPressed} style={{ backgroundColor: buttonPressed ? '#46aa03' : '' }}>
-            Додати з полігону
-          </button>
-          <button className="button-add-Dz" onClick={() => setShowAddForm(true)}>
-            Додати ДЗ
-          </button>
-          <button className="button-add-Dz" onClick={handleClickRemoveButton}>
-            Очистити
-          </button>
-        </div>
+        {showButton &&
+          <div className="flex">
+            <button className="button-add-Dz" onClick={setButtonPressed} style={{ backgroundColor: buttonPressed ? '#46aa03' : '' }}>
+              Додати з полігону
+            </button>
+            <button className="button-add-Dz" onClick={() => setShowAddForm(true)}>
+              Додати ДЗ
+            </button>
+            <button className="button-add-Dz" onClick={handleClickRemoveButton}>
+              Очистити
+            </button>
+          </div>}
         <table>
           <thead>
             <tr>

@@ -9,6 +9,7 @@ import Navigation from "./components/Navigation/Navigation";
 import { NotificationContainer } from 'react-notifications';
 import "react-notifications/lib/notifications.css";
 import NotificationService from './services/NotificationService';
+import icon from '../src/img/saveIcon.png';
 
 function App() {
   // const [showAddInfoForm, setShowAddInfoForm] = useState(false);
@@ -34,6 +35,7 @@ function App() {
   const [formSelectedDzShown, setFormSelectedDzShown] = useState(false);
   const [pushToDZCalled, setPushToDZCalled] = useState(false);
   const [isChecked, setIsChecked] = useState(true);
+
 
   const handleRowClick = (markerId) => {
     setFocusMarker(markerId);
@@ -70,7 +72,6 @@ function App() {
         console.error("Error fetching polygon data", error);
       });
   };
-
 
   const [formAddElementsData, setformAddElementsData] = useState({
     tableId: selectedRowData,
@@ -178,10 +179,11 @@ function App() {
             setButtonAddDocPressed={setButtonAddDocPressed}
             buttonAddDocPressed={buttonAddDocPressed}
             setIdFormAddWorks={setIdFormAddWorks}
+            idFormAddWorks={idFormAddWorks}
             isChecked={isChecked}
             setIsChecked={setIsChecked}
           />
-          <div className=" flex">
+          <div className="flex">
             {buttonAddDocPressed && (
               <Table
                 data={dataTable}
@@ -205,15 +207,25 @@ function App() {
             {showSecondTable &&
               <SecondTable
                 dataSecondTable={dataSecondTable}
-                handleSubmitElements={handleSubmitElements}
                 handleChange={handleChange}
                 formAddElementsData={formAddElementsData}
                 selectedRowData={selectedRowData}
                 handleAddElements={handleAddElements}
                 showAddElements={showAddElements}
+                handleRemoveElements={handleRemoveElements}
+                handleSubmitElements={handleSubmitElements}
               />
             }
           </div>
+
+          {/* {showSecondTable &&
+            <div className="buttons-panel">
+              <button className="buttons-panel__button">
+                <img src={icon} alt="Icon" className="buttons-panel__icon" /> Зберегти
+              </button>
+
+              <button className="buttons-panel__button">Скасувати запис</button>
+            </div>} */}
         </div>
       </div>
       <NotificationContainer />

@@ -11,7 +11,7 @@ app.use(express.json());
 const client = new Client({
   user: "postgres",
   host: "localhost",
-  database: "mydatabase", 
+  database: "mydatabase",
   password: "6006059a",
   port: 5432,
 });
@@ -153,6 +153,32 @@ app.get("/dz", (req, res) => {
       const data = result.rows.map((row) => ({
         id: row.id,
         geom: swapCoordinates(JSON.parse(row.geom)),
+        num_pdr: row.num_pdr,
+        ang_map: row.ang_map,
+      }));
+      res.json(data);
+    }
+  });
+});
+
+app.get("/dz/filteredPoints/:lat/:lng", (req, res) => {
+  const lat = req.params.lat;
+  const lng = req.params.lng;
+
+  const query = `
+    SELECT id, ST_AsGeoJSON(geom) AS geom, num_pdr, ang_map
+    FROM exploitation.dz
+    WHERE ST_DWithin(geom, ST_GeomFromText('POINT(${lng} ${lat})', 4326), 0.001);
+  `;
+
+  client.query(query, (err, result) => {
+    if (err) {
+      console.error("Error executing query", err);
+      res.status(500).send("Error executing query");
+    } else {
+      const data = result.rows.map((row) => ({
+        id: row.id,
+        geom: swapCoordinates(row.geom),
         num_pdr: row.num_pdr,
         ang_map: row.ang_map,
       }));
@@ -455,6 +481,75 @@ app.delete("/elements/:id", (req, res) => {
     }
   });
 });
+
+app.delete("/work_table/:id", (req, res) => {
+  const idToDelete = req.params.id;
+
+  const query = {
+    text: "DELETE FROM exploitation.work_table WHERE id_wrk_tbl = $1 RETURNING id_wrk_tbl",
+    values: [idToDelete],
+  };
+
+  client.query(query, (err, result) => {
+    if (err) {
+      console.error("Error executing deletion query", err);
+      res.status(500).send("Error executing deletion query");
+    } else {
+      if (result.rows && result.rows[0] && result.rows[0].id_wrk_tbl) {
+        const deletedId = result.rows[0].id_wrk_tbl;
+        res.json({
+          message: `Record with id_wrk_tbl ${deletedId} successfully deleted`,
+          id_wrk_tbl: deletedId,
+        });
+      } else {
+        res.status(404).json({
+          message: `Record with id_wrk_tbl ${idToDelete} not found or could not be deleted.`,
+        });
+      }
+    }
+  });
+});
+
+app.delete("/expl_dz/:work_id", (req, res) => {
+  const workIdToDelete = req.params.work_id;
+
+  const query = {
+    text: 'DELETE FROM exploitation.expl_dz WHERE work_id = $1',
+    values: [workIdToDelete],
+  };
+
+  client.query(query, (err, result) => {
+    if (err) {
+      console.error("Error executing deletion query", err);
+      res.status(500).send("Error executing deletion query");
+    } else {
+      res.json({ message: `Records with work_id ${workIdToDelete} successfully deleted` });
+    }
+  });
+});
+
+app.delete("/elements/:id_expl_dz", (req, res) => {
+  const idExplDzToDelete = req.params.id_expl_dz;
+
+  const query = {
+    text: 'DELETE FROM exploitation.elements WHERE expl_dz_id IN (SELECT id_expl_dz FROM exploitation.expl_dz WHERE id_expl_dz = $1)',
+    values: [idExplDzToDelete],
+  };
+
+  client.query(query, (err, result) => {
+    if (err) {
+      console.error("Error executing deletion query", err);
+      res.status(500).send("Error executing deletion query");
+    } else {
+      const deletedCount = result.rowCount;
+      res.json({
+        message: `${deletedCount} row(s) successfully deleted from elements`,
+        rows_deleted: deletedCount,
+      });
+    }
+  });
+});
+
 
 //put
 app.put("/elements/:id", (req, res) => {

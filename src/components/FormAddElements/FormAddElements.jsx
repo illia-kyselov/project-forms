@@ -69,7 +69,6 @@ const FormAddElements = ({
         </form>
       </div>
     </DraggablePopup>
-
   );
 };
 

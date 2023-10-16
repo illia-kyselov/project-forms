@@ -6,7 +6,7 @@ import L from "leaflet";
 const customIcon = new L.Icon({
   iconUrl: markerImage,
   iconRetinaUrl: markerImage,
-  iconSize: [50, 50],
+  iconSize: [60, 60],
   iconAngle: 100,
 });
 

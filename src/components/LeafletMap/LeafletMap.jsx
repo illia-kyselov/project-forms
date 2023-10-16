@@ -247,7 +247,7 @@ const LeafletMap = ({
       rotationClass = `rotate-${roundedAngle}`;
     }
 
-    const iconSize = isFocused ? [65, 65] : [55, 55];
+    const iconSize = isFocused ? [45, 45] : [35, 35];
 
     return L.divIcon({
       className: `custom-icon ${rotationClass}`,
@@ -255,7 +255,7 @@ const LeafletMap = ({
       <img 
         src="${markerImage[num_pdr]}" 
         class="custom-icon-img" 
-        style="transform: rotate(${ang_map}deg); width: ${iconSize[0]}px; height: ${iconSize[0]}px" 
+        style="transform: rotate(${ang_map}deg); width: ${iconSize[0]}px; height: ${iconSize[0]}px"
       />`,
       iconSize,
       iconAnchor: [iconSize[0] / 2, iconSize[1] / 2],
@@ -263,12 +263,11 @@ const LeafletMap = ({
     });
   };
 
-
   return (
     <div className="LeafletMapContainer ">
       <MapContainer
         center={center}
-        maxZoom={25}
+        maxZoom={20}
         zoom={17}
         style={containerStyle}
         onMoveend={handleMoveEnd}

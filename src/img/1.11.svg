@@ -1,21 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   id="svg10503"
    version="1.1"
-   viewBox="11 11 12 12"
-   width="8" 
-   height="8">
+   viewBox="0 0 8.2400303 7.3204365"
+   height="7.3204365mm"
+   width="8.2400303mm">
+  <defs
+     id="defs10497" />
+  <metadata
+     id="metadata10500">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
   <g
-     transform="translate(145.0238,-187.50595)"
+     transform="translate(134.15338,-199.05437)"
      id="layer1">
-    <rect
-       ry="0.048530705"
-       y="187.50595"
-       x="-145.0238"
-       height="30.000002"
-       width="30.000002"
-       id="rect815"
-       style="opacity:0;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.10268871;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers" />
     <g
        id="g11063">
       <path

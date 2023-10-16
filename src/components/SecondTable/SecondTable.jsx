@@ -6,12 +6,11 @@ import FormUpdateElementsInfo from "../FormUpdateElementsInfo/FormUpdateElements
 const SecondTable = ({
   dataSecondTable,
   handleChange,
-  formAddElementsData,
   selectedRowData,
-  handleSubmitElements,
   handleAddElements,
   showAddElements,
   handleRemoveElements,
+  handleSubmitElements,
 }) => {
   const [dataTable, setDataTable] = useState([]);
   const tableRef = useRef();
@@ -38,7 +37,7 @@ const SecondTable = ({
     } else {
       setDataTable([]);
     }
-  }, [dataSecondTable, selectedRowData]);
+  }, [dataSecondTable, selectedRowData, dataTable]);
 
   const deleteData = async (id) => {
     try {
