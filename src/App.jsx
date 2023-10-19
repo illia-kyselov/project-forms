@@ -9,7 +9,7 @@ import Navigation from "./components/Navigation/Navigation";
 import { NotificationContainer } from 'react-notifications';
 import "react-notifications/lib/notifications.css";
 import NotificationService from './services/NotificationService';
-import icon from '../src/img/saveIcon.png';
+// import icon from '../src/img/saveIcon.png';
 
 function App() {
   // const [showAddInfoForm, setShowAddInfoForm] = useState(false);

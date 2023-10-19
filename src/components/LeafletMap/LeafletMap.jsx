@@ -285,7 +285,7 @@ const LeafletMap = ({
           layers="dz"
           url={wmsLayerUrl}
           format="image/png"
-          // transparent={true}
+          transparent={true}
         />
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
