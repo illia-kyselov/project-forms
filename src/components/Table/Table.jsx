@@ -23,6 +23,7 @@ const Table = ({
   setShowSelectedDzForm,
   setPushToDZCalled,
   handleRowClick,
+  isChecked,
 }) => {
   const [selectedRow, setSelectedRow] = useState(null);
   const selectedRowRef = useRef(null);
@@ -288,18 +289,18 @@ const Table = ({
             </form>
           </div>
         )}
-        {showButton &&
-          <div className="flex">
+        <div className="flex">
+          {isChecked &&
             <button className="button-add-Dz" onClick={setButtonPressed} style={{ backgroundColor: buttonPressed ? '#46aa03' : '' }}>
               Додати з полігону
-            </button>
-            <button className="button-add-Dz" onClick={() => setShowAddForm(true)}>
-              Додати ДЗ
-            </button>
-            <button className="button-add-Dz" onClick={handleClickRemoveButton}>
-              Очистити
-            </button>
-          </div>}
+            </button>}
+          <button className="button-add-Dz" onClick={() => setShowAddForm(true)}>
+            Додати ДЗ
+          </button>
+          <button className="button-add-Dz" onClick={handleClickRemoveButton}>
+            Очистити
+          </button>
+        </div>
         <table>
           <thead>
             <tr>

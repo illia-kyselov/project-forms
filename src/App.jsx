@@ -202,6 +202,7 @@ function App() {
                 handleAddElements={handleAddElements}
                 draggableDzMarkerWKT={draggableDzMarkerWKT}
                 setPushToDZCalled={setPushToDZCalled}
+                isChecked={isChecked}
               />
             )}
             {showSecondTable &&

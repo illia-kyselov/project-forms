@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Polygon, Popup, Marker } from "react-leaflet";
+import { MapContainer, TileLayer, Polygon, Popup, Marker, WMSTileLayer } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import markerImage from "../../img";
@@ -263,6 +263,14 @@ const LeafletMap = ({
     });
   };
 
+  // const wmsLayer = L.tileLayer.wms('http://your-wms-server-url', {
+  //   layers: 'your-wms-layers',
+  //   format: 'image/png',
+  //   transparent: true,
+  // });
+
+  const wmsLayerUrl = 'http://192.168.1.3/cgi-bin/mapserv?map=/var/www/html/map/kyivcl.map';
+
   return (
     <div className="LeafletMapContainer ">
       <MapContainer
@@ -273,9 +281,15 @@ const LeafletMap = ({
         onMoveend={handleMoveEnd}
         preferCanvas={true}
       >
+        <WMSTileLayer
+          layers="dz"
+          url={wmsLayerUrl}
+          format="image/png"
+          // transparent={true}
+        />
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          url="http://192.168.1.3/cgi-bin/mapserv?map=/var/www/html/map/kyivcl.map"
           noWrap={true}
         />
         {isChecked && filteredPolygons.map((polygon) => (
