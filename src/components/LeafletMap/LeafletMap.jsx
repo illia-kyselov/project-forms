@@ -193,8 +193,8 @@ const LeafletMap = ({
   };
 
   const handleMarkerClick = (markerId) => {
-    setSelectedPolygon(null);
-    setSelectedPolygonIdFromList(null);
+    // setSelectedPolygon(null);
+    // setSelectedPolygonIdFromList(null);
     handlePolygonClick(markerId);
     handleDzClick(markerId);
     const markerData = markers.find((marker) => marker.id === markerId);
@@ -255,13 +255,15 @@ const LeafletMap = ({
       <img 
         src="${markerImage[num_pdr]}" 
         class="custom-icon-img" 
-        style="transform: rotate(${ang_map}deg); width: ${iconSize[0]}px; height: ${iconSize[0]}px"
+        style="transform: rotate(${ang_map}deg); width: ${iconSize[0]}px; height: ${iconSize[0]}px;"
       />`,
       iconSize,
       iconAnchor: [iconSize[0] / 2, iconSize[1] / 2],
       popupAnchor: [0, 0],
     });
   };
+
+  console.log(selectedPolygon)
 
   return (
     <div className="LeafletMapContainer ">
@@ -278,31 +280,49 @@ const LeafletMap = ({
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           noWrap={true}
         />
-        {isChecked && filteredPolygons.map((polygon) => (
-          <Polygon
-            key={polygon.objectid}
-            positions={polygon.geom.coordinates}
-            pathOptions={{
-              color:
-                selectedPolygon === polygon || selectedPolygonIdFromList === polygon.objectid
-                  ? "red"
-                  : "purple",
-              zIndex:
-                selectedPolygon === polygon || selectedPolygonIdFromList === polygon.objectid
-                  ? '2147483647'
-                  : '',
-              opacity:
-                selectedPolygon === polygon || selectedPolygonIdFromList === polygon.objectid
-                  ? '1'
-                  : '0.7',
-            }}
-            eventHandlers={{
-              click: (e) => handleClick(e, polygon),
-            }}
-          >
-            <Popup>{polygon.pro_name}</Popup>
-          </Polygon>
-        ))}
+        {isChecked &&
+          (buttonAddDocPressed ? (
+            <Polygon
+              key={selectedPolygonId}
+              positions={selectedPolygon.geom.coordinates}
+              pathOptions={{
+                color: "red",
+                zIndex: "2147483647",
+                opacity: "1",
+              }}
+              eventHandlers={{
+                click: (e) => handleClick(e, selectedPolygon),
+              }}
+            >
+              <Popup>{selectedPolygon.pro_name}</Popup>
+            </Polygon>
+          ) : (
+            filteredPolygons.map((polygon) => (
+              <Polygon
+                key={polygon.objectid}
+                positions={polygon.geom.coordinates}
+                pathOptions={{
+                  color:
+                    selectedPolygon === polygon || selectedPolygonIdFromList === polygon.objectid
+                      ? "red"
+                      : "purple",
+                  zIndex:
+                    selectedPolygon === polygon || selectedPolygonIdFromList === polygon.objectid
+                      ? '2147483647'
+                      : '',
+                  opacity:
+                    selectedPolygon === polygon || selectedPolygonIdFromList === polygon.objectid
+                      ? '1'
+                      : '0.7',
+                }}
+                eventHandlers={{
+                  click: (e) => handleClick(e, polygon),
+                }}
+              >
+                <Popup>{polygon.pro_name}</Popup>
+              </Polygon>
+            ))
+          ))}
         {showDraggableDzMarker && (
           <DraggableDzMarker
             handleMarkerPosition={handleMarkerDragEnd}

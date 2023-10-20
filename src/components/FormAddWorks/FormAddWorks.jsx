@@ -95,7 +95,6 @@ const FormAddWorks = ({
     }
   }
 
-
   const selectedInfoFromTableRowClick =
     polygonTableRowClick.objectid && polygonTableRowClick.pro_name
       ? `${polygonTableRowClick.objectid} / ${polygonTableRowClick.pro_name}`
@@ -203,8 +202,14 @@ const FormAddWorks = ({
 
   return (
     <div className="form-container-inside">
-      <label className="block-label">Загальна інформація</label>
-      <form className="form">
+      <label className="block-label" style={{ backgroundColor: buttonAddDocPressed ? 'grey' : '' }}>Загальна інформація</label>
+      <form
+        className="form"
+        style={{
+          backgroundColor: buttonAddDocPressed ? '#f5f5f5' : '',
+          border: buttonAddDocPressed ? '1px solid grey' : '',
+        }}
+      >
         <div className="form-left">
           <div className="form__group">
             <label className="form-input_title">Тип роботи</label>
@@ -212,6 +217,7 @@ const FormAddWorks = ({
               className="form__input form__input-select"
               name="type_work"
               onChange={handleChange}
+              disabled={buttonAddDocPressed}
             >
               <option value="" selected hidden>Оберіть тип роботи</option>
               {options.map((option) => (
@@ -219,7 +225,6 @@ const FormAddWorks = ({
                   key={option}
                   value={option}
                   className="form__input-option"
-                  disabled={buttonAddDocPressed}
                 >
                   {option}
                 </option>
@@ -266,7 +271,7 @@ const FormAddWorks = ({
                 disabled={buttonAddDocPressed}
                 onChange={handleCheckboxChange}>
               </input>
-              <span className="slider round"></span>
+              <span className="slider round" style={{ backgroundColor: buttonAddDocPressed ? 'grey' : '' }}></span>
             </label>
           </div>
           <div className="form__group form__group-radio">
@@ -301,14 +306,14 @@ const FormAddWorks = ({
             <button
               className="form__button form__button-addForm"
               onClick={handleButtonClick}
-              style={{ backgroundColor: buttonAddDocPressed ? '#a5d565  ' : '' }}
+              style={{ backgroundColor: buttonAddDocPressed ? '#BBBBBB' : '' }}
               disabled={buttonAddDocPressed}
             >
               Зберегти
             </button>
             {buttonAddDocPressed &&
               <button
-                className="form__button form__button-addForm"
+                className="form__button form__button-addForm form__button-delete"
                 onClick={() => deleteRecordsById(idTable)}
               >
                 Скасувати

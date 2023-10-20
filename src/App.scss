@@ -103,7 +103,7 @@ body {
     outline: none;
     padding: 5px 8px;
     text-align: center;
-    transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
+    transition: all 500ms cubic-bezier(0.23, 1, 0.32, 1);
     touch-action: manipulation;
     font-size: 16px;
     font-weight: 600;
@@ -116,6 +116,7 @@ body {
 
     &:hover {
       box-shadow: #00000040 0 8px 15px;
+      background-color: #6cb63a;
       transform: translateY(-2px);
     }
 
@@ -123,6 +124,18 @@ body {
       box-shadow: none;
       transform: translateY(0);
     }
+  }
+
+  .form__button-delete:hover {
+    transition: all 500ms cubic-bezier(0.23, 1, 0.32, 1);
+    box-shadow: #00000040 0 8px 15px;
+    background-color: #ffb4b7;
+    transform: translateY(-2px);
+  }
+
+  .form__button-delete:active {
+    box-shadow: none;
+    transform: translateY(0);
   }
 
   .form__button-container {
@@ -192,7 +205,6 @@ body {
 .leaflet-container {
   z-index: 2;
   width: 50vw;
-  // background-color: transparent !important;
 }
 
 .leaflet-control-attribution {

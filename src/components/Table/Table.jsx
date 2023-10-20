@@ -300,7 +300,7 @@ const Table = ({
               Очистити
             </button>
           </div>}
-        <table>
+        <table className="tableDz">
           <thead>
             <tr>
               <th>ID</th>

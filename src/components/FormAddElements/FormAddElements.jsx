@@ -53,6 +53,7 @@ const FormAddElements = ({
               name="quantity"
               className="form__input"
               onChange={handleChange}
+              min="1"
             />
           </div>
           <div className="form__button-container">

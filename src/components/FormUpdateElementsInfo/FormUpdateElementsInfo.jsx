@@ -93,6 +93,7 @@ const FormUpdateElementsInfo = ({ selectedElement, setShowUpdateElements, }) => 
               className="form__input"
               value={formData.quantity}
               onChange={handleChange}
+              min="1"
             />
           </div>
           <div className="form__button-container">
