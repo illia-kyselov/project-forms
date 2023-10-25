@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import NotificationService from '../../services/NotificationService';
+import { validateEmptyInputs } from "../../helpers/validate-empty-inputs";
+import Input from "../Input/Input";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 const FormAddWorks = ({
   objectid,
@@ -18,6 +21,7 @@ const FormAddWorks = ({
   const [selectedDocValue, setSelectedDocValue] = useState("");
   const [dataSubmitted, setDataSubmitted] = useState(false);
   const [idTable, setIdTable] = useState();
+  const [invalidInputs, setInvalidInputs] = useState([]);
 
   const [formWorksData, setFormWorksData] = useState({
     type_work: "",
@@ -117,16 +121,31 @@ const FormAddWorks = ({
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (!!invalidInputs.length) {
+      setInvalidInputs((inputs) => inputs.filter((input) => input !== name));
+    }
     setFormWorksData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
 
+  const emptyInputs = validateEmptyInputs(formWorksData);
+
+  const hasEmptyInputs = emptyInputs.length > 0;
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (dataSubmitted) {
+      return;
+    }
+
+    if (dataSubmitted || hasEmptyInputs) {
+      if (hasEmptyInputs) {
+        setInvalidInputs(emptyInputs);
+        NotificationService.showWarningNotification('Будь ласка заповніть всі поля!');
+      }
       return;
     }
 
@@ -231,7 +250,9 @@ const FormAddWorks = ({
                 </option>
               ))}
             </select>
-
+            {invalidInputs.includes("type_work") && (
+              <ErrorMessage errorMessage={"Оберіть тип роботи із переліку"} />
+            )}
           </div>
           <div className="form__group">
             <label className="form-input_title">Особа, яка виконала роботу</label>
@@ -246,17 +267,22 @@ const FormAddWorks = ({
               <option value="Шевченко Тарас" className="form__input-option">Шевченко Тарас</option>
               <option value="Українка Леся" className="form__input-option">Українка Леся</option>
             </select>
+            {invalidInputs.includes("pers_work") && (
+              <ErrorMessage errorMessage={"Оберіть особу із переліку"} />
+            )}
           </div>
           <div className="form__group datetime-input">
             <label className="form-input_title">Дата виконання роботи</label>
-            <input
+            <Input
               type="datetime-local"
               id="additionalDatetime"
               className="form__input"
-              onChange={handleChange}
-              disabled={buttonAddDocPressed}
               style={{ pointerEvents: buttonAddDocPressed ? "none" : '', }}
+              disabled={buttonAddDocPressed}
+              onChange={handleChange}
               name="date_work"
+              hasError={invalidInputs.includes("date_work")}
+              errorMessage={"Оберіть дату роботи"}
             />
           </div>
         </div>
@@ -283,14 +309,18 @@ const FormAddWorks = ({
           </div>
           <div className="form__group form__group-radio">
             <label className="form-input_title">Адреса роботи</label>
-            <input
+            <Input
               type="text"
               name="address"
               placeholder="Введіть адресу роботи"
-              className="form__input"
+              className={`form__input ${invalidInputs.includes("address") ? "has-error" : ""}`}
               disabled={buttonAddDocPressed}
-              onChange={handleChange}>
-            </input>
+              autoComplete="off"
+              style={{ backgroundColor: '#fff' }}
+              onChange={handleChange}
+              errorMessage={"Поле не може бути пустим"}
+              hasError={invalidInputs.includes("address")}
+            />
           </div>
           {isChecked && (
             <>
