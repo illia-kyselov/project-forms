@@ -90,6 +90,7 @@ const FormAddWorks = ({
       }
 
       NotificationService.showSuccessNotification('Дані успішно видалені');
+      window.location.reload();
     } catch (error) {
       console.error('Error deleting record:', error);
     }
@@ -135,6 +136,7 @@ const FormAddWorks = ({
       formWorksData.date_work || new Date(Date.now()).toISOString();
 
     let cleanedObjectidInput = objectidInput.replace(/_/g, '');
+    console.log(cleanedObjectidInput);
 
     if (isChecked === false) {
       cleanedObjectidInput = null;
@@ -182,7 +184,6 @@ const FormAddWorks = ({
         console.error("Error inserting data into the database", error);
       });
   };
-
 
   const handleButtonClick = (e) => {
     e.preventDefault();
@@ -254,6 +255,7 @@ const FormAddWorks = ({
               className="form__input"
               onChange={handleChange}
               disabled={buttonAddDocPressed}
+              style={{ pointerEvents: buttonAddDocPressed ? "none" : '', }}
               name="date_work"
             />
           </div>
@@ -271,7 +273,12 @@ const FormAddWorks = ({
                 disabled={buttonAddDocPressed}
                 onChange={handleCheckboxChange}>
               </input>
-              <span className="slider round" style={{ backgroundColor: buttonAddDocPressed ? 'grey' : '' }}></span>
+              <span
+                className="slider round"
+                style={{
+                  backgroundColor: buttonAddDocPressed ? 'grey' : '',
+                  pointerEvents: buttonAddDocPressed ? "none" : '',
+                }}></span>
             </label>
           </div>
           <div className="form__group form__group-radio">
@@ -315,6 +322,7 @@ const FormAddWorks = ({
               <button
                 className="form__button form__button-addForm form__button-delete"
                 onClick={() => deleteRecordsById(idTable)}
+                type="button"
               >
                 Скасувати
               </button>}

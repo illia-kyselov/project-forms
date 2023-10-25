@@ -18,6 +18,7 @@ function App() {
   const [objectid, setObjectid] = useState("");
   const [selectedMarkerId, setSelectedMarkerId] = useState(null);
   const [dataTable, setDataTable] = useState([]);
+  const [dataDzTable, setDataDzTable] = useState([]);
   const [buttonPressed, setButtonPressed] = useState(false);
   const [showSecondTable, setShowSecondTable] = useState(false);
   const [selectedMarkersPressed, setSelectedMarkersPressed] = useState(false);
@@ -52,11 +53,13 @@ function App() {
   };
 
   const handleAddFromPolygon = (markers) => {
-    if (buttonPressed) {
-      setDataTable(markers);
-      setButtonPressed(false);
-    }
+    setDataDzTable(markers);
+    setButtonPressed(false);
   };
+
+  const handleAddDzFromPolygon = () => {
+    setDataTable(dataDzTable);
+  }
 
   const handlePolygonClick = (objectid) => {
     fetch(`http://localhost:3001/doc_plg/${objectid}`)
@@ -202,6 +205,7 @@ function App() {
                 handleAddElements={handleAddElements}
                 draggableDzMarkerWKT={draggableDzMarkerWKT}
                 setPushToDZCalled={setPushToDZCalled}
+                handleAddDzFromPolygon={handleAddDzFromPolygon}
               />
             )}
             {showSecondTable &&

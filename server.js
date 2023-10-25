@@ -528,6 +528,46 @@ app.delete("/expl_dz/:work_id", (req, res) => {
   });
 });
 
+app.delete("/expl_dz/table/:rowId", (req, res) => {
+  const rowIdToDelete = req.params.rowId;
+
+  const query = {
+    text: 'DELETE FROM exploitation.expl_dz WHERE id_disl_dz = $1',
+    values: [rowIdToDelete],
+  };
+
+  client.query(query, (err, result) => {
+    if (err) {
+      console.error("Error executing deletion query", err);
+      res.status(500).send("Error executing deletion query");
+    } else {
+      res.json({ message: `Records with work_id ${rowIdToDelete} successfully deleted` });
+    }
+  });
+});
+
+app.delete("/elements/table/:rowId", (req, res) => {
+  const rowIdExplDzToDelete = req.params.rowId;
+
+  const query = {
+    text: 'DELETE FROM exploitation.elements WHERE expl_dz_id IN (SELECT id_expl_dz FROM exploitation.expl_dz WHERE id_expl_dz = $1)',
+    values: [rowIdExplDzToDelete],
+  };
+
+  client.query(query, (err, result) => {
+    if (err) {
+      console.error("Error executing deletion query", err);
+      res.status(500).send("Error executing deletion query");
+    } else {
+      const deletedCount = result.rowCount;
+      res.json({
+        message: `${deletedCount} row(s) successfully deleted from elements`,
+        rows_deleted: deletedCount,
+      });
+    }
+  });
+});
+
 app.delete("/elements/:id_expl_dz", (req, res) => {
   const idExplDzToDelete = req.params.id_expl_dz;
 

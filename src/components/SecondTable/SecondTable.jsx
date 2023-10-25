@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import FormAddElements from "../FormAddElements/FormAddElements";
 import NotificationService from "../../services/NotificationService";
 import FormUpdateElementsInfo from "../FormUpdateElementsInfo/FormUpdateElementsInfo";
+import img from '../../img/icon-trash.png';
 
 const SecondTable = ({
   dataSecondTable,
@@ -110,7 +111,7 @@ const SecondTable = ({
                       className="delete-icon"
                       onClick={() => deleteData(element.id_elmts)}
                     >
-                      X
+                      <img className="delete-icon-svg" src={img} alt="Удалить" />
                     </button>
                   </td>
                 </tr>

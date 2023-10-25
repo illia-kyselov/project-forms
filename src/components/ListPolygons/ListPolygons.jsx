@@ -18,7 +18,6 @@ const ListPolygons = ({
     setSelectedPolygon(null);
   };
 
-
   return (
     <table className="map-table">
       <thead>

@@ -16,21 +16,6 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require("leaflet/dist/images/marker-shadow.png").default,
 });
 
-// const customIcon = new L.Icon({
-//   iconUrl: markerImage,
-//   iconRetinaUrl: markerImage,
-//   iconSize: [60, 60],
-//   iconAnchor: [30, 30],
-//   popupAnchor: [0, 50],
-// });
-
-// const customIconFocus = new L.Icon({
-//   iconUrl: markerImage,
-//   iconRetinaUrl: markerImage,
-//   iconSize: [70, 70],
-//   iconAngle: 100,
-// });
-
 const coordinatesStyle = {
   position: "absolute",
   top: "10px",
@@ -166,6 +151,7 @@ const LeafletMap = ({
     e.target.openPopup();
     handlePolygonClick(polygon.objectid);
     setSelectedPolygonId(polygon.objectid);
+
     setSelectedPolygon(polygon);
     setSelectedPolygonIdFromList(null);
 
@@ -184,11 +170,8 @@ const LeafletMap = ({
 
     handleAsyncClick();
 
-
     const polygonCoordinates = polygon.geom.coordinates;
-    console.log(polygonCoordinates);
     const filteredMarkers = filterMarkersWithinPolygon(polygonCoordinates);
-    console.log(filteredMarkers);
     setSelectedPolygonMarkers(filteredMarkers);
   };
 
@@ -263,8 +246,6 @@ const LeafletMap = ({
     });
   };
 
-  console.log(selectedPolygon)
-
   return (
     <div className="LeafletMapContainer ">
       <MapContainer
@@ -286,7 +267,7 @@ const LeafletMap = ({
               key={selectedPolygonId}
               positions={selectedPolygon.geom.coordinates}
               pathOptions={{
-                color: "red",
+                color: "green",
                 zIndex: "2147483647",
                 opacity: "1",
               }}
@@ -340,6 +321,7 @@ const LeafletMap = ({
                 marker.id === focusMarker
               )
             }
+            zIndexOffset={marker.id === focusMarker ? 1000 : 100}
             eventHandlers={{
               click: () => handleMarkerClick(marker.id),
             }}
@@ -359,6 +341,8 @@ const LeafletMap = ({
             setClickedPolygons={setClickedPolygons}
             setSelectedPolygonIdFromList={setSelectedPolygonIdFromList}
             setSelectedPolygon={setSelectedPolygon}
+            filterMarkersWithinPolygon={filterMarkersWithinPolygon}
+            setSelectedPolygonMarkers={setSelectedPolygonMarkers}
           />
         }
 

@@ -244,6 +244,12 @@ body {
   background-color: transparent;
   padding: 5px;
   transition: all linear 0.2s;
+  font-weight: bolder;
+
+  &-svg {
+    width: 25px;
+    height: 25px;
+  }
 }
 
 .delete-icon:hover {

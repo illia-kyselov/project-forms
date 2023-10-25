@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import NotificationService from "../../services/NotificationService";
+import img from '../../img/icon-trash.png';
 
 const KeyCodesEnum = {
   ArrowUp: 38,
@@ -23,6 +24,7 @@ const Table = ({
   setShowSelectedDzForm,
   setPushToDZCalled,
   handleRowClick,
+  handleAddDzFromPolygon,
 }) => {
   const [selectedRow, setSelectedRow] = useState(null);
   const selectedRowRef = useRef(null);
@@ -37,6 +39,7 @@ const Table = ({
   const [arrowsListenerAdded, setArrowsListenerAdded] = useState(false);
   const arrowsListenerAddedRef = useRef(false);
   const [showSaveButton, setShowSaveButton] = useState(false);
+  const [listGenerated, setListGenerated] = useState(false);
 
   useEffect(() => {
     fetchForms();
@@ -57,7 +60,6 @@ const Table = ({
   useEffect(() => {
     const ids = data.map((item) => item.id);
     rowIdsRef.current = ids;
-    handleROwClick(ids[0]);
   }, [data]);
 
   useEffect(() => {
@@ -134,14 +136,14 @@ const Table = ({
             if (!response.ok) {
               NotificationService.showWarningNotification('Будь ласка, заповніть всі поля та спробуйте ще раз!');
             }
-            NotificationService.showSuccessNotification('Данні успішно відправлені');
           })
         )
       );
+      NotificationService.showSuccessNotification('Данні успішно відправлені');
 
       setShowSecondTable(true);
       setShowButton(false);
-
+      setListGenerated(true);
     } catch (error) {
       console.error("Error inserting data into the database", error);
     }
@@ -250,6 +252,37 @@ const Table = ({
     setShowButton(true);
   }
 
+  async function deleteRecordsById(rowId) {
+    //row.id = 185357
+    try {
+      const elementsResponse = await fetch(`http://localhost:3001/elements/table/${rowId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const explDzResponse = await fetch(`http://localhost:3001/expl_dz/table/${rowId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (explDzResponse.ok && elementsResponse.ok) {
+        setData((prevData) => {
+          const updatedData = prevData.filter((element) => element.id !== rowId);
+          return updatedData;
+        });
+        NotificationService.showSuccessNotification('Дані успішно видалені');
+      }
+    } catch (error) {
+      NotificationService.showErrorNotification('Дані не видалені');
+      console.error('Error deleting record:', error);
+    }
+  }
+
+
   return (
     <div className="form-container-inside form-container-inside-width">
       <label className="block-label">Обрані дорожні знаки</label>
@@ -288,18 +321,20 @@ const Table = ({
             </form>
           </div>
         )}
-        {showButton &&
-          <div className="flex">
-            <button className="button-add-Dz" onClick={setButtonPressed} style={{ backgroundColor: buttonPressed ? '#46aa03' : '' }}>
-              Додати з полігону
-            </button>
-            <button className="button-add-Dz" onClick={() => setShowAddForm(true)}>
-              Додати ДЗ
-            </button>
+
+        <div className="flex">
+          <button className="button-add-Dz" onClick={handleAddDzFromPolygon} style={{ backgroundColor: buttonPressed ? '#46aa03' : '' }}>
+            Додати з полігону
+          </button>
+          <button className="button-add-Dz" onClick={() => setShowAddForm(true)}>
+            Додати ДЗ
+          </button>
+          {showButton &&
             <button className="button-add-Dz" onClick={handleClickRemoveButton}>
               Очистити
             </button>
-          </div>}
+          }
+        </div>
         <table className="tableDz">
           <thead>
             <tr>
@@ -338,9 +373,20 @@ const Table = ({
                   </select>
                 </td>
                 <td>
-                  <button className="delete-icon" onClick={() => deleteData(row.id)}>
-                    X
-                  </button>
+                  {listGenerated ? (
+                    <button class="delete-icon">
+                      <img
+                        src={img}
+                        alt="Delete"
+                        className="delete-icon-svg"
+                        onClick={() => deleteRecordsById(row.id)}
+                      />
+                    </button>
+                  ) : (
+                    <button className="delete-icon" onClick={() => deleteData(row.id)}>
+                      X
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
