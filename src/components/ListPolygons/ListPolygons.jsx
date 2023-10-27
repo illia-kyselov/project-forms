@@ -1,21 +1,21 @@
 import React from "react";
 
 const ListPolygons = ({
-  clickedPolygons, 
-  setPolygonTableRowClick, 
-  setSelectedMarkerId, 
-  setSelectedPolygonApp, 
+  clickedPolygons,
+  setPolygonTableRowClick,
+  setSelectedMarkerId,
+  setSelectedPolygonApp,
   setClickedPolygons,
   setSelectedPolygonIdFromList,
   setSelectedPolygon,
 }) => {
-  const handleRowClick = (objectid, pro_name) => {
+  const handleRowClick = (polygon) => {
     setSelectedMarkerId(null);
     setSelectedPolygonApp(null);
-    setSelectedPolygonIdFromList(objectid);
-    setPolygonTableRowClick({ objectid, pro_name });
+    setSelectedPolygonIdFromList(polygon.objectid);
+    setSelectedPolygon(polygon);
+    setPolygonTableRowClick(polygon);
     setClickedPolygons([]);
-    setSelectedPolygon(null);
   };
 
   return (
@@ -28,7 +28,7 @@ const ListPolygons = ({
       </thead>
       <tbody>
         {clickedPolygons.map((polygon) => (
-          <tr key={polygon.objectid} onClick={() => handleRowClick(polygon.objectid, polygon.pro_name)}>
+          <tr key={polygon.objectid} onClick={() => handleRowClick(polygon)}>
             <td>{polygon.objectid}</td>
             <td>{polygon.pro_name}</td>
           </tr>

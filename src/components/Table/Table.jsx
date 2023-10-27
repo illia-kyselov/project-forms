@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import NotificationService from "../../services/NotificationService";
+import { validateEmptyInputs } from "../../helpers/validate-empty-inputs";
+import Input from "../Input/Input";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
+
 import img from '../../img/icon-trash.png';
+
 
 const KeyCodesEnum = {
   ArrowUp: 38,
@@ -40,6 +45,7 @@ const Table = ({
   const arrowsListenerAddedRef = useRef(false);
   const [showSaveButton, setShowSaveButton] = useState(false);
   const [listGenerated, setListGenerated] = useState(false);
+  const [invalidInputs, setInvalidInputs] = useState([]);
 
   useEffect(() => {
     fetchForms();
@@ -293,7 +299,7 @@ const Table = ({
             <form className="form-addDz">
               <div className="form-addDz__group">
                 <label className="form-addDz-input_title">Номер ПДР знаку</label>
-                <input
+                <Input
                   className="form-addDz__input"
                   type="text"
                   name="num_pdr"
@@ -301,6 +307,8 @@ const Table = ({
                   onChange={handleInputChange}
                   placeholder="Номер ПДР"
                   required
+                  errorMessage={"Введіть номер ПДР"}
+                  hasError={invalidInputs.includes("address")}
                 />
               </div>
               <div className="flex">

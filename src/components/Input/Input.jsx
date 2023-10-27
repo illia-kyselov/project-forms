@@ -14,6 +14,7 @@ const Input = ({
   disabled,
   style,
   autoComplete,
+  min,
 }) => {
   return (
     <div>
@@ -28,6 +29,7 @@ const Input = ({
         disabled={disabled}
         style={style}
         autoComplete={autoComplete}
+        min={min}
       />
       {hasError && errorMessage && <ErrorMessage errorMessage={errorMessage} />}
     </div>

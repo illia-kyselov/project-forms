@@ -162,11 +162,24 @@ const LeafletMap = ({
       try {
         const response = await fetch(`http://localhost:3001/doc_plg/filteredPolygons/${lat}/${lng}`);
         const data = await response.json();
-        setClickedPolygons(data);
+
+        const filteredPolygons = data.map((polygon) => ({
+          ...polygon,
+          pro_name: polygon.pro_name,
+          geom: {
+            ...polygon.geom,
+            coordinates: polygon.geom.coordinates[0].filter(
+              (coordinate) => coordinate[0] !== null && coordinate[1] !== null
+            ),
+          },
+        }));
+
+        setClickedPolygons(filteredPolygons);
       } catch (error) {
         console.error("Error fetching clicked polygons data", error);
       }
     };
+
 
     handleAsyncClick();
 
@@ -174,6 +187,7 @@ const LeafletMap = ({
     const filteredMarkers = filterMarkersWithinPolygon(polygonCoordinates);
     setSelectedPolygonMarkers(filteredMarkers);
   };
+
 
   const handleMarkerClick = (markerId) => {
     // setSelectedPolygon(null);
@@ -245,6 +259,9 @@ const LeafletMap = ({
       popupAnchor: [0, 0],
     });
   };
+
+  console.log(clickedPolygons);
+
 
   return (
     <div className="LeafletMapContainer ">

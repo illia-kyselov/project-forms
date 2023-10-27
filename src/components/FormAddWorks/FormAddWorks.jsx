@@ -316,9 +316,8 @@ const FormAddWorks = ({
               className={`form__input ${invalidInputs.includes("address") ? "has-error" : ""}`}
               disabled={buttonAddDocPressed}
               autoComplete="off"
-              style={{ backgroundColor: '#fff' }}
               onChange={handleChange}
-              errorMessage={"Поле не може бути пустим"}
+              errorMessage={"Введіть адресу роботи"}
               hasError={invalidInputs.includes("address")}
             />
           </div>
