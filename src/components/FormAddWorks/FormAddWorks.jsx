@@ -251,7 +251,7 @@ const FormAddWorks = ({
               ))}
             </select>
             {invalidInputs.includes("type_work") && (
-              <ErrorMessage errorMessage={"Оберіть тип роботи із переліку"} />
+              <ErrorMessage errorMessage={"Оберіть тип роботи з переліку"} />
             )}
           </div>
           <div className="form__group">
@@ -268,7 +268,7 @@ const FormAddWorks = ({
               <option value="Українка Леся" className="form__input-option">Українка Леся</option>
             </select>
             {invalidInputs.includes("pers_work") && (
-              <ErrorMessage errorMessage={"Оберіть особу із переліку"} />
+              <ErrorMessage errorMessage={"Оберіть особу з переліку"} />
             )}
           </div>
           <div className="form__group datetime-input">

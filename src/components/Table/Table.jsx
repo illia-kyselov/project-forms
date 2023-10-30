@@ -47,6 +47,10 @@ const Table = ({
   const [listGenerated, setListGenerated] = useState(false);
   const [invalidInputs, setInvalidInputs] = useState([]);
 
+  const emptyInputsDZ = validateEmptyInputs(newRowData);
+
+  const hasEmptyInputsDz = emptyInputsDZ.length > 0;
+
   useEffect(() => {
     fetchForms();
     setShowSelectedDzForm(true);
@@ -157,6 +161,15 @@ const Table = ({
 
   const handlePushToDZ = async (e) => {
     e.preventDefault();
+
+    if (hasEmptyInputsDz) {
+      if (hasEmptyInputsDz) {
+        setInvalidInputs(emptyInputsDZ);
+        NotificationService.showWarningNotification('Будь ласка заповніть всі поля!');
+      }
+      return;
+    }
+
     setShowSecondTable(false);
 
     try {
@@ -259,7 +272,6 @@ const Table = ({
   }
 
   async function deleteRecordsById(rowId) {
-    //row.id = 185357
     try {
       const elementsResponse = await fetch(`http://localhost:3001/elements/table/${rowId}`, {
         method: 'DELETE',
@@ -288,7 +300,6 @@ const Table = ({
     }
   }
 
-
   return (
     <div className="form-container-inside form-container-inside-width">
       <label className="block-label">Обрані дорожні знаки</label>
@@ -308,7 +319,7 @@ const Table = ({
                   placeholder="Номер ПДР"
                   required
                   errorMessage={"Введіть номер ПДР"}
-                  hasError={invalidInputs.includes("address")}
+                  hasError={invalidInputs.includes("num_pdr")}
                 />
               </div>
               <div className="flex">

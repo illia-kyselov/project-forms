@@ -180,7 +180,6 @@ const LeafletMap = ({
       }
     };
 
-
     handleAsyncClick();
 
     const polygonCoordinates = polygon.geom.coordinates;

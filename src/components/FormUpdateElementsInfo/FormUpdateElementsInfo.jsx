@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import NotificationService from '../../services/NotificationService';
 import DraggablePopup from "../DraggablePopup/DraggablePopup";
+import { validateEmptyInputs } from "../../helpers/validate-empty-inputs";
+import Input from "../Input/Input";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 const FormUpdateElementsInfo = ({ selectedElement, setShowUpdateElements, }) => {
   const [elements, setElements] = useState([]);
@@ -8,6 +11,12 @@ const FormUpdateElementsInfo = ({ selectedElement, setShowUpdateElements, }) => 
     element: '',
     quantity: ''
   });
+
+  const [invalidInputs, setInvalidInputs] = useState([]);
+
+  const emptyInputs = validateEmptyInputs(formData);
+
+  const hasEmptyInputs = emptyInputs.length > 0;
 
   useEffect(() => {
     fetchData();
@@ -33,6 +42,18 @@ const FormUpdateElementsInfo = ({ selectedElement, setShowUpdateElements, }) => 
 
   const handleUpdateElements = async (e) => {
     e.preventDefault();
+
+    if (hasEmptyInputs) {
+      setInvalidInputs(emptyInputs);
+      NotificationService.showWarningNotification('Будь ласка заповніть всі поля!');
+      return;
+    }
+
+    if (formData.quantity <= 0) {
+      setInvalidInputs([...invalidInputs, "quantity"]);
+      NotificationService.showWarningNotification('Кількість елементів повинна бути більше 0');
+      return;
+    }
 
     try {
       const elementId = selectedElement.id_elmts;
@@ -84,16 +105,21 @@ const FormUpdateElementsInfo = ({ selectedElement, setShowUpdateElements, }) => 
                 </option>
               ))}
             </select>
+            {invalidInputs.includes("element") && (
+              <ErrorMessage errorMessage={"Оберіть тип роботи з переліку"} />
+            )}
           </div>
           <div className="form__group">
             <label className="form-input_title">Кількість елементів</label>
-            <input
+            <Input
               type="number"
               name="quantity"
-              className="form__input"
+              className={`form__input ${invalidInputs.includes("quantity") ? "has-error" : ""}`}
               value={formData.quantity}
               onChange={handleChange}
               min="1"
+              errorMessage={"Введіть кількість елементів"}
+              hasError={invalidInputs.includes("quantity")}
             />
           </div>
           <div className="form__button-container">
