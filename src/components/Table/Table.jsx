@@ -119,6 +119,13 @@ const Table = ({
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
+    const hasEmptyForm = data.some((row) => !selectedFormByRow[row.id]);
+
+    if (hasEmptyForm) {
+      NotificationService.showWarningNotification('Оберіть форму для всіх записів');
+      return;
+    }
+
     const idExists = data.some((row) => row.id === newRowData.id);
 
     if (idExists) {
@@ -377,6 +384,8 @@ const Table = ({
                     className="form__input form__input-select"
                     value={selectedFormByRow[row.id] || ""}
                     onChange={(e) => handleFormSelect(e, row.id)}
+                    errorMessage={"Выберите форму"}
+                    hasError={!selectedFormByRow[row.id]}
                   >
                     <option value="" disabled hidden>Оберіть форму</option>
                     {forms

@@ -12,6 +12,7 @@ const SecondTable = ({
   showAddElements,
   handleRemoveElements,
   handleSubmitElements,
+  invalidInputs,
 }) => {
   const [dataTable, setDataTable] = useState([]);
   const tableRef = useRef();
@@ -130,6 +131,7 @@ const SecondTable = ({
                     handleRemoveElements={handleRemoveElements}
                     handleSubmitElements={handleSubmitElements}
                     handleChange={handleChange}
+                    invalidInputs={invalidInputs}
                   />
                 </div>
               </div>
@@ -162,6 +164,7 @@ const SecondTable = ({
                     handleRemoveElements={handleRemoveElements}
                     handleSubmitElements={handleSubmitElements}
                     handleChange={handleChange}
+                    invalidInputs={invalidInputs}
                   />
                 </div>
               </div>

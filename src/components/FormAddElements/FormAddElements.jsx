@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import DraggablePopup from "../DraggablePopup/DraggablePopup";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import Input from "../Input/Input";
+
 
 const FormAddElements = ({
   handleRemoveElements,
   handleSubmitElements,
-  handleChange
+  handleChange,
+  invalidInputs
 }) => {
   const [elements, setElements] = useState([]);
 
@@ -30,7 +34,7 @@ const FormAddElements = ({
           <div className="form__group">
             <label className="form-input_title">Елемент</label>
             <select
-              className="form__input form__input-select"
+              className={`form__input form__input-select ${invalidInputs.includes("element") ? "has-error" : ""}`}
               name="element"
               onChange={handleChange}
             >
@@ -45,17 +49,23 @@ const FormAddElements = ({
                 </option>
               ))}
             </select>
+            {invalidInputs.includes("element") && (
+              <ErrorMessage errorMessage={"Оберіть елемент з переліку"} />
+            )}
           </div>
           <div className="form__group">
             <label className="form-input_title">Кількість елементів</label>
-            <input
+            <Input
               type="number"
               name="quantity"
-              className="form__input"
+              className={`form__input ${invalidInputs.includes("quantity") ? "has-error" : ""}`}
               onChange={handleChange}
               min="1"
+              errorMessage={"Введіть кількість елементів"}
+              hasError={invalidInputs.includes("quantity")}
             />
           </div>
+
           <div className="form__button-container">
             <button className="form__button" onClick={handleSubmitElements}>
               Додати елементи

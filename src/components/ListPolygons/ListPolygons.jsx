@@ -8,6 +8,8 @@ const ListPolygons = ({
   setClickedPolygons,
   setSelectedPolygonIdFromList,
   setSelectedPolygon,
+  setSelectedPolygonMarkers,
+  filterMarkersWithinPolygon,
 }) => {
   const handleRowClick = (polygon) => {
     setSelectedMarkerId(null);
@@ -16,6 +18,10 @@ const ListPolygons = ({
     setSelectedPolygon(polygon);
     setPolygonTableRowClick(polygon);
     setClickedPolygons([]);
+    
+    const polygonCoordinates = polygon.geom.coordinates;
+    const filteredMarkers = filterMarkersWithinPolygon(polygonCoordinates);
+    setSelectedPolygonMarkers(filteredMarkers);
   };
 
   return (

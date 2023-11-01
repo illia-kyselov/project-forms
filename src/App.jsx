@@ -36,7 +36,7 @@ function App() {
   const [formSelectedDzShown, setFormSelectedDzShown] = useState(false);
   const [pushToDZCalled, setPushToDZCalled] = useState(false);
   const [isChecked, setIsChecked] = useState(true);
-
+  const [invalidInputs, setInvalidInputs] = useState([]);
 
   const handleRowClick = (markerId) => {
     setFocusMarker(markerId);
@@ -95,6 +95,27 @@ function App() {
 
   const handleSubmitElements = async (e) => {
     e.preventDefault();
+
+    setInvalidInputs([]);
+
+    if (!formAddElementsData.element) {
+      setInvalidInputs((prevInvalidInputs) => [...prevInvalidInputs, "element"]);
+      NotificationService.showWarningNotification('Будь ласка, оберіть елемент');
+      return;
+    }
+
+    if (formAddElementsData.quantity === 0) {
+      setInvalidInputs((prevInvalidInputs) => [...prevInvalidInputs, "quantity"]);
+      NotificationService.showWarningNotification('Введіть кількість елементів');
+      return;
+    }
+
+    if (formAddElementsData.quantity <= 0) {
+      setInvalidInputs((prevInvalidInputs) => [...prevInvalidInputs, "quantity"]);
+      NotificationService.showWarningNotification('Кількість елементів повинна бути більше 0');
+      return;
+    }
+
     try {
       const response = await fetch("http://localhost:3001/elements", {
         method: "POST",
@@ -208,7 +229,7 @@ function App() {
                 handleAddDzFromPolygon={handleAddDzFromPolygon}
               />
             )}
-            {showSecondTable &&
+            {showSecondTable && dataTable.length > 0 &&
               <SecondTable
                 dataSecondTable={dataSecondTable}
                 handleChange={handleChange}
@@ -218,6 +239,7 @@ function App() {
                 showAddElements={showAddElements}
                 handleRemoveElements={handleRemoveElements}
                 handleSubmitElements={handleSubmitElements}
+                invalidInputs={invalidInputs}
               />
             }
           </div>
