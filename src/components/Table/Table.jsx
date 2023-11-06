@@ -1,8 +1,9 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef } from "react";
 import NotificationService from "../../services/NotificationService";
 import { validateEmptyInputs } from "../../helpers/validate-empty-inputs";
-import Input from "../Input/Input";
-import ErrorMessage from "../ErrorMessage/ErrorMessage";
+// import Input from "../Input/Input";
+// import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 import img from '../../img/icon-trash.png';
 
@@ -30,8 +31,9 @@ const Table = ({
   setPushToDZCalled,
   handleRowClick,
   handleAddDzFromPolygon,
+  setFocusMarker,
+  focusMarker
 }) => {
-  const [selectedRow, setSelectedRow] = useState(null);
   const selectedRowRef = useRef(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [newRowData, setNewRowData] = useState({
@@ -78,6 +80,19 @@ const Table = ({
       position: dzMarkerPosition,
     }));
   }, [dzMarkerPosition]);
+
+  useEffect(() => {
+    if (focusMarker === null) {
+      return;
+    }
+
+    const rowExists = data.some((row) => row.id === focusMarker);
+
+    if (!rowExists) {
+      setFocusMarker(null);
+    }
+  }, [data, focusMarker]);
+
 
   const fetchForms = async () => {
     try {
@@ -206,9 +221,12 @@ const Table = ({
     }
   };
 
-  const deleteData = (id) => {
+  const deleteData = (rowId) => {
+    if (+focusMarker === rowId) {
+      setFocusMarker(null);
+    }
     setData((prevData) => {
-      const updatedData = prevData.filter((element) => element.id !== id);
+      const updatedData = prevData.filter((element) => element.id !== rowId);
       return updatedData;
     });
   };
@@ -217,7 +235,6 @@ const Table = ({
     if (!rowId) {
       return;
     }
-    setSelectedRow(rowId);
     handleRowClick(rowId);
     selectedRowRef.current = rowId;
 
@@ -276,6 +293,7 @@ const Table = ({
     e.preventDefault();
     handleClearTable(e);
     setShowButton(true);
+    setFocusMarker(null);
   }
 
   async function deleteRecordsById(rowId) {
@@ -295,6 +313,9 @@ const Table = ({
       });
 
       if (explDzResponse.ok && elementsResponse.ok) {
+        if (rowId === focusMarker) {
+          setFocusMarker(null);
+        }
         setData((prevData) => {
           const updatedData = prevData.filter((element) => element.id !== rowId);
           return updatedData;
@@ -307,12 +328,14 @@ const Table = ({
     }
   }
 
+  console.log(`focusMarker: ${focusMarker}`);
+
   return (
     <div className="form-container-inside form-container-inside-width">
       <label className="block-label">Обрані дорожні знаки</label>
 
       <div className="table">
-        {showAddForm && (
+        {/* {showAddForm && (
           <div>
             <form className="form-addDz">
               <div className="form-addDz__group">
@@ -346,13 +369,17 @@ const Table = ({
               </div>
             </form>
           </div>
-        )}
+        )} */}
 
         <div className="flex">
           <button className="button-add-Dz" onClick={handleAddDzFromPolygon} style={{ backgroundColor: buttonPressed ? '#46aa03' : '' }}>
             Додати з полігону
           </button>
-          <button className="button-add-Dz" onClick={() => setShowAddForm(true)}>
+          <button
+            className="button-add-Dz"
+            // onClick={() => setShowAddForm(true)}
+            onClick={() => NotificationService.showInfoNotification('Нові знаки можуть бути додані через відповідний проект QGIS')}
+          >
             Додати ДЗ
           </button>
           {showButton &&
@@ -375,7 +402,7 @@ const Table = ({
               <tr
                 key={row.id}
                 onClick={() => handleROwClick(row.id)}
-                style={{ background: selectedRow === row.id ? "#a5d565" : "" }}
+                style={{ background: focusMarker === row.id ? "#a5d565" : "" }}
               >
                 <td>{row.id}</td>
                 <td>{row.num_pdr || "Немає в БД"}</td>
@@ -411,7 +438,12 @@ const Table = ({
                       />
                     </button>
                   ) : (
-                    <button className="delete-icon" onClick={() => deleteData(row.id)}>
+                    <button
+                      className="delete-icon"
+                      onClick={() => {
+                        deleteData(row.id);
+                      }}
+                    >
                       X
                     </button>
                   )}

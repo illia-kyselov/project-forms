@@ -64,7 +64,7 @@ const LeafletMap = ({
   const [clickedPolygons, setClickedPolygons] = useState([]);
 
   const [selectedPolygonIdFromList, setSelectedPolygonIdFromList] = useState(null);
-
+  const [currentFocusMarker, setCurrentFocusMarker] = useState(null);
 
   useEffect(() => {
     fetch("http://localhost:3001/doc_plg")
@@ -191,6 +191,8 @@ const LeafletMap = ({
   const handleMarkerClick = (markerId) => {
     // setSelectedPolygon(null);
     // setSelectedPolygonIdFromList(null);
+    setCurrentFocusMarker(markerId);
+
     handlePolygonClick(markerId);
     handleDzClick(markerId);
     const markerData = markers.find((marker) => marker.id === markerId);
@@ -258,9 +260,6 @@ const LeafletMap = ({
       popupAnchor: [0, 0],
     });
   };
-
-  console.log(clickedPolygons);
-
 
   return (
     <div className="LeafletMapContainer ">
@@ -342,7 +341,9 @@ const LeafletMap = ({
               click: () => handleMarkerClick(marker.id),
             }}
           >
-            <Popup>{marker.id}</Popup>
+            <Popup>
+              {`${marker.num_pdr}[${marker.id}]`}
+            </Popup>
           </Marker>
         ))}
         <MouseCoordinates setCoordinates={setCoordinates} />

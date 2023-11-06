@@ -227,6 +227,8 @@ function App() {
                 draggableDzMarkerWKT={draggableDzMarkerWKT}
                 setPushToDZCalled={setPushToDZCalled}
                 handleAddDzFromPolygon={handleAddDzFromPolygon}
+                setFocusMarker={setFocusMarker}
+                focusMarker={focusMarker}
               />
             )}
             {showSecondTable && dataTable.length > 0 &&

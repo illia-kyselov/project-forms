@@ -688,3 +688,8 @@ input:checked+.slider:before {
     margin-right: 5px;
   }
 }
+
+.custom-icon:hover {
+  transform: scale(1.2);
+  transition: transform 0.3s ease;
+}

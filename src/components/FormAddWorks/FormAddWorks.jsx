@@ -239,7 +239,7 @@ const FormAddWorks = ({
               onChange={handleChange}
               disabled={buttonAddDocPressed}
             >
-              <option value="" selected hidden>Оберіть тип роботи</option>
+              <option value="" defaultValue hidden>Оберіть тип роботи</option>
               {options.map((option) => (
                 <option
                   key={option}
@@ -263,7 +263,7 @@ const FormAddWorks = ({
               disabled={buttonAddDocPressed}
               onChange={handleChange}
             >
-              <option value="" selected hidden>Оберіть особу</option>
+              <option value="" defaultValue hidden>Оберіть особу</option>
               <option value="Шевченко Тарас" className="form__input-option">Шевченко Тарас</option>
               <option value="Українка Леся" className="form__input-option">Українка Леся</option>
             </select>
