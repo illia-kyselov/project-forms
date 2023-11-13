@@ -143,8 +143,16 @@ app.get("/dict_dz_form", (req, res) => {
 });
 
 app.get("/dz", (req, res) => {
-  const query =
-    "SELECT id, ST_AsGeoJSON(geom) AS geom, num_pdr, ang_map FROM exploitation.dz";
+  const limit = 10000;
+  const query = {
+    text: `
+      SELECT id, ST_AsGeoJSON(geom) AS geom, num_pdr, ang_map
+      FROM exploitation.dz
+      LIMIT $1
+    `,
+    values: [limit],
+  };
+
   client.query(query, (err, result) => {
     if (err) {
       console.error("Error executing query", err);
@@ -514,7 +522,7 @@ app.delete("/expl_dz/:work_id", (req, res) => {
   const workIdToDelete = req.params.work_id;
 
   const query = {
-    text: 'DELETE FROM exploitation.expl_dz WHERE work_id = $1',
+    text: "DELETE FROM exploitation.expl_dz WHERE work_id = $1",
     values: [workIdToDelete],
   };
 
@@ -523,7 +531,9 @@ app.delete("/expl_dz/:work_id", (req, res) => {
       console.error("Error executing deletion query", err);
       res.status(500).send("Error executing deletion query");
     } else {
-      res.json({ message: `Records with work_id ${workIdToDelete} successfully deleted` });
+      res.json({
+        message: `Records with work_id ${workIdToDelete} successfully deleted`,
+      });
     }
   });
 });
@@ -532,7 +542,7 @@ app.delete("/expl_dz/table/:rowId", (req, res) => {
   const rowIdToDelete = req.params.rowId;
 
   const query = {
-    text: 'DELETE FROM exploitation.expl_dz WHERE id_disl_dz = $1',
+    text: "DELETE FROM exploitation.expl_dz WHERE id_disl_dz = $1",
     values: [rowIdToDelete],
   };
 
@@ -541,7 +551,9 @@ app.delete("/expl_dz/table/:rowId", (req, res) => {
       console.error("Error executing deletion query", err);
       res.status(500).send("Error executing deletion query");
     } else {
-      res.json({ message: `Records with work_id ${rowIdToDelete} successfully deleted` });
+      res.json({
+        message: `Records with work_id ${rowIdToDelete} successfully deleted`,
+      });
     }
   });
 });
@@ -550,7 +562,7 @@ app.delete("/elements/table/:rowId", (req, res) => {
   const rowIdExplDzToDelete = req.params.rowId;
 
   const query = {
-    text: 'DELETE FROM exploitation.elements WHERE expl_dz_id IN (SELECT id_expl_dz FROM exploitation.expl_dz WHERE id_expl_dz = $1)',
+    text: "DELETE FROM exploitation.elements WHERE expl_dz_id IN (SELECT id_expl_dz FROM exploitation.expl_dz WHERE id_expl_dz = $1)",
     values: [rowIdExplDzToDelete],
   };
 
@@ -572,7 +584,7 @@ app.delete("/elements/:id_expl_dz", (req, res) => {
   const idExplDzToDelete = req.params.id_expl_dz;
 
   const query = {
-    text: 'DELETE FROM exploitation.elements WHERE expl_dz_id IN (SELECT id_expl_dz FROM exploitation.expl_dz WHERE id_expl_dz = $1)',
+    text: "DELETE FROM exploitation.elements WHERE expl_dz_id IN (SELECT id_expl_dz FROM exploitation.expl_dz WHERE id_expl_dz = $1)",
     values: [idExplDzToDelete],
   };
 
@@ -589,7 +601,6 @@ app.delete("/elements/:id_expl_dz", (req, res) => {
     }
   });
 });
-
 
 //put
 app.put("/elements/:id", (req, res) => {

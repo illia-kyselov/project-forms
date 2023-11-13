@@ -184,6 +184,7 @@ function App() {
           handleAddFromPolygon={handleAddFromPolygon}
           handleMarkerDzDragend={handleMarkerDzPosition}
           focusMarker={focusMarker}
+          setFocusMarker={setFocusMarker}
           setSelectedMarkerId={setSelectedMarkerId}
           setPolygonTableRowClick={setPolygonTableRowClick}
           setSelectedPolygonApp={setSelectedPolygon}

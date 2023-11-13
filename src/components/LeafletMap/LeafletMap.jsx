@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { MapContainer, TileLayer, Polygon, Popup, Marker } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+
+import MarkerClusterGroup from 'react-leaflet-markercluster';
+
 import markerImage from "../../img";
-import image from '../../img/1.39z.png';
+
 import MouseCoordinates from "../CursorCoordinates/MapEvents";
 import ListPolygons from "../ListPolygons/ListPolygons";
 import DraggableDzMarker from "../DraggableDzMarker/DraggableDzMarker";
+require('react-leaflet-markercluster/dist/styles.min.css');
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -42,6 +46,7 @@ const LeafletMap = ({
   pushToDZCalled,
   setPushToDZCalled,
   isChecked,
+  setFocusMarker
 }) => {
   const containerStyle = {
     height: "95.5vh",
@@ -64,7 +69,6 @@ const LeafletMap = ({
   const [clickedPolygons, setClickedPolygons] = useState([]);
 
   const [selectedPolygonIdFromList, setSelectedPolygonIdFromList] = useState(null);
-  const [currentFocusMarker, setCurrentFocusMarker] = useState(null);
 
   useEffect(() => {
     fetch("http://localhost:3001/doc_plg")
@@ -122,7 +126,6 @@ const LeafletMap = ({
     setFilteredMarkers(filtered);
     handleAddFromPolygon(filtered);
   };
-
 
   const isPointWithinPolygon = (point, polygonCoordinates) => {
     const x = point.lng;
@@ -187,17 +190,17 @@ const LeafletMap = ({
     setSelectedPolygonMarkers(filteredMarkers);
   };
 
-
   const handleMarkerClick = (markerId) => {
     // setSelectedPolygon(null);
     // setSelectedPolygonIdFromList(null);
-    setCurrentFocusMarker(markerId);
+    setFocusMarker(markerId);
 
     handlePolygonClick(markerId);
     handleDzClick(markerId);
     const markerData = markers.find((marker) => marker.id === markerId);
     handleAddMarkerData(markerData);
   };
+
 
   const handleMoveEnd = () => {
     if (mapBounds) {
@@ -235,7 +238,6 @@ const LeafletMap = ({
     setFilteredPolygons(polygonsInView);
 
     setFilteredMarkers(filterMarkersByMapBounds(polygonsInView));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapBounds, polygons]);
 
   const createMarkerIcon = (num_pdr, ang_map, isFocused) => {
@@ -276,6 +278,57 @@ const LeafletMap = ({
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           noWrap={true}
         />
+        <MarkerClusterGroup disableClusteringAtZoom={18}>
+          {isChecked ? (
+            filteredMarkers.map((marker) => (
+              <Marker
+                key={marker.id}
+                position={marker.coordinates}
+                icon={createMarkerIcon(
+                  marker.num_pdr,
+                  marker.ang_map,
+                  marker.id === focusMarker
+                )}
+                zIndexOffset={marker.id === focusMarker ? 1000 : 100}
+                eventHandlers={{
+                  click: () => {
+                    handleMarkerClick(marker.id);
+                  },
+                }}
+              >
+                {focusMarker === marker.id && (
+                  <Popup position={marker.coordinates}>
+                    {`${marker.num_pdr}[${marker.id}]`}
+                  </Popup>
+                )}
+              </Marker>
+            ))
+          ) : (
+            markers.map((marker) => (
+              <Marker
+                key={marker.id}
+                position={marker.coordinates}
+                icon={createMarkerIcon(
+                  marker.num_pdr,
+                  marker.ang_map,
+                  marker.id === focusMarker
+                )}
+                zIndexOffset={marker.id === focusMarker ? 1000 : 100}
+                eventHandlers={{
+                  click: () => {
+                    handleMarkerClick(marker.id);
+                  },
+                }}
+              >
+                {focusMarker === marker.id && (
+                  <Popup position={marker.coordinates}>
+                    {`${marker.num_pdr}[${marker.id}]`}
+                  </Popup>
+                )}
+              </Marker>
+            ))
+          )}
+        </MarkerClusterGroup>
         {isChecked &&
           (buttonAddDocPressed ? (
             <Polygon
@@ -325,27 +378,7 @@ const LeafletMap = ({
             setDraggableDzMarkerWKT={setDraggableDzMarkerWKT}
           />
         )}
-        {isChecked && filteredMarkers.map((marker) => (
-          <Marker
-            key={marker.id}
-            position={marker.coordinates}
-            icon={
-              createMarkerIcon(
-                marker.num_pdr,
-                marker.ang_map,
-                marker.id === focusMarker
-              )
-            }
-            zIndexOffset={marker.id === focusMarker ? 1000 : 100}
-            eventHandlers={{
-              click: () => handleMarkerClick(marker.id),
-            }}
-          >
-            <Popup>
-              {`${marker.num_pdr}[${marker.id}]`}
-            </Popup>
-          </Marker>
-        ))}
+
         <MouseCoordinates setCoordinates={setCoordinates} />
         {coordinaetes ? <div style={coordinatesStyle}>{coordinaetes}</div> : ""}
 
@@ -362,7 +395,6 @@ const LeafletMap = ({
             setSelectedPolygonMarkers={setSelectedPolygonMarkers}
           />
         }
-
       </MapContainer>
     </div >
   );

@@ -200,11 +200,13 @@ body {
   top: 52px;
   height: min-content;
   box-sizing: border-box;
+  touch-action: none;
 }
 
 .leaflet-container {
   z-index: 2;
   width: 50vw;
+  touch-action: none;
 }
 
 .leaflet-control-attribution {
@@ -692,4 +694,8 @@ input:checked+.slider:before {
 .custom-icon:hover {
   transform: scale(1.2);
   transition: transform 0.3s ease;
+}
+
+.leaflet-container {
+  outline: none;
 }
