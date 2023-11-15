@@ -328,8 +328,6 @@ const Table = ({
     }
   }
 
-  console.log(`focusMarker: ${focusMarker}`);
-
   return (
     <div className="form-container-inside form-container-inside-width">
       <label className="block-label">Обрані дорожні знаки</label>

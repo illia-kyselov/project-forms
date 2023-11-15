@@ -4,13 +4,17 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
 import MarkerClusterGroup from 'react-leaflet-markercluster';
+import 'react-leaflet-markercluster/dist/styles.min.css';
 
 import markerImage from "../../img";
+import isEqual from 'lodash/isEqual';
 
 import MouseCoordinates from "../CursorCoordinates/MapEvents";
 import ListPolygons from "../ListPolygons/ListPolygons";
 import DraggableDzMarker from "../DraggableDzMarker/DraggableDzMarker";
-require('react-leaflet-markercluster/dist/styles.min.css');
+import MapBoundsHandler from "../../helpers/getBounds";
+
+import { BeatLoader } from 'react-spinners';
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -46,10 +50,11 @@ const LeafletMap = ({
   pushToDZCalled,
   setPushToDZCalled,
   isChecked,
-  setFocusMarker
+  setFocusMarker,
 }) => {
   const containerStyle = {
     height: "95.5vh",
+    position: 'relative',
   };
   const center = {
     lat: 50.3865,
@@ -69,8 +74,13 @@ const LeafletMap = ({
   const [clickedPolygons, setClickedPolygons] = useState([]);
 
   const [selectedPolygonIdFromList, setSelectedPolygonIdFromList] = useState(null);
+  const [prevMapBounds, setPrevMapBounds] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  console.log(mapBounds ?? "MapBounds is null");
 
   useEffect(() => {
+    setLoading(true);
     fetch("http://localhost:3001/doc_plg")
       .then((response) => response.json())
       .then((data) => {
@@ -85,6 +95,7 @@ const LeafletMap = ({
           },
         }));
         setPolygons(filteredPolygons);
+        setLoading(false)
       })
       .catch((error) => {
         console.error("Error fetching polygons data", error);
@@ -92,9 +103,14 @@ const LeafletMap = ({
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:3001/dz")
-      .then((response) => response.json())
-      .then((data) => {
+    setLoading(true);
+    const fetchMarkers = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3001/dz?minLat=${mapBounds._southWest[0]}&minLng=${mapBounds._southWest[1]}&maxLat=${mapBounds._northEast[0]}&maxLng=${mapBounds._northEast[1]}`
+        );
+
+        const data = await response.json();
         const dzMarkers = data.map((marker) => ({
           id: marker.id,
           coordinates: marker.geom.coordinates[0],
@@ -102,12 +118,20 @@ const LeafletMap = ({
           ang_map: marker.ang_map,
         }));
         setMarkers(dzMarkers);
-      })
-      .catch((error) => {
+        setLoading(false)
+
+      } catch (error) {
         console.error("Error fetching marker data", error);
-      });
+      }
+    };
+
+    if (!prevMapBounds || !isEqual(prevMapBounds, mapBounds)) {
+      fetchMarkers();
+      setPrevMapBounds(mapBounds);
+    }
+
     setPushToDZCalled(false);
-  }, [pushToDZCalled, setPushToDZCalled]);
+  }, [mapBounds, prevMapBounds, setMarkers, setPushToDZCalled]);
 
   const filterMarkersWithinPolygon = (polygonCoordinates) => {
     if (!markers || markers.length === 0) {
@@ -203,14 +227,7 @@ const LeafletMap = ({
 
 
   const handleMoveEnd = () => {
-    if (mapBounds) {
-      const polygonsInView = polygons.filter((polygon) =>
-        isPolygonWithinMapBounds(polygon)
-      );
-      setFilteredPolygons(polygonsInView);
 
-      setFilteredMarkers(filterMarkersByMapBounds(polygonsInView));
-    }
   };
 
   const filterMarkersByMapBounds = (polygonsInView) => {
@@ -223,8 +240,6 @@ const LeafletMap = ({
 
   const isPolygonWithinMapBounds = (polygon) => {
     if (!mapBounds) return true;
-    const polygonBounds = L.polygon(polygon.geom.coordinates).getBounds();
-    return mapBounds.intersects(polygonBounds);
   };
 
   const handleMarkerDragEnd = (position) => {
@@ -238,7 +253,7 @@ const LeafletMap = ({
     setFilteredPolygons(polygonsInView);
 
     setFilteredMarkers(filterMarkersByMapBounds(polygonsInView));
-  }, [mapBounds, polygons]);
+  }, [polygons]);
 
   const createMarkerIcon = (num_pdr, ang_map, isFocused) => {
     let rotationClass = 'rotate-0';
@@ -278,6 +293,7 @@ const LeafletMap = ({
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           noWrap={true}
         />
+        <MapBoundsHandler setMapBounds={setMapBounds} />
         <MarkerClusterGroup disableClusteringAtZoom={18}>
           {isChecked ? (
             filteredMarkers.map((marker) => (
@@ -395,6 +411,11 @@ const LeafletMap = ({
             setSelectedPolygonMarkers={setSelectedPolygonMarkers}
           />
         }
+        {loading && (
+          <div className={`loader-overlay ${loading ? 'show' : ''}`}>
+            <BeatLoader color="#36d7b7" loading={true} size={50} />
+          </div>
+        )}
       </MapContainer>
     </div >
   );

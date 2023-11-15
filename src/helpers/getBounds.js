@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useMapEvents } from "react-leaflet";
 
-const MapBoundsHandler = ({ setMapBounds, onMapBoundsChange }) => {
+const MapBoundsHandler = ({ setMapBounds }) => {
   const mapRef = useRef();
 
   useMapEvents({
@@ -13,12 +13,10 @@ const MapBoundsHandler = ({ setMapBounds, onMapBoundsChange }) => {
         _northEast: [bounds._northEast.lat, bounds._northEast.lng],
       };
       setMapBounds(updatedBounds);
-      onMapBoundsChange(updatedBounds);
     },
   });
 
   useEffect(() => {
-    // Fetch data from the backend using the initial bounds (current map bounds)
     const map = mapRef.current;
     if (map != null) {
       const bounds = map.getBounds();
@@ -27,9 +25,8 @@ const MapBoundsHandler = ({ setMapBounds, onMapBoundsChange }) => {
         _northEast: [bounds._northEast.lat, bounds._northEast.lng],
       };
       setMapBounds(initialBounds);
-      onMapBoundsChange(initialBounds);
     }
-  }, [setMapBounds, onMapBoundsChange]);
+  }, [setMapBounds]);
 
   return null;
 };

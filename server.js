@@ -144,13 +144,16 @@ app.get("/dict_dz_form", (req, res) => {
 
 app.get("/dz", (req, res) => {
   const limit = 10000;
+  const { minLat, minLng, maxLat, maxLng } = req.query;
+
   const query = {
     text: `
       SELECT id, ST_AsGeoJSON(geom) AS geom, num_pdr, ang_map
       FROM exploitation.dz
-      LIMIT $1
+      WHERE ST_Within(geom, ST_MakeEnvelope($1, $2, $3, $4, 4326))
+      LIMIT $5
     `,
-    values: [limit],
+    values: [minLng, minLat, maxLng, maxLat, limit],
   };
 
   client.query(query, (err, result) => {
