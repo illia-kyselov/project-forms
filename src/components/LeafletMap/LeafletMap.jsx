@@ -81,6 +81,10 @@ const LeafletMap = ({
   const [prevMapBounds, setPrevMapBounds] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const refs = markers.reduce((acc, marker) => {
+    acc[marker.id] = React.createRef();
+    return acc;
+  }, {});
 
   useEffect(() => {
     setLoading(true);
@@ -136,6 +140,15 @@ const LeafletMap = ({
 
     setPushToDZCalled(false);
   }, [mapBounds, prevMapBounds, setMarkers, setPushToDZCalled]);
+
+  useEffect(() => {
+    const focusedMarker = markers.find((marker) => marker.id === focusMarker);
+    const markerRef = focusedMarker ? refs[focusedMarker.id] : null;
+
+    if (markerRef && markerRef.current && typeof markerRef.current.openPopup === 'function') {
+      markerRef.current.openPopup();
+    }
+  }, [focusMarker, markers, refs]);
 
   const filterMarkersWithinPolygon = (polygonCoordinates) => {
     if (!markers || markers.length === 0) {
@@ -312,6 +325,7 @@ const LeafletMap = ({
                     handleMarkerClick(marker.id);
                   },
                 }}
+                ref={refs[marker.id]}
               >
                 {focusMarker === marker.id && (
                   <Popup position={marker.coordinates}>
@@ -336,6 +350,7 @@ const LeafletMap = ({
                     handleMarkerClick(marker.id);
                   },
                 }}
+                ref={refs[marker.id]}
               >
                 {/* {focusMarker === marker.id && ( */}
                 <Popup position={marker.coordinates}>
