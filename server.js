@@ -143,7 +143,7 @@ app.get("/dict_dz_form", (req, res) => {
 });
 
 app.get("/dz", (req, res) => {
-  const limit = 10000;
+  const limit = 4000;
   const { minLat, minLng, maxLat, maxLng } = req.query;
 
   const query = {

@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Polygon, Popup, Marker } from "react-leaflet";
-import L from "leaflet";
+import L, { map, marker } from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-import MarkerClusterGroup from 'react-leaflet-markercluster';
+import MarkerClusterGroup from "@changey/react-leaflet-markercluster";
 import 'react-leaflet-markercluster/dist/styles.min.css';
 
 import markerImage from "../../img";
@@ -117,6 +117,7 @@ const LeafletMap = ({
           num_pdr: marker.num_pdr,
           ang_map: marker.ang_map,
         }));
+
         setMarkers(dzMarkers);
         setLoading(false)
 
@@ -217,17 +218,14 @@ const LeafletMap = ({
   const handleMarkerClick = (markerId) => {
     // setSelectedPolygon(null);
     // setSelectedPolygonIdFromList(null);
-    setFocusMarker(markerId);
+    if (buttonAddDocPressed) {
+      setFocusMarker(markerId);
+    }
 
     handlePolygonClick(markerId);
     handleDzClick(markerId);
     const markerData = markers.find((marker) => marker.id === markerId);
     handleAddMarkerData(markerData);
-  };
-
-
-  const handleMoveEnd = () => {
-
   };
 
   const filterMarkersByMapBounds = (polygonsInView) => {
@@ -278,6 +276,8 @@ const LeafletMap = ({
     });
   };
 
+  console.log(mapBounds);
+
   return (
     <div className="LeafletMapContainer ">
       <MapContainer
@@ -285,7 +285,6 @@ const LeafletMap = ({
         maxZoom={20}
         zoom={17}
         style={containerStyle}
-        onMoveend={handleMoveEnd}
         preferCanvas={true}
       >
         <TileLayer
@@ -336,11 +335,11 @@ const LeafletMap = ({
                   },
                 }}
               >
-                {focusMarker === marker.id && (
-                  <Popup position={marker.coordinates}>
-                    {`${marker.num_pdr}[${marker.id}]`}
-                  </Popup>
-                )}
+                {/* {focusMarker === marker.id && ( */}
+                <Popup position={marker.coordinates}>
+                  {`${marker.num_pdr}[${marker.id}]`}
+                </Popup>
+                {/* )} */}
               </Marker>
             ))
           )}
@@ -395,7 +394,7 @@ const LeafletMap = ({
           />
         )}
 
-        <MouseCoordinates setCoordinates={setCoordinates} />
+        {/* <MouseCoordinates setCoordinates={setCoordinates} /> */}
         {coordinaetes ? <div style={coordinatesStyle}>{coordinaetes}</div> : ""}
 
         {clickedPolygons.length > 1 && !buttonAddDocPressed &&

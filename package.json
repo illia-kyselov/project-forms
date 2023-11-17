@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@changey/react-leaflet-markercluster": "^4.0.0-rc1",
     "@react-leaflet/core": "^2.1.0",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "leaflet": "^1.9.4",
+    "leaflet.markercluster": "^1.5.3",
     "pg": "^8.11.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
