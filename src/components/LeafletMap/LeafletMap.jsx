@@ -73,6 +73,8 @@ const LeafletMap = ({
   const [selectedPolygon, setSelectedPolygon] = useState(null);
   const [coordinaetes, setCoordinates] = useState();
 
+  // eslint-disable-next-line no-unused-vars
+  const [selectedPolygonMarkers, setSelectedPolygonMarkers] = useState([]);
   const [clickedPolygons, setClickedPolygons] = useState([]);
 
   const [selectedPolygonIdFromList, setSelectedPolygonIdFromList] = useState(null);
@@ -212,7 +214,8 @@ const LeafletMap = ({
     handleAsyncClick();
 
     const polygonCoordinates = polygon.geom.coordinates;
-    filterMarkersWithinPolygon(polygonCoordinates);
+    const filteredMarkers = filterMarkersWithinPolygon(polygonCoordinates);
+    setSelectedPolygonMarkers(filteredMarkers);
   };
 
   const handleMarkerClick = (markerId) => {
@@ -251,7 +254,7 @@ const LeafletMap = ({
     setFilteredPolygons(polygonsInView);
 
     setFilteredMarkers(filterMarkersByMapBounds(polygonsInView));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [polygons]);
 
   const createMarkerIcon = (num_pdr, ang_map, isFocused) => {
@@ -406,6 +409,7 @@ const LeafletMap = ({
             setSelectedPolygonIdFromList={setSelectedPolygonIdFromList}
             setSelectedPolygon={setSelectedPolygon}
             filterMarkersWithinPolygon={filterMarkersWithinPolygon}
+            setSelectedPolygonMarkers={setSelectedPolygonMarkers}
           />
         }
         {loading && (
