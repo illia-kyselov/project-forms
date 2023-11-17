@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Polygon, Popup, Marker } from "react-leaflet";
-import L, { map, marker } from "leaflet";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
 import MarkerClusterGroup from "@changey/react-leaflet-markercluster";
@@ -65,19 +65,20 @@ const LeafletMap = ({
   const [markers, setMarkers] = useState([]);
   const [selectedPolygonId, setSelectedPolygonId] = useState(null);
   const [filteredMarkers, setFilteredMarkers] = useState([]);
-  const [mapBounds, setMapBounds] = useState(null);
+  const [mapBounds, setMapBounds] = useState({
+    _southWest: [50.36, 30.46],
+    _northEast: [50.39, 30.48],
+  });
   const [filteredPolygons, setFilteredPolygons] = useState([]);
   const [selectedPolygon, setSelectedPolygon] = useState(null);
   const [coordinaetes, setCoordinates] = useState();
 
-  const [selectedPolygonMarkers, setSelectedPolygonMarkers] = useState([]);
   const [clickedPolygons, setClickedPolygons] = useState([]);
 
   const [selectedPolygonIdFromList, setSelectedPolygonIdFromList] = useState(null);
   const [prevMapBounds, setPrevMapBounds] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  console.log(mapBounds ?? "MapBounds is null");
 
   useEffect(() => {
     setLoading(true);
@@ -109,7 +110,6 @@ const LeafletMap = ({
         const response = await fetch(
           `http://localhost:3001/dz?minLat=${mapBounds._southWest[0]}&minLng=${mapBounds._southWest[1]}&maxLat=${mapBounds._northEast[0]}&maxLng=${mapBounds._northEast[1]}`
         );
-
         const data = await response.json();
         const dzMarkers = data.map((marker) => ({
           id: marker.id,
@@ -117,6 +117,7 @@ const LeafletMap = ({
           num_pdr: marker.num_pdr,
           ang_map: marker.ang_map,
         }));
+        console.log('отправил');
 
         setMarkers(dzMarkers);
         setLoading(false)
@@ -211,8 +212,7 @@ const LeafletMap = ({
     handleAsyncClick();
 
     const polygonCoordinates = polygon.geom.coordinates;
-    const filteredMarkers = filterMarkersWithinPolygon(polygonCoordinates);
-    setSelectedPolygonMarkers(filteredMarkers);
+    filterMarkersWithinPolygon(polygonCoordinates);
   };
 
   const handleMarkerClick = (markerId) => {
@@ -237,7 +237,7 @@ const LeafletMap = ({
   };
 
   const isPolygonWithinMapBounds = (polygon) => {
-    if (!mapBounds) return true;
+    if (mapBounds) return true;
   };
 
   const handleMarkerDragEnd = (position) => {
@@ -251,6 +251,7 @@ const LeafletMap = ({
     setFilteredPolygons(polygonsInView);
 
     setFilteredMarkers(filterMarkersByMapBounds(polygonsInView));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [polygons]);
 
   const createMarkerIcon = (num_pdr, ang_map, isFocused) => {
@@ -275,8 +276,6 @@ const LeafletMap = ({
       popupAnchor: [0, 0],
     });
   };
-
-  console.log(mapBounds);
 
   return (
     <div className="LeafletMapContainer ">
@@ -394,7 +393,7 @@ const LeafletMap = ({
           />
         )}
 
-        {/* <MouseCoordinates setCoordinates={setCoordinates} /> */}
+        <MouseCoordinates setCoordinates={setCoordinates} />
         {coordinaetes ? <div style={coordinatesStyle}>{coordinaetes}</div> : ""}
 
         {clickedPolygons.length > 1 && !buttonAddDocPressed &&
@@ -407,7 +406,6 @@ const LeafletMap = ({
             setSelectedPolygonIdFromList={setSelectedPolygonIdFromList}
             setSelectedPolygon={setSelectedPolygon}
             filterMarkersWithinPolygon={filterMarkersWithinPolygon}
-            setSelectedPolygonMarkers={setSelectedPolygonMarkers}
           />
         }
         {loading && (

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useMapEvents } from 'react-leaflet';
 
 function round(number, precision = 0) {
@@ -19,14 +19,14 @@ function formatLongitude(longitude) {
 }
 
 function MouseCoordinates({ setCoordinates }) {
-  const [mousePoint, setMousePoint] = React.useState(null);
+  const [mousePoint, setMousePoint] = useState(null);
 
   const formattedCoordinates =
     mousePoint === null
       ? ''
       : `${formatLatitude(mousePoint.lat)}, ${formatLongitude(mousePoint.lng)}`;
 
-  React.useEffect(
+  useEffect(
     function copyToClipboard() {
       function handleCtrlCKeydown(event) {
         if (
