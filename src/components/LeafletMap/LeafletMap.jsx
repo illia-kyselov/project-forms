@@ -87,11 +87,16 @@ const LeafletMap = ({
   }, {});
 
   useEffect(() => {
-    setLoading(true);
-    fetch("http://localhost:3001/doc_plg")
-      .then((response) => response.json())
-      .then((data) => {
-        const filteredPolygons = data.map((polygon) => ({
+    const fetchPolygonsAndMarkers = async () => {
+      try {
+        setLoading(true);
+
+        const polygonsResponse = await fetch(
+          `http://localhost:3001/doc_plg?minLat=${mapBounds._southWest[0]}&minLng=${mapBounds._southWest[1]}&maxLat=${mapBounds._northEast[0]}&maxLng=${mapBounds._northEast[1]}`
+        );
+        const polygonsData = await polygonsResponse.json();
+
+        const filteredPolygons = polygonsData.map((polygon) => ({
           ...polygon,
           pro_name: polygon.pro_name,
           geom: {
@@ -101,45 +106,37 @@ const LeafletMap = ({
             ),
           },
         }));
-        setPolygons(filteredPolygons);
-        setLoading(false)
-      })
-      .catch((error) => {
-        console.error("Error fetching polygons data", error);
-      });
-  }, []);
 
-  useEffect(() => {
-    setLoading(true);
-    const fetchMarkers = async () => {
-      try {
-        const response = await fetch(
+        setPolygons(filteredPolygons);
+
+        const markersResponse = await fetch(
           `http://localhost:3001/dz?minLat=${mapBounds._southWest[0]}&minLng=${mapBounds._southWest[1]}&maxLat=${mapBounds._northEast[0]}&maxLng=${mapBounds._northEast[1]}`
         );
-        const data = await response.json();
-        const dzMarkers = data.map((marker) => ({
+        const markersData = await markersResponse.json();
+
+        const dzMarkers = markersData.map((marker) => ({
           id: marker.id,
           coordinates: marker.geom.coordinates[0],
           num_pdr: marker.num_pdr,
           ang_map: marker.ang_map,
         }));
-        console.log('отправил');
 
         setMarkers(dzMarkers);
-        setLoading(false)
 
+        setLoading(false);
       } catch (error) {
-        console.error("Error fetching marker data", error);
+        console.error("Error fetching data", error);
+        setLoading(false);
       }
     };
 
     if (!prevMapBounds || !isEqual(prevMapBounds, mapBounds)) {
-      fetchMarkers();
+      fetchPolygonsAndMarkers();
       setPrevMapBounds(mapBounds);
+      setPushToDZCalled(false);
     }
+  }, [mapBounds, prevMapBounds, setMarkers, setPushToDZCalled, setPolygons]);
 
-    setPushToDZCalled(false);
-  }, [mapBounds, prevMapBounds, setMarkers, setPushToDZCalled]);
 
   useEffect(() => {
     const focusedMarker = markers.find((marker) => marker.id === focusMarker);
@@ -327,11 +324,9 @@ const LeafletMap = ({
                 }}
                 ref={refs[marker.id]}
               >
-                {focusMarker === marker.id && (
-                  <Popup position={marker.coordinates}>
-                    {`${marker.num_pdr}[${marker.id}]`}
-                  </Popup>
-                )}
+                <Popup position={marker.coordinates}>
+                  {`${marker.num_pdr}[${marker.id}]`}
+                </Popup>
               </Marker>
             ))
           ) : (
@@ -352,11 +347,9 @@ const LeafletMap = ({
                 }}
                 ref={refs[marker.id]}
               >
-                {/* {focusMarker === marker.id && ( */}
                 <Popup position={marker.coordinates}>
                   {`${marker.num_pdr}[${marker.id}]`}
                 </Popup>
-                {/* )} */}
               </Marker>
             ))
           )}
