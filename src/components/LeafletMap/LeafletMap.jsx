@@ -90,23 +90,25 @@ const LeafletMap = ({
     const fetchPolygonsAndMarkers = async () => {
       try {
         setLoading(true);
-        const polygonsResponse = await fetch(
-          `http://localhost:3001/doc_plg?minLat=${mapBounds._southWest[0]}&minLng=${mapBounds._southWest[1]}&maxLat=${mapBounds._northEast[0]}&maxLng=${mapBounds._northEast[1]}`
-        );
-        const polygonsData = await polygonsResponse.json();
+        if (isChecked && !buttonAddDocPressed) {
+          const polygonsResponse = await fetch(
+            `http://localhost:3001/doc_plg?minLat=${mapBounds._southWest[0]}&minLng=${mapBounds._southWest[1]}&maxLat=${mapBounds._northEast[0]}&maxLng=${mapBounds._northEast[1]}`
+          );
+          const polygonsData = await polygonsResponse.json();
 
-        const filteredPolygons = polygonsData.map((polygon) => ({
-          ...polygon,
-          pro_name: polygon.pro_name,
-          geom: {
-            ...polygon.geom,
-            coordinates: polygon.geom.coordinates[0].filter(
-              (coordinate) => coordinate[0] !== null && coordinate[1] !== null
-            ),
-          },
-        }));
+          const filteredPolygons = polygonsData.map((polygon) => ({
+            ...polygon,
+            pro_name: polygon.pro_name,
+            geom: {
+              ...polygon.geom,
+              coordinates: polygon.geom.coordinates[0].filter(
+                (coordinate) => coordinate[0] !== null && coordinate[1] !== null
+              ),
+            },
+          }));
 
-        setPolygons(filteredPolygons);
+          setPolygons(filteredPolygons);
+        }
 
         const markersResponse = await fetch(
           `http://localhost:3001/dz?minLat=${mapBounds._southWest[0]}&minLng=${mapBounds._southWest[1]}&maxLat=${mapBounds._northEast[0]}&maxLng=${mapBounds._northEast[1]}`

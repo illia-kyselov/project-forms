@@ -22,6 +22,15 @@ const FormUpdateElementsInfo = ({ selectedElement, setShowUpdateElements, }) => 
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (selectedElement) {
+      setFormData((prevData) => ({
+        ...prevData,
+        element: selectedElement.name_elmns
+      }));
+    }
+  }, [selectedElement]);
+
   const fetchData = async () => {
     try {
       const response = await fetch("http://localhost:3001/dict_elmnts");
