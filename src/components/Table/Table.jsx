@@ -32,7 +32,8 @@ const Table = ({
   handleRowClick,
   handleAddDzFromPolygon,
   setFocusMarker,
-  focusMarker
+  focusMarker,
+  isChecked,
 }) => {
   const selectedRowRef = useRef(null);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -370,9 +371,10 @@ const Table = ({
         )} */}
 
         <div className="flex">
-          <button className="button-add-Dz" onClick={handleAddDzFromPolygon} style={{ backgroundColor: buttonPressed ? '#46aa03' : '' }}>
-            Додати з полігону
-          </button>
+          {isChecked &&
+            <button className="button-add-Dz" onClick={handleAddDzFromPolygon} style={{ backgroundColor: buttonPressed ? '#46aa03' : '' }}>
+              Додати з полігону
+            </button>}
           <button
             className="button-add-Dz"
             // onClick={() => setShowAddForm(true)}

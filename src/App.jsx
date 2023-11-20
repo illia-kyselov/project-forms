@@ -230,6 +230,8 @@ function App() {
                 handleAddDzFromPolygon={handleAddDzFromPolygon}
                 setFocusMarker={setFocusMarker}
                 focusMarker={focusMarker}
+                buttonAddDocPressed={buttonAddDocPressed}
+                isChecked={isChecked}
               />
             )}
             {showSecondTable && dataTable.length > 0 &&

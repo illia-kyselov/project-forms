@@ -90,7 +90,6 @@ const LeafletMap = ({
     const fetchPolygonsAndMarkers = async () => {
       try {
         setLoading(true);
-
         const polygonsResponse = await fetch(
           `http://localhost:3001/doc_plg?minLat=${mapBounds._southWest[0]}&minLng=${mapBounds._southWest[1]}&maxLat=${mapBounds._northEast[0]}&maxLng=${mapBounds._northEast[1]}`
         );
@@ -145,7 +144,7 @@ const LeafletMap = ({
     if (markerRef && markerRef.current && typeof markerRef.current.openPopup === 'function') {
       markerRef.current.openPopup();
     }
-  }, [focusMarker, markers, refs]);
+  }, [focusMarker]);
 
   const filterMarkersWithinPolygon = (polygonCoordinates) => {
     if (!markers || markers.length === 0) {
@@ -316,7 +315,7 @@ const LeafletMap = ({
                   marker.ang_map,
                   marker.id === focusMarker
                 )}
-                zIndexOffset={marker.id === focusMarker ? 1000 : 100}
+                zIndexOffset={marker.id === focusMarker ? 999000 : 100}
                 eventHandlers={{
                   click: () => {
                     handleMarkerClick(marker.id);
@@ -324,7 +323,7 @@ const LeafletMap = ({
                 }}
                 ref={refs[marker.id]}
               >
-                <Popup position={marker.coordinates}>
+                <Popup position={marker.coordinates} autoClose={true}>
                   {`${marker.num_pdr}[${marker.id}]`}
                 </Popup>
               </Marker>
@@ -347,7 +346,7 @@ const LeafletMap = ({
                 }}
                 ref={refs[marker.id]}
               >
-                <Popup position={marker.coordinates}>
+                <Popup position={marker.coordinates} autoClose={true}>
                   {`${marker.num_pdr}[${marker.id}]`}
                 </Popup>
               </Marker>
