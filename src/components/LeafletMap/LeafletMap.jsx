@@ -26,10 +26,9 @@ L.Icon.Default.mergeOptions({
 
 const coordinatesStyle = {
   position: "absolute",
-  top: "10px",
+  top: "20px",
   right: "10px",
   backgroundColor: "white",
-  padding: "5px",
   borderRadius: "5px",
   zIndex: 1000,
 };
@@ -53,7 +52,7 @@ const LeafletMap = ({
   setFocusMarker,
 }) => {
   const containerStyle = {
-    height: "95.5vh",
+    height: "calc(96vh - 10px)",
     position: 'relative',
   };
   const center = {
@@ -87,12 +86,12 @@ const LeafletMap = ({
   }, {});
 
   useEffect(() => {
-    const fetchPolygonsAndMarkers = async () => {
+    const fetchPolygons = async () => {
       try {
         setLoading(true);
         if (isChecked && !buttonAddDocPressed) {
           const polygonsResponse = await fetch(
-            `http://localhost:3001/doc_plg?minLat=${mapBounds._southWest[0]}&minLng=${mapBounds._southWest[1]}&maxLat=${mapBounds._northEast[0]}&maxLng=${mapBounds._northEast[1]}`
+            `http://localhost:3001/doc_plg`
           );
           const polygonsData = await polygonsResponse.json();
 
@@ -109,7 +108,24 @@ const LeafletMap = ({
 
           setPolygons(filteredPolygons);
         }
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching polygons data", error);
+        setLoading(false);
+      }
+    };
 
+    if (!prevMapBounds || !isEqual(prevMapBounds, mapBounds)) {
+      fetchPolygons();
+      setPrevMapBounds(mapBounds);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const fetchMarkers = async () => {
+      try {
+        setLoading(true);
         const markersResponse = await fetch(
           `http://localhost:3001/dz?minLat=${mapBounds._southWest[0]}&minLng=${mapBounds._southWest[1]}&maxLat=${mapBounds._northEast[0]}&maxLng=${mapBounds._northEast[1]}`
         );
@@ -123,21 +139,19 @@ const LeafletMap = ({
         }));
 
         setMarkers(dzMarkers);
-
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching data", error);
+        console.error("Error fetching markers data", error);
         setLoading(false);
       }
     };
 
     if (!prevMapBounds || !isEqual(prevMapBounds, mapBounds)) {
-      fetchPolygonsAndMarkers();
+      fetchMarkers();
       setPrevMapBounds(mapBounds);
       setPushToDZCalled(false);
     }
-  }, [mapBounds, prevMapBounds, setMarkers, setPushToDZCalled, setPolygons]);
-
+  }, [mapBounds, prevMapBounds, setMarkers, setPushToDZCalled]);
 
   useEffect(() => {
     const focusedMarker = markers.find((marker) => marker.id === focusMarker);
@@ -146,6 +160,7 @@ const LeafletMap = ({
     if (markerRef && markerRef.current && typeof markerRef.current.openPopup === 'function') {
       markerRef.current.openPopup();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focusMarker]);
 
   const filterMarkersWithinPolygon = (polygonCoordinates) => {

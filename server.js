@@ -26,21 +26,40 @@ app.listen(port, () => {
 
 //get
 
+// app.get("/doc_plg", (req, res) => {
+//   const { minLat, minLng, maxLat, maxLng } = req.query;
+
+//   const query = {
+//     text: `
+//       SELECT objectid, num_disl, pro_name, ST_AsText(geom) AS geom
+//       FROM exploitation.doc_plg
+//       WHERE ST_Intersects(
+//         geom,
+//         ST_MakeEnvelope($1, $2, $3, $4, 4326)
+//       )
+//     `,
+//     values: [minLng, minLat, maxLng, maxLat],
+//   };
+
+//   client.query(query, (err, result) => {
+//     if (err) {
+//       console.error("Error executing query", err);
+//       res.status(500).send("Error executing query");
+//     } else {
+//       const data = result.rows.map((row) => ({
+//         objectid: row.objectid,
+//         num_disl: row.num_disl,
+//         pro_name: row.pro_name,
+//         geom: parsePolygon(row.geom),
+//       }));
+//       res.json(data);
+//     }
+//   });
+// });
+
 app.get("/doc_plg", (req, res) => {
-  const { minLat, minLng, maxLat, maxLng } = req.query;
-
-  const query = {
-    text: `
-      SELECT objectid, num_disl, pro_name, ST_AsText(geom) AS geom
-      FROM exploitation.doc_plg
-      WHERE ST_Intersects(
-        geom,
-        ST_MakeEnvelope($1, $2, $3, $4, 4326)
-      )
-    `,
-    values: [minLng, minLat, maxLng, maxLat],
-  };
-
+  const query =
+    "SELECT objectid, num_disl, pro_name, ST_AsText(geom) AS geom FROM exploitation.doc_plg";
   client.query(query, (err, result) => {
     if (err) {
       console.error("Error executing query", err);

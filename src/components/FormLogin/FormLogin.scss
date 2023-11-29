@@ -1,0 +1,230 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,500);
+
+$bg: #1a1f25;
+$button: #dfaa25;
+$buttonHover: #daa318;
+$buttonFocus: #d49c0e;
+$border: #22272d;
+
+.wrapper {
+  width: 300px;
+  margin: 12% auto;
+}
+
+body {
+  background: $bg;
+}
+
+#man-people-user,
+#lock-locker {
+  fill: white;
+}
+
+.login__form {
+  position: relative;
+}
+
+.login__sign-in {
+  float: left;
+  color: white;
+  font-size: 1.3em;
+}
+
+.login__button {
+  float: right;
+  color: #7f8084;
+  border: 1px solid $border;
+  padding: 7px 15px;
+  border-radius: 3px;
+  font-size: 0.8em;
+  cursor: pointer;
+  text-decoration: none;
+  margin-left: auto;
+}
+
+.login__button:hover {
+  color: #d3d3d3
+}
+
+.login__lock {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  margin-top: 10px;
+  padding: 7px;
+  left: 5px;
+
+  &::after {
+    content: "";
+    width: 1px;
+    height: 30px;
+    position: absolute;
+    background-color: $border;
+    top: 0px;
+    left: 100%;
+  }
+}
+
+.login__user {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  margin-top: 10px;
+  padding: 7px;
+  left: 5px;
+
+  &::after {
+    content: "";
+    width: 1px;
+    height: 30px;
+    position: absolute;
+    background-color: $border;
+    top: 0px;
+    left: 100%;
+  }
+}
+
+.login__input {
+  width: 100%;
+  padding: 5px;
+  height: 40px;
+  border-radius: 3px;
+  margin: 5px 0;
+  outline: none;
+}
+
+.login__input[type="email"]:focus,
+.login__input[type="password"]:focus {
+  border: 1px solid white;
+  box-shadow: none;
+}
+
+.login__user-input:focus .login__user {
+  background-color: white !important;
+}
+
+
+.login__input[type="email"] {
+  background-color: transparent;
+  border: 2px solid $border;
+  padding-left: 45px;
+  color: $button;
+}
+
+.login__input[type="password"] {
+  background-color: transparent;
+  border: 2px solid $border;
+  padding-left: 45px;
+  color: $button;
+}
+
+.login__input[type="submit"] {
+  background-color: $button;
+  border: none;
+  color: white;
+  text-align: center;
+  font-size: 0.8em;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $buttonHover;
+  }
+
+  &:focus {
+    background-color: $buttonFocus;
+  }
+
+  &:target {
+    background-color: pink;
+  }
+}
+
+.login__input[type="radio"] {
+  display: none;
+}
+
+.login__switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 24px;
+}
+
+.login__bottom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+}
+
+.login__switch input {
+  display: none;
+}
+
+.login__slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 40px;
+  height: 24px;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.login__slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 4px;
+  bottom: 3px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+input:checked+.login__slider {
+  background-color: #525551;
+}
+
+input:focus+.login__slider {
+  box-shadow: 0 0 1px #525551;
+}
+
+input:checked+.login__slider:before {
+  -webkit-transform: translateX(15px);
+  -ms-transform: translateX(15px);
+  transform: translateX(15px);
+}
+
+.login__slider.round {
+  border-radius: 34px;
+}
+
+.login__slider.round:before {
+  border-radius: 50%;
+}
+
+// .radio-yes:checked~.switch-selection {
+//   margin-left: 25px !important;
+// }
+
+.login__check-label {
+  font-size: 0.8em;
+  color: #7f8084;
+  padding: 3px 0;
+  margin-left: 10px;
+}
+
+
+.login__forgot-label {
+  font-size: 0.8em;
+  color: #7f8084;
+  padding: 3px 0;
+  margin-left: 40px;
+  cursor: pointer;
+}

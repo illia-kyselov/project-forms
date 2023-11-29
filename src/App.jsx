@@ -5,7 +5,7 @@ import LeafletMap from "./components/LeafletMap/LeafletMap";
 import FormAddElements from "./components/FormAddElements/FormAddElements";
 import Table from "./components/Table/Table";
 import SecondTable from "./components/SecondTable/SecondTable";
-import Navigation from "./components/Navigation/Navigation";
+import Header from "./components/Header/Header";
 import { NotificationContainer } from 'react-notifications';
 import "react-notifications/lib/notifications.css";
 import NotificationService from './services/NotificationService';
@@ -175,7 +175,7 @@ function App() {
 
   return (
     <div className="App">
-      <Navigation />
+      <Header />
       <div className="elements-container">
         <LeafletMap
           handlePolygonClick={handlePolygonClick}
