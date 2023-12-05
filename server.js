@@ -316,7 +316,7 @@ app.get("/elements", (req, res) => {
   });
 });
 
-app.get("/elements/:id_expl_dz", (req, res) => {
+app.get("/elements/:expl_dz_id", (req, res) => {
   const expl_dz_id = req.params.expl_dz_id;
   const query = `
     SELECT id_elmts, expl_dz_id, name_elmns, cnt_elmnt

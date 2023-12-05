@@ -155,7 +155,6 @@ const FormAddWorks = ({
       formWorksData.date_work || new Date(Date.now()).toISOString();
 
     let cleanedObjectidInput = objectidInput.replace(/_/g, '');
-    console.log(cleanedObjectidInput);
 
     if (isChecked === false) {
       cleanedObjectidInput = null;

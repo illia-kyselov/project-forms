@@ -251,14 +251,12 @@ function App() {
             }
           </div>
 
-          {/* {showSecondTable &&
+          {showSecondTable &&
             <div className="buttons-panel">
               <button className="buttons-panel__button">
                 <img src={icon} alt="Icon" className="buttons-panel__icon" /> Зберегти
               </button>
-
-              <button className="buttons-panel__button">Скасувати запис</button>
-            </div>} */}
+            </div>}
         </div>
       </div>
       <NotificationContainer />
