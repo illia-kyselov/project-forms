@@ -38,6 +38,18 @@ function App() {
   const [isChecked, setIsChecked] = useState(true);
   const [invalidInputs, setInvalidInputs] = useState([]);
 
+
+  const [tableToInsert, setTableToInsert] = useState([]);
+  const [workToInsert, setWorkToInsert] = useState([]);
+  const [visibleButtonInsert, setVisibleButtonInsert] = useState(true);
+  const [formAddElementsData, setformAddElementsData] = useState({
+    tableId: selectedRowData,
+    element: "",
+    quantity: 0,
+  });
+
+  console.log(formAddElementsData);
+
   const handleRowClick = (markerId) => {
     setFocusMarker(markerId);
   };
@@ -75,14 +87,6 @@ function App() {
         console.error("Error fetching polygon data", error);
       });
   };
-
-  console.log(selectedRowData);
-
-  const [formAddElementsData, setformAddElementsData] = useState({
-    tableId: selectedRowData,
-    element: "",
-    quantity: 0,
-  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -175,6 +179,38 @@ function App() {
     setDraggableDzMarkerShow(data);
   };
 
+  const handleSendAllData = async () => {
+    try {
+      await fetch("http://localhost:3001/work_table", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(workToInsert)
+      });
+
+      for (const row of tableToInsert) {
+        const response = await fetch("http://localhost:3001/expl_dz", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(row),
+        });
+
+        if (!response.ok) {
+          NotificationService.showWarningNotification('Будь ласка, заповніть всі поля та спробуйте ще раз!');
+        }
+      }
+
+      NotificationService.showInfoNotification('Всі данні надіслані');
+      setVisibleButtonInsert(false);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+
   return (
     <div className="App">
       <Header />
@@ -209,6 +245,7 @@ function App() {
             idFormAddWorks={idFormAddWorks}
             isChecked={isChecked}
             setIsChecked={setIsChecked}
+            setWorkToInsert={setWorkToInsert}
           />
           <div className="flex">
             {buttonAddDocPressed && (
@@ -234,6 +271,7 @@ function App() {
                 focusMarker={focusMarker}
                 buttonAddDocPressed={buttonAddDocPressed}
                 isChecked={isChecked}
+                setTableToInsert={setTableToInsert}
               />
             )}
             {showSecondTable && dataTable.length > 0 &&
@@ -251,9 +289,12 @@ function App() {
             }
           </div>
 
-          {showSecondTable &&
+          {showSecondTable && visibleButtonInsert &&
             <div className="buttons-panel">
-              <button className="buttons-panel__button">
+              <button
+                className="buttons-panel__button"
+                onClick={handleSendAllData}
+              >
                 <img src={icon} alt="Icon" className="buttons-panel__icon" /> Зберегти
               </button>
             </div>}

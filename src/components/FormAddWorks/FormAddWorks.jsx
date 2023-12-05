@@ -14,6 +14,7 @@ const FormAddWorks = ({
   setIdFormAddWorks,
   idFormAddWorks,
   isChecked,
+  setWorkToInsert,
   setIsChecked,
 }) => {
   const [options, setOptions] = useState([]);
@@ -159,6 +160,8 @@ const FormAddWorks = ({
     if (isChecked === false) {
       cleanedObjectidInput = null;
     }
+
+    setWorkToInsert(formWorksData);
 
     fetch("http://localhost:3001/work_table", {
       method: "POST",

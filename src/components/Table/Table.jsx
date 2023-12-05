@@ -34,6 +34,7 @@ const Table = ({
   setFocusMarker,
   focusMarker,
   isChecked,
+  setTableToInsert,
 }) => {
   const selectedRowRef = useRef(null);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -157,21 +158,23 @@ const Table = ({
         work_uuid: idFormAddWorks,
       }));
 
-      const responses = await Promise.all(
-        rowsToInsert.map((row) =>
-          fetch("http://localhost:3001/expl_dz", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(row),
-          }).then((response) => {
-            if (!response.ok) {
-              NotificationService.showWarningNotification('Будь ласка, заповніть всі поля та спробуйте ще раз!');
-            }
-          })
-        )
-      );
+      setTableToInsert(rowsToInsert);
+      
+      // const responses = await Promise.all(
+      //   rowsToInsert.map((row) =>
+      //     fetch("http://localhost:3001/expl_dz", {
+      //       method: "POST",
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //       },
+      //       body: JSON.stringify(row),
+      //     }).then((response) => {
+      //       if (!response.ok) {
+      //         NotificationService.showWarningNotification('Будь ласка, заповніть всі поля та спробуйте ще раз!');
+      //       }
+      //     })
+      //   )
+      // );
       NotificationService.showSuccessNotification('Данні успішно відправлені');
 
       setShowSecondTable(true);
