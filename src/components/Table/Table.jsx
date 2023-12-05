@@ -154,7 +154,7 @@ const Table = ({
         num_dz: row.num_pdr,
         dz_form: selectedFormByRow[row.id],
         id_disl_dz: row.id,
-        work_id: idFormAddWorks,
+        work_uuid: idFormAddWorks,
       }));
 
       const responses = await Promise.all(

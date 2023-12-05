@@ -1,6 +1,7 @@
 const express = require("express");
 const { Client } = require("pg");
 const cors = require("cors");
+const { v4: uuidv4 } = require("uuid");
 
 const app = express();
 const port = 3001;
@@ -231,7 +232,7 @@ app.get("/dz/filteredPoints/:lat/:lng", (req, res) => {
 
 app.get("/work_table", (req, res) => {
   const query =
-    "SELECT id_wrk_tbl, type_work, is_doc, id_doc, address, date_work, pers_work FROM exploitation.work_table";
+    "SELECT id_wrk_tbl, type_work, is_doc, id_doc, address, date_work, pers_work, uuid FROM exploitation.work_table";
   client.query(query, (err, result) => {
     if (err) {
       console.error("Error executing query", err);
@@ -245,6 +246,7 @@ app.get("/work_table", (req, res) => {
         address: row.address,
         date_work: row.date_work,
         pers_work: row.pers_work,
+        uuid: row.uuid,
       }));
       res.json(data);
     }
@@ -314,7 +316,7 @@ app.get("/elements", (req, res) => {
   });
 });
 
-app.get("/elements/:expl_dz_id", (req, res) => {
+app.get("/elements/:id_expl_dz", (req, res) => {
   const expl_dz_id = req.params.expl_dz_id;
   const query = `
     SELECT id_elmts, expl_dz_id, name_elmns, cnt_elmnt
@@ -425,10 +427,11 @@ app.post("/dz", (req, res) => {
 
 app.post("/work_table", (req, res) => {
   const formWorksData = req.body;
+  const uuid = uuidv4();
 
   const query = `
-  INSERT INTO exploitation.work_table (type_work, is_doc, id_doc, address, date_work, pers_work)
-  VALUES ($1, $2, $3, $4, $5, $6)
+  INSERT INTO exploitation.work_table (type_work, is_doc, id_doc, address, date_work, pers_work, uuid)
+  VALUES ($1, $2, $3, $4, $5, $6, $7)
   RETURNING id_wrk_tbl;
 `;
 
@@ -439,6 +442,7 @@ app.post("/work_table", (req, res) => {
     formWorksData.address,
     formWorksData.date_work,
     formWorksData.pers_work,
+    uuid,
   ];
 
   client.query(query, values, (err, result) => {
@@ -446,11 +450,11 @@ app.post("/work_table", (req, res) => {
       console.error("Error inserting data into database", err);
       res.status(500).send("Error inserting data into database");
     } else {
-      const newId = result.rows[0].id_wrk_tbl;
+      // const newId = result.rows[0].id_wrk_tbl;
 
       res.json({
         message: "Data successfully inserted into database",
-        id_wrk_tbl: newId,
+        id_wrk_tbl: uuid,
       });
     }
   });
@@ -460,7 +464,7 @@ app.post("/expl_dz", (req, res) => {
   const formData = req.body;
 
   const query = `
-    INSERT INTO exploitation.expl_dz (is_dz, num_dz, dz_form, id_disl_dz, work_id)
+    INSERT INTO exploitation.expl_dz (is_dz, num_dz, dz_form, id_disl_dz, work_uuid)
     VALUES ($1, $2, $3, $4, $5)
   `;
 
@@ -469,7 +473,7 @@ app.post("/expl_dz", (req, res) => {
     formData.num_dz,
     formData.dz_form,
     formData.id_disl_dz,
-    formData.work_id,
+    formData.work_uuid,
   ];
 
   client.query(query, values, (err, result) => {

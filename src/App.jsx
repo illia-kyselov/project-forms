@@ -76,6 +76,8 @@ function App() {
       });
   };
 
+  console.log(selectedRowData);
+
   const [formAddElementsData, setformAddElementsData] = useState({
     tableId: selectedRowData,
     element: "",
