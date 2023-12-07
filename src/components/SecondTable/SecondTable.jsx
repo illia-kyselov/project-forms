@@ -13,19 +13,23 @@ const SecondTable = ({
   handleRemoveElements,
   handleSubmitElements,
   invalidInputs,
+  handleUpdateElements,
+  showUpdateElements,
+  setShowUpdateElements,
+  selectedElement,
+  setSelectedElement,
+  allElementsData,
+  setAllElementsData,
 }) => {
   const [dataTable, setDataTable] = useState([]);
   const tableRef = useRef();
-  const [showUpdateElements, setShowUpdateElements] = useState(false);
-  const [selectedElement, setSelectedElement] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (dataSecondTable) {
-          const response = await fetch(`http://localhost:3001/elements/${selectedRowData}`);
-          const data = await response.json();
-          setDataTable(data);
+          const filteredData = allElementsData.filter(element => element.tableId === selectedRowData);
+          setDataTable(filteredData);
         } else {
           setDataTable([]);
         }
@@ -39,7 +43,7 @@ const SecondTable = ({
     } else {
       setDataTable([]);
     }
-  }, [dataSecondTable, selectedRowData, dataTable]);
+  }, [dataSecondTable, selectedRowData, allElementsData]);
 
   const deleteData = async (id) => {
     try {
@@ -75,6 +79,8 @@ const SecondTable = ({
     setShowUpdateElements(true);
   }
 
+  console.log(selectedElement);
+
   return (
     <div className="form-container-inside form-container-inside-width">
       <label className="block-label">Елементи до ДЗ № {dataSecondTable || '______'}</label>
@@ -83,8 +89,8 @@ const SecondTable = ({
           <table>
             <thead>
               <tr>
-                <th>№ з/п</th>
-                <th>expl_dz_id</th>
+                {/* <th>№ з/п</th> */}
+                <th>uuid</th>
                 <th>Назва елемента</th>
                 <th>Кількість елементів</th>
                 <th></th>
@@ -97,15 +103,15 @@ const SecondTable = ({
                   key={element.id_elmts}
                   onDoubleClick={() => handleShowUpdateForm(element)}
                 >
-                  <td>{element.id_elmts}</td>
+                  {/* <td>{element.id_elmts}</td> */}
                   <td>
-                    <span>{element.expl_dz_id}</span>
+                    <span>{element.tableId}</span>
                   </td>
                   <td>
-                    <span>{element.name_elmns}</span>
+                    <span>{element.element}</span>
                   </td>
                   <td>
-                    <span>{element.cnt_elmnt}</span>
+                    <span>{element.quantity}</span>
                   </td>
                   <td>
                     <button
@@ -142,6 +148,10 @@ const SecondTable = ({
                   <FormUpdateElementsInfo
                     selectedElement={selectedElement}
                     setShowUpdateElements={setShowUpdateElements}
+                    handleUpdateElements={handleUpdateElements}
+                    invalidInputs={invalidInputs}
+                    setAllElementsData={setAllElementsData}
+                    allElementsData={allElementsData}
                   />
                 </div>
               </div>

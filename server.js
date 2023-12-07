@@ -277,7 +277,7 @@ app.get("/expl_dz", (req, res) => {
 app.get("/expl_dz/:expl_dz_id", (req, res) => {
   const expl_dz_id = req.params.expl_dz_id;
   const query = `
-    SELECT id_expl_dz, id_disl_dz 
+    SELECT id_expl_dz, id_disl_dz, uuid
     FROM exploitation.expl_dz 
     WHERE id_disl_dz = $1
   `;
@@ -291,6 +291,7 @@ app.get("/expl_dz/:expl_dz_id", (req, res) => {
       const data = result.rows.map((row) => ({
         id_expl_dz: row.id_expl_dz,
         id_disl_dz: row.id_disl_dz,
+        uuid: row.uuid,
       }));
       res.json(data);
     }
@@ -316,15 +317,15 @@ app.get("/elements", (req, res) => {
   });
 });
 
-app.get("/elements/:expl_dz_id", (req, res) => {
-  const expl_dz_id = req.params.expl_dz_id;
+app.get("/elements/:uuid", (req, res) => {
+  const uuid = req.params.uuid;
   const query = `
-    SELECT id_elmts, expl_dz_id, name_elmns, cnt_elmnt
+    SELECT id_elmts, uuid, name_elmns, cnt_elmnt
     FROM exploitation.elements
-    WHERE expl_dz_id = $1
+    WHERE uuid = $1
   `;
 
-  const values = [expl_dz_id];
+  const values = [uuid];
 
   client.query(query, values, (err, result) => {
     if (err) {
@@ -333,7 +334,7 @@ app.get("/elements/:expl_dz_id", (req, res) => {
     } else {
       const data = result.rows.map((row) => ({
         id_elmts: row.id_elmts,
-        expl_dz_id: row.expl_dz_id,
+        uuid: row.uuid,
         name_elmns: row.name_elmns,
         cnt_elmnt: row.cnt_elmnt,
       }));
@@ -462,10 +463,11 @@ app.post("/work_table", (req, res) => {
 
 app.post("/expl_dz", (req, res) => {
   const formData = req.body;
+  const uuid = uuidv4();
 
   const query = `
-    INSERT INTO exploitation.expl_dz (is_dz, num_dz, dz_form, id_disl_dz, work_uuid)
-    VALUES ($1, $2, $3, $4, $5)
+    INSERT INTO exploitation.expl_dz (is_dz, num_dz, dz_form, id_disl_dz, work_uuid, uuid)
+    VALUES ($1, $2, $3, $4, $5, $6)
   `;
 
   const values = [
@@ -474,6 +476,7 @@ app.post("/expl_dz", (req, res) => {
     formData.dz_form,
     formData.id_disl_dz,
     formData.work_uuid,
+    uuid,
   ];
 
   client.query(query, values, (err, result) => {
@@ -490,7 +493,7 @@ app.post("/elements", (req, res) => {
   const formData = req.body;
 
   const query = `
-    INSERT INTO exploitation.elements (expl_dz_id, name_elmns, cnt_elmnt)
+    INSERT INTO exploitation.elements (uuid, name_elmns, cnt_elmnt)
     VALUES ($1, $2, $3)
   `;
 
@@ -596,11 +599,11 @@ app.delete("/expl_dz/table/:rowId", (req, res) => {
   });
 });
 
-app.delete("/elements/table/:rowId", (req, res) => {
+app.delete("/elements/table/:uuid", (req, res) => {
   const rowIdExplDzToDelete = req.params.rowId;
 
   const query = {
-    text: "DELETE FROM exploitation.elements WHERE expl_dz_id IN (SELECT id_expl_dz FROM exploitation.expl_dz WHERE id_expl_dz = $1)",
+    text: "DELETE FROM exploitation.elements WHERE uuid IN (SELECT uuid FROM exploitation.expl_dz WHERE uuid = $1)",
     values: [rowIdExplDzToDelete],
   };
 

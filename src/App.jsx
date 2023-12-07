@@ -10,6 +10,9 @@ import { NotificationContainer } from 'react-notifications';
 import "react-notifications/lib/notifications.css";
 import NotificationService from './services/NotificationService';
 import icon from '../src/img/saveIcon.png';
+import { validateEmptyInputs } from "./helpers/validate-empty-inputs";
+
+import { v4 as uuidv4 } from 'uuid';
 
 function App() {
   // const [showAddInfoForm, setShowAddInfoForm] = useState(false);
@@ -38,6 +41,7 @@ function App() {
   const [isChecked, setIsChecked] = useState(true);
   const [invalidInputs, setInvalidInputs] = useState([]);
 
+  const [selectedElement, setSelectedElement] = useState(null);
 
   const [tableToInsert, setTableToInsert] = useState([]);
   const [workToInsert, setWorkToInsert] = useState([]);
@@ -47,8 +51,17 @@ function App() {
     element: "",
     quantity: 0,
   });
+  const [formData, setFormData] = useState({
+    element: '',
+    quantity: ''
+  });
+  const [allElementsData, setAllElementsData] = useState([]);
+  const [showUpdateElements, setShowUpdateElements] = useState(false);
 
-  console.log(formAddElementsData);
+  console.log(allElementsData);
+
+  const emptyInputs = validateEmptyInputs(formData);
+  const hasEmptyInputs = emptyInputs.length > 0;
 
   const handleRowClick = (markerId) => {
     setFocusMarker(markerId);
@@ -99,7 +112,7 @@ function App() {
     }));
   };
 
-  const handleSubmitElements = async (e) => {
+  const handleSubmitElements = (e) => {
     e.preventDefault();
 
     setInvalidInputs([]);
@@ -110,46 +123,57 @@ function App() {
       return;
     }
 
-    if (formAddElementsData.quantity === 0) {
-      setInvalidInputs((prevInvalidInputs) => [...prevInvalidInputs, "quantity"]);
-      NotificationService.showWarningNotification('Введіть кількість елементів');
-      return;
-    }
-
-    if (formAddElementsData.quantity <= 0) {
+    if (formAddElementsData.quantity === 0 || formAddElementsData.quantity < 0) {
       setInvalidInputs((prevInvalidInputs) => [...prevInvalidInputs, "quantity"]);
       NotificationService.showWarningNotification('Кількість елементів повинна бути більше 0');
       return;
     }
 
-    try {
-      const response = await fetch("http://localhost:3001/elements", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ...formAddElementsData, tableId: selectedRowData }),
-      });
+    const newData = {
+      ...formAddElementsData,
+      tableId: selectedRowData,
+      id: uuidv4()
+    };
 
-      if (!response.ok) {
-        NotificationService.showWarningNotification('Будь ласка, заповніть всі поля та спробуйте ще раз!');
-        throw new Error(`Error: ${response.statusText}`);
-      } else {
-        NotificationService.showSuccessNotification('Данні успішно відправлені');
-        handleRemoveElements(e);
-      }
-
-      const data = await response.json();
-      setformAddElementsData({
-        tableId: selectedRowData,
-        element: "",
-        quantity: 0,
-      });
-
-    } catch (error) {
-      console.error("Error sending data:", error);
-    }
+    setAllElementsData((prevData) => [...prevData, newData]);
+    NotificationService.showSuccessNotification('Данні успішно додані');
+    setformAddElementsData({
+      tableId: selectedRowData,
+      element: "",
+      quantity: 0,
+    });
+    handleRemoveElements(e);
   };
+
+  const handleUpdateElements = (e) => {
+    e.preventDefault();
+
+    if (hasEmptyInputs) {
+      setInvalidInputs(emptyInputs);
+      NotificationService.showWarningNotification('Будь ласка заповніть всі поля!');
+      return;
+    }
+
+    if (formData.quantity <= 0) {
+      setInvalidInputs([...invalidInputs, "quantity"]);
+      NotificationService.showWarningNotification('Кількість елементів повинна бути більше 0');
+      return;
+    }
+
+    const elementId = selectedElement.id_elmts;
+
+    const updatedData = allElementsData.map((element) => {
+      if (element.id_elmts === elementId) {
+        return { ...element, ...formData };
+      }
+      return element;
+    });
+
+    setAllElementsData(updatedData);
+    NotificationService.showSuccessNotification('Данні успішно оновлені');
+    setShowUpdateElements(false);
+  };
+
 
   const handleDzClick = (markerId) => {
     setSelectedMarkerId(markerId);
@@ -181,14 +205,14 @@ function App() {
 
   const handleSendAllData = async () => {
     try {
-      await fetch("http://localhost:3001/work_table", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(workToInsert)
-      });
 
+      // await fetch("http://localhost:3001/work_table", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(workToInsert)
+      // });
       for (const row of tableToInsert) {
         const response = await fetch("http://localhost:3001/expl_dz", {
           method: "POST",
@@ -203,12 +227,27 @@ function App() {
         }
       }
 
-      NotificationService.showInfoNotification('Всі данні надіслані');
+      for (const element of allElementsData) {
+        const response = await fetch("http://localhost:3001/elements", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ...element, tableId: selectedRowData }),
+        });
+
+        if (!response.ok) {
+          NotificationService.showWarningNotification('Помилка під час надсилання даних елементів');
+        }
+      }
+
+      NotificationService.showInfoNotification('Всі дані надіслані');
       setVisibleButtonInsert(false);
     } catch (error) {
       console.error("Error:", error);
     }
   };
+
 
 
   return (
@@ -285,6 +324,13 @@ function App() {
                 handleRemoveElements={handleRemoveElements}
                 handleSubmitElements={handleSubmitElements}
                 invalidInputs={invalidInputs}
+                handleUpdateElements={handleUpdateElements}
+                showUpdateElements={showUpdateElements}
+                setShowUpdateElements={setShowUpdateElements}
+                selectedElement={selectedElement}
+                setSelectedElement={setSelectedElement}
+                allElementsData={allElementsData}
+                setAllElementsData={setAllElementsData}
               />
             }
           </div>

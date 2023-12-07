@@ -5,22 +5,37 @@ import { validateEmptyInputs } from "../../helpers/validate-empty-inputs";
 import Input from "../Input/Input";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
-const FormUpdateElementsInfo = ({ selectedElement, setShowUpdateElements, }) => {
+const FormUpdateElementsInfo = ({
+  selectedElement,
+  setShowUpdateElements,
+  invalidInputs,
+  allElementsData,
+  setAllElementsData,
+}) => {
   const [elements, setElements] = useState([]);
   const [formData, setFormData] = useState({
     element: '',
     quantity: ''
   });
 
-  const [invalidInputs, setInvalidInputs] = useState([]);
-
-  const emptyInputs = validateEmptyInputs(formData);
-
-  const hasEmptyInputs = emptyInputs.length > 0;
-
   useEffect(() => {
     fetchData();
   }, []);
+
+  const handleUpdateElements = (e) => {
+    e.preventDefault();
+    const elementId = selectedElement.id;
+
+    const updatedData = allElementsData.map((element) => {
+      if (element.id === elementId) {
+        return { ...element, ...formData };
+      }
+      return element;
+    });
+
+    setAllElementsData(updatedData);
+    setShowUpdateElements(false);
+  };
 
   useEffect(() => {
     if (selectedElement) {
@@ -43,48 +58,15 @@ const FormUpdateElementsInfo = ({ selectedElement, setShowUpdateElements, }) => 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    const selectedElement = elements.find((element) => element.name_elmns === value);
+
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
+      id_elmts: selectedElement ? selectedElement.id_elmts : ''
     });
   };
 
-  const handleUpdateElements = async (e) => {
-    e.preventDefault();
-
-    if (hasEmptyInputs) {
-      setInvalidInputs(emptyInputs);
-      NotificationService.showWarningNotification('Будь ласка заповніть всі поля!');
-      return;
-    }
-
-    if (formData.quantity <= 0) {
-      setInvalidInputs([...invalidInputs, "quantity"]);
-      NotificationService.showWarningNotification('Кількість елементів повинна бути більше 0');
-      return;
-    }
-
-    try {
-      const elementId = selectedElement.id_elmts;
-
-      const response = await fetch(`http://localhost:3001/elements/${elementId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        NotificationService.showWarningNotification('Будь ласка, заповніть всі поля та спробуйте ще раз!');
-      } else {
-        NotificationService.showSuccessNotification('Данні успішно оновлені');
-        setShowUpdateElements(false);
-      }
-    } catch (error) {
-      console.error("Error updating data:", error);
-    }
-  };
 
   const handleEscapeClick = () => {
     setShowUpdateElements(false)

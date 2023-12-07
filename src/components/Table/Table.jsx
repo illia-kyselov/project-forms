@@ -246,7 +246,7 @@ const Table = ({
       const response = await fetch(`http://localhost:3001/expl_dz/${rowId}`);
       const data = await response.json();
 
-      setSelectedRowData(data[data.length - 1].id_expl_dz);
+      setSelectedRowData(data[data.length - 1].uuid);
 
     } catch (error) {
       console.error("Error fetching data for SecondTable", error);

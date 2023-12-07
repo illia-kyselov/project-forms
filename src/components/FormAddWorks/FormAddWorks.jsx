@@ -161,7 +161,12 @@ const FormAddWorks = ({
       cleanedObjectidInput = null;
     }
 
-    setWorkToInsert(formWorksData);
+    setWorkToInsert({
+      ...formWorksData,
+      is_doc: is_doc,
+      id_doc: cleanedObjectidInput,
+      date_work: date_work,
+    });
 
     fetch("http://localhost:3001/work_table", {
       method: "POST",
