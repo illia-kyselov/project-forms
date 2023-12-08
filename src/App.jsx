@@ -33,6 +33,7 @@ function App() {
   const [draggableDzMarkerWKT, setDraggableDzMarkerWKT] = useState(false);
 
   const [idFormAddWorks, setIdFormAddWorks] = useState();
+  const [dataSubmitted, setDataSubmitted] = useState(false);
 
   const [buttonAddDocPressed, setButtonAddDocPressed] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
@@ -40,11 +41,16 @@ function App() {
   const [pushToDZCalled, setPushToDZCalled] = useState(false);
   const [isChecked, setIsChecked] = useState(true);
   const [invalidInputs, setInvalidInputs] = useState([]);
+  const [idTable, setIdTable] = useState();
+
 
   const [selectedElement, setSelectedElement] = useState(null);
 
-  const [tableToInsert, setTableToInsert] = useState([]);
   const [workToInsert, setWorkToInsert] = useState([]);
+  const [tableToInsert, setTableToInsert] = useState([]);
+  const [allElementsData, setAllElementsData] = useState([]);
+
+
   const [visibleButtonInsert, setVisibleButtonInsert] = useState(true);
   const [formAddElementsData, setformAddElementsData] = useState({
     tableId: selectedRowData,
@@ -55,10 +61,19 @@ function App() {
     element: '',
     quantity: ''
   });
-  const [allElementsData, setAllElementsData] = useState([]);
+  const [formWorksData, setFormWorksData] = useState({
+    type_work: "",
+    is_doc: true,
+    id_doc: 0,
+    address: "",
+    date_work: "",
+    pers_work: "",
+  });
   const [showUpdateElements, setShowUpdateElements] = useState(false);
 
-  console.log(allElementsData);
+  // console.log('allElementsData:', allElementsData);
+  // console.log('workToInsert:', workToInsert);
+  // console.log('workToInsert:', workToInsert);
 
   const emptyInputs = validateEmptyInputs(formData);
   const hasEmptyInputs = emptyInputs.length > 0;
@@ -203,23 +218,86 @@ function App() {
     setDraggableDzMarkerShow(data);
   };
 
+  const date_work =
+    formWorksData.date_work || new Date(Date.now()).toISOString();
+  const is_doc = isChecked;
+
+  const selectedInfoFromTableRowClick =
+    polygonTableRowClick.objectid && polygonTableRowClick.pro_name
+      ? `${polygonTableRowClick.objectid} / ${polygonTableRowClick.pro_name}`
+      : "";
+
+  const selectedInfo =
+    (selectedPolygon
+      ? `${selectedPolygon.objectid} / ${selectedPolygon.pro_name}`
+      : selectedInfoFromTableRowClick);
+
+  let objectidInput = null;
+
+  if (selectedInfo !== selectedMarkerId) {
+    const parts = selectedInfo.split('/').map(part => part.trim());
+    objectidInput = parts.length > 0 ? parts[0] : null;
+
+    objectidInput = objectidInput.replace(/_/g, '');
+  }
+
+  let cleanedObjectidInput = objectidInput.replace(/_/g, '');
+
+
   const handleSendAllData = async () => {
     try {
+      const workResponse = await fetch("http://localhost:3001/work_table", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...workToInsert,
+          is_doc: is_doc,
+          id_doc: cleanedObjectidInput,
+          date_work: date_work,
+        })
+      });
 
-      // await fetch("http://localhost:3001/work_table", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(workToInsert)
-      // });
+      if (!workResponse.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const workData = await workResponse.json();
+
+      console.log(workData);
+
+      const { id_wrk_tbl } = workData;
+
+      setIdFormAddWorks(workData.id_wrk_tbl);
+
+      const workId = id_wrk_tbl;
+
+      setIdTable(workData.id_wrk_tbl);
+
+      setFormWorksData({
+        type_work: "",
+        is_doc: true,
+        id_doc: objectidInput,
+        address: "",
+        date_work: "",
+        pers_work: "",
+      });
+
+
+      NotificationService.showSuccessNotification('Данні успішно відправлені');
+      setDataSubmitted(true);
+
       for (const row of tableToInsert) {
+        const dataToSend = { ...row, work_uuid: workId };
+        console.log(dataToSend);
+
         const response = await fetch("http://localhost:3001/expl_dz", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(row),
+          body: JSON.stringify(dataToSend),
         });
 
         if (!response.ok) {
@@ -247,8 +325,6 @@ function App() {
       console.error("Error:", error);
     }
   };
-
-
 
   return (
     <div className="App">
@@ -285,6 +361,10 @@ function App() {
             isChecked={isChecked}
             setIsChecked={setIsChecked}
             setWorkToInsert={setWorkToInsert}
+            idTable={idTable}
+            dataSubmitted={dataSubmitted}
+            formWorksData={formWorksData}
+            setFormWorksData={setFormWorksData}
           />
           <div className="flex">
             {buttonAddDocPressed && (

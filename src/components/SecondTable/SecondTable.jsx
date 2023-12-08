@@ -79,7 +79,6 @@ const SecondTable = ({
     setShowUpdateElements(true);
   }
 
-  console.log(selectedElement);
 
   return (
     <div className="form-container-inside form-container-inside-width">

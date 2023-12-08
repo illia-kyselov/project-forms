@@ -16,22 +16,15 @@ const FormAddWorks = ({
   isChecked,
   setWorkToInsert,
   setIsChecked,
+  idTable,
+  dataSubmitted,
+  formWorksData,
+  setFormWorksData
 }) => {
   const [options, setOptions] = useState([]);
   const [formObjectId, setFormObjectId] = useState("");
   const [selectedDocValue, setSelectedDocValue] = useState("");
-  const [dataSubmitted, setDataSubmitted] = useState(false);
-  const [idTable, setIdTable] = useState();
   const [invalidInputs, setInvalidInputs] = useState([]);
-
-  const [formWorksData, setFormWorksData] = useState({
-    type_work: "",
-    is_doc: true,
-    id_doc: 0,
-    address: "",
-    date_work: "",
-    pers_work: "",
-  });
 
   useEffect(() => {
     fetchData();
@@ -138,11 +131,7 @@ const FormAddWorks = ({
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (dataSubmitted) {
-      return;
-    }
-
-    if (dataSubmitted || hasEmptyInputs) {
+    if (hasEmptyInputs) {
       if (hasEmptyInputs) {
         setInvalidInputs(emptyInputs);
         NotificationService.showWarningNotification('Будь ласка заповніть всі поля!');
@@ -161,54 +150,53 @@ const FormAddWorks = ({
       cleanedObjectidInput = null;
     }
 
+    setButtonAddDocPressed(true);
+
     setWorkToInsert({
-      ...formWorksData,
-      is_doc: is_doc,
-      id_doc: cleanedObjectidInput,
-      date_work: date_work,
+      ...formWorksData
     });
 
-    fetch("http://localhost:3001/work_table", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        ...formWorksData,
-        is_doc: is_doc,
-        id_doc: cleanedObjectidInput,
-        date_work: date_work,
-      }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        setButtonAddDocPressed(true);
+    // fetch("http://localhost:3001/work_table", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     ...formWorksData,
+    //     is_doc: is_doc,
+    //     id_doc: cleanedObjectidInput,
+    //     date_work: date_work,
+    //   }),
+    // })
+    //   .then((response) => {
+    //     if (!response.ok) {
+    //       throw new Error("Network response was not ok");
+    //     }
+    //     setButtonAddDocPressed(true);
 
-        return response.json();
-      })
-      .then((data) => {
-        setIdFormAddWorks(data.id_wrk_tbl);
-        setIdTable(data.id_wrk_tbl);
-      })
-      .then((data) => {
-        setFormWorksData({
-          type_work: "",
-          is_doc: true,
-          id_doc: objectidInput,
-          address: "",
-          date_work: "",
-          pers_work: "",
-        });
-        NotificationService.showSuccessNotification('Данні успішно відправлені');
-        setDataSubmitted(true);
-      })
-      .catch((error) => {
-        NotificationService.showWarningNotification('Будь ласка, заповніть всі поля та спробуйте ще раз!');
-        setDataSubmitted(false);
-        console.error("Error inserting data into the database", error);
-      });
+    //     return response.json();
+    //   })
+    //   .then((data) => {
+    //     setIdFormAddWorks(data.id_wrk_tbl);
+    //     setIdTable(data.id_wrk_tbl);
+    //   })
+    //   .then((data) => {
+    //     setFormWorksData({
+    //       type_work: "",
+    //       is_doc: true,
+    //       id_doc: objectidInput,
+    //       address: "",
+    //       date_work: "",
+    //       pers_work: "",
+    //     });
+    //     NotificationService.showSuccessNotification('Данні успішно відправлені');
+    //     setDataSubmitted(true);
+    //   })
+    //   .catch((error) => {
+    //     NotificationService.showWarningNotification('Будь ласка, заповніть всі поля та спробуйте ще раз!');
+    //     setDataSubmitted(false);
+    //     console.error("Error inserting data into the database", error);
+    //   });
   };
 
   const handleButtonClick = (e) => {

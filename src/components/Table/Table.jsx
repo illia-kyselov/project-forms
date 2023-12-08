@@ -156,10 +156,11 @@ const Table = ({
         dz_form: selectedFormByRow[row.id],
         id_disl_dz: row.id,
         work_uuid: idFormAddWorks,
+        uuid: row.uuid
       }));
 
       setTableToInsert(rowsToInsert);
-      
+
       // const responses = await Promise.all(
       //   rowsToInsert.map((row) =>
       //     fetch("http://localhost:3001/expl_dz", {
@@ -251,7 +252,6 @@ const Table = ({
     } catch (error) {
       console.error("Error fetching data for SecondTable", error);
     }
-
     setDataSecondTable(rowId);
   };
 
@@ -385,11 +385,9 @@ const Table = ({
           >
             Додати ДЗ
           </button>
-          {showButton &&
-            <button className="button-add-Dz" onClick={handleClickRemoveButton}>
-              Очистити
-            </button>
-          }
+          <button className="button-add-Dz" onClick={handleClickRemoveButton}>
+            Очистити
+          </button>
         </div>
         <table className="tableDz">
           <thead>
