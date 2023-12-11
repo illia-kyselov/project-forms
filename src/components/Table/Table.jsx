@@ -176,7 +176,7 @@ const Table = ({
       //     })
       //   )
       // );
-      NotificationService.showSuccessNotification('Данні успішно відправлені');
+      // NotificationService.showSuccessNotification('Данні успішно відправлені');
 
       setShowSecondTable(true);
       setShowButton(false);

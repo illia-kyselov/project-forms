@@ -242,7 +242,9 @@ function App() {
   }
 
   let cleanedObjectidInput = objectidInput.replace(/_/g, '');
-
+  if (isChecked === false) {
+    cleanedObjectidInput = null;
+  }
 
   const handleSendAllData = async () => {
     try {
@@ -318,6 +320,8 @@ function App() {
           NotificationService.showWarningNotification('Помилка під час надсилання даних елементів');
         }
       }
+
+      
 
       NotificationService.showInfoNotification('Всі дані надіслані');
       setVisibleButtonInsert(false);

@@ -138,18 +138,6 @@ const FormAddWorks = ({
       }
       return;
     }
-
-    const is_doc = isChecked;
-
-    const date_work =
-      formWorksData.date_work || new Date(Date.now()).toISOString();
-
-    let cleanedObjectidInput = objectidInput.replace(/_/g, '');
-
-    if (isChecked === false) {
-      cleanedObjectidInput = null;
-    }
-
     setButtonAddDocPressed(true);
 
     setWorkToInsert({
