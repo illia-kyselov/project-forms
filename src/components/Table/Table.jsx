@@ -35,6 +35,7 @@ const Table = ({
   focusMarker,
   isChecked,
   setTableToInsert,
+  tableToInsert,
 }) => {
   const selectedRowRef = useRef(null);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -243,16 +244,23 @@ const Table = ({
     handleRowClick(rowId);
     selectedRowRef.current = rowId;
 
-    try {
-      const response = await fetch(`http://localhost:3001/expl_dz/${rowId}`);
-      const data = await response.json();
+    // try {
+    //   const response = await fetch(`http://localhost:3001/expl_dz/${rowId}`);
+    //   const data = await response.json();
 
-      setSelectedRowData(data[data.length - 1].uuid);
+    //   setSelectedRowData(data[data.length - 1].uuid);
 
-    } catch (error) {
-      console.error("Error fetching data for SecondTable", error);
-    }
+    // } catch (error) {
+    //   console.error("Error fetching data for SecondTable", error);
+    // }
     setDataSecondTable(rowId);
+    const foundElement = tableToInsert.find((element) => element.id_disl_dz === rowId);
+    console.log(foundElement);
+
+
+    if (foundElement) {
+      setSelectedRowData(foundElement.uuid);
+    }
   };
 
   const handleInputChange = (e) => {
@@ -300,37 +308,37 @@ const Table = ({
     setFocusMarker(null);
   }
 
-  async function deleteRecordsById(rowId) {
-    try {
-      const elementsResponse = await fetch(`http://localhost:3001/elements/table/${rowId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+  // async function deleteRecordsById(rowId) {
+  //   try {
+  //     const elementsResponse = await fetch(`http://localhost:3001/elements/table/${rowId}`, {
+  //       method: 'DELETE',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     });
 
-      const explDzResponse = await fetch(`http://localhost:3001/expl_dz/table/${rowId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+  //     const explDzResponse = await fetch(`http://localhost:3001/expl_dz/table/${rowId}`, {
+  //       method: 'DELETE',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     });
 
-      if (explDzResponse.ok && elementsResponse.ok) {
-        if (rowId === focusMarker) {
-          setFocusMarker(null);
-        }
-        setData((prevData) => {
-          const updatedData = prevData.filter((element) => element.id !== rowId);
-          return updatedData;
-        });
-        NotificationService.showSuccessNotification('Дані успішно видалені');
-      }
-    } catch (error) {
-      NotificationService.showErrorNotification('Дані не видалені');
-      console.error('Error deleting record:', error);
-    }
-  }
+  //     if (explDzResponse.ok && elementsResponse.ok) {
+  //       if (rowId === focusMarker) {
+  //         setFocusMarker(null);
+  //       }
+  //       setData((prevData) => {
+  //         const updatedData = prevData.filter((element) => element.id !== rowId);
+  //         return updatedData;
+  //       });
+  //       NotificationService.showSuccessNotification('Дані успішно видалені');
+  //     }
+  //   } catch (error) {
+  //     NotificationService.showErrorNotification('Дані не видалені');
+  //     console.error('Error deleting record:', error);
+  //   }
+  // }
 
   return (
     <div className="form-container-inside form-container-inside-width">
@@ -429,25 +437,14 @@ const Table = ({
                   </select>
                 </td>
                 <td>
-                  {listGenerated ? (
-                    <button class="delete-icon">
-                      <img
-                        src={img}
-                        alt="Delete"
-                        className="delete-icon-svg"
-                        onClick={() => deleteRecordsById(row.id)}
-                      />
-                    </button>
-                  ) : (
-                    <button
-                      className="delete-icon"
-                      onClick={() => {
-                        deleteData(row.id);
-                      }}
-                    >
-                      X
-                    </button>
-                  )}
+                  <button
+                    className="delete-icon"
+                    onClick={() => {
+                      deleteData(row.id);
+                    }}
+                  >
+                    X
+                  </button>
                 </td>
               </tr>
             ))}

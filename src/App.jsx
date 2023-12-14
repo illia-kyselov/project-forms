@@ -71,8 +71,8 @@ function App() {
   });
   const [showUpdateElements, setShowUpdateElements] = useState(false);
 
-  // console.log('allElementsData:', allElementsData);
-  // console.log('workToInsert:', workToInsert);
+  console.log('allElementsData:', allElementsData);
+  // console.log('selectedRowData:', selectedRowData);
   // console.log('workToInsert:', workToInsert);
 
   const emptyInputs = validateEmptyInputs(formData);
@@ -201,7 +201,12 @@ function App() {
       return;
     }
 
-    setDataTable((prevData) => [...prevData, markerData]);
+    const dataWithUUID = {
+      ...markerData,
+      uuid: uuidv4()
+    };
+
+    setDataTable((prevData) => [...prevData, dataWithUUID]);
   };
 
   const handleClearTable = () => {
@@ -267,8 +272,6 @@ function App() {
 
       const workData = await workResponse.json();
 
-      console.log(workData);
-
       const { id_wrk_tbl } = workData;
 
       setIdFormAddWorks(workData.id_wrk_tbl);
@@ -286,13 +289,11 @@ function App() {
         pers_work: "",
       });
 
-
-      NotificationService.showSuccessNotification('Данні успішно відправлені');
       setDataSubmitted(true);
 
       for (const row of tableToInsert) {
         const dataToSend = { ...row, work_uuid: workId };
-        console.log(dataToSend);
+        console.log('dataToSend', dataToSend);
 
         const response = await fetch("http://localhost:3001/expl_dz", {
           method: "POST",
@@ -313,7 +314,7 @@ function App() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ ...element, tableId: selectedRowData }),
+          body: JSON.stringify({ ...element }),
         });
 
         if (!response.ok) {
@@ -321,7 +322,7 @@ function App() {
         }
       }
 
-      
+
 
       NotificationService.showInfoNotification('Всі дані надіслані');
       setVisibleButtonInsert(false);
@@ -395,6 +396,7 @@ function App() {
                 buttonAddDocPressed={buttonAddDocPressed}
                 isChecked={isChecked}
                 setTableToInsert={setTableToInsert}
+                tableToInsert={tableToInsert}
               />
             )}
             {showSecondTable && dataTable.length > 0 &&
@@ -415,6 +417,7 @@ function App() {
                 setSelectedElement={setSelectedElement}
                 allElementsData={allElementsData}
                 setAllElementsData={setAllElementsData}
+                setInvalidInputs={setInvalidInputs}
               />
             }
           </div>

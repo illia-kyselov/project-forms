@@ -463,7 +463,7 @@ app.post("/work_table", (req, res) => {
 
 app.post("/expl_dz", (req, res) => {
   const formData = req.body;
-  const uuid = uuidv4();
+  // const uuid = uuidv4();
 
   const query = `
     INSERT INTO exploitation.expl_dz (is_dz, num_dz, dz_form, id_disl_dz, work_uuid, uuid)
@@ -476,7 +476,7 @@ app.post("/expl_dz", (req, res) => {
     formData.dz_form,
     formData.id_disl_dz,
     formData.work_uuid,
-    uuid,
+    formData.uuid,
   ];
 
   client.query(query, values, (err, result) => {

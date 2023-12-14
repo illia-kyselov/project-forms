@@ -255,6 +255,7 @@ const LeafletMap = ({
     handleDzClick(markerId);
     const markerData = markers.find((marker) => marker.id === markerId);
     handleAddMarkerData(markerData);
+    console.log(markerData);
   };
 
   const filterMarkersByMapBounds = (polygonsInView) => {

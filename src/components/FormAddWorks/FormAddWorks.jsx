@@ -132,12 +132,14 @@ const FormAddWorks = ({
     e.preventDefault();
 
     if (hasEmptyInputs) {
-      if (hasEmptyInputs) {
-        setInvalidInputs(emptyInputs);
-        NotificationService.showWarningNotification('Будь ласка заповніть всі поля!');
-      }
+      setInvalidInputs(emptyInputs);
+      NotificationService.showWarningNotification('Будь ласка заповніть всі поля!');
       return;
     }
+    // if (selectedDocValue) {
+    //   NotificationService.showWarningNotification('Будь ласка оберіть документ');
+    //   return;
+    // }
     setButtonAddDocPressed(true);
 
     setWorkToInsert({

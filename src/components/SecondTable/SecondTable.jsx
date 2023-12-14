@@ -20,6 +20,7 @@ const SecondTable = ({
   setSelectedElement,
   allElementsData,
   setAllElementsData,
+  setInvalidInputs,
 }) => {
   const [dataTable, setDataTable] = useState([]);
   const tableRef = useRef();
@@ -45,25 +46,30 @@ const SecondTable = ({
     }
   }, [dataSecondTable, selectedRowData, allElementsData]);
 
-  const deleteData = async (id) => {
-    try {
-      const response = await fetch(`http://localhost:3001/elements/${id}`, {
-        method: 'DELETE'
-      });
+  // const deleteData = async (id) => {
+  //   try {
+  //     const response = await fetch(`http://localhost:3001/elements/${id}`, {
+  //       method: 'DELETE'
+  //     });
 
-      if (response.ok) {
-        setDataTable((prevData) => {
-          const updatedData = prevData.filter((element) => element.id_elmts !== id);
-          return updatedData;
-        });
-        NotificationService.showSuccessNotification('Данні успішно видалено');
-      } else {
-        NotificationService.showErrorNotification('Щось пішло не так');
-      }
-    } catch (error) {
-      console.error('Error deleting data', error);
-    }
-  };
+  //     if (response.ok) {
+  //       setDataTable((prevData) => {
+  //         const updatedData = prevData.filter((element) => element.id_elmts !== id);
+  //         return updatedData;
+  //       });
+  //       NotificationService.showSuccessNotification('Данні успішно видалено');
+  //     } else {
+  //       NotificationService.showErrorNotification('Щось пішло не так');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error deleting data', error);
+  //   }
+  // };
+
+  const handleDeleteElements = (e) => {
+    e.preventDefault();
+    
+  }
 
   const handleButtonClick = (e) => {
     e.preventDefault();
@@ -115,10 +121,13 @@ const SecondTable = ({
                   <td>
                     <button
                       className="delete-icon"
-                      onClick={() => deleteData(element.id_elmts)}
+                      // onClick={() => deleteData(element.id_elmts)}
+                      onClick={handleDeleteElements}
                     >
-                      <img className="delete-icon-svg" src={img} alt="Удалить" />
+                      X
+                      {/* <img className="delete-icon-svg" src={img} alt="Удалить" /> */}
                     </button>
+
                   </td>
                 </tr>
               ))}
@@ -151,6 +160,7 @@ const SecondTable = ({
                     invalidInputs={invalidInputs}
                     setAllElementsData={setAllElementsData}
                     allElementsData={allElementsData}
+                    setInvalidInputs={setInvalidInputs}
                   />
                 </div>
               </div>
