@@ -41,7 +41,7 @@ function App() {
   const [pushToDZCalled, setPushToDZCalled] = useState(false);
   const [isChecked, setIsChecked] = useState(true);
   const [invalidInputs, setInvalidInputs] = useState([]);
-  const [idTable, setIdTable] = useState();
+  const [uuidTable, setUuidTable] = useState();
 
 
   const [selectedElement, setSelectedElement] = useState(null);
@@ -71,7 +71,7 @@ function App() {
   });
   const [showUpdateElements, setShowUpdateElements] = useState(false);
 
-  console.log('allElementsData:', allElementsData);
+  console.log('uuidTable:', uuidTable);
   // console.log('selectedRowData:', selectedRowData);
   // console.log('workToInsert:', workToInsert);
 
@@ -278,7 +278,7 @@ function App() {
 
       const workId = id_wrk_tbl;
 
-      setIdTable(workData.id_wrk_tbl);
+      setUuidTable(workData.id_wrk_tbl);
 
       setFormWorksData({
         type_work: "",
@@ -366,7 +366,7 @@ function App() {
             isChecked={isChecked}
             setIsChecked={setIsChecked}
             setWorkToInsert={setWorkToInsert}
-            idTable={idTable}
+            uuidTable={uuidTable}
             dataSubmitted={dataSubmitted}
             formWorksData={formWorksData}
             setFormWorksData={setFormWorksData}

@@ -16,7 +16,7 @@ const FormAddWorks = ({
   isChecked,
   setWorkToInsert,
   setIsChecked,
-  idTable,
+  uuidTable,
   dataSubmitted,
   formWorksData,
   setFormWorksData
@@ -49,9 +49,9 @@ const FormAddWorks = ({
     handleChange(e);
   };
 
-  async function deleteRecordsById(id) {
+  async function deleteRecordsById(uuid) {
     try {
-      const elementsResponse = await fetch(`http://localhost:3001/elements/${id}`, {
+      const elementsResponse = await fetch(`http://localhost:3001/elements/${uuid}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -59,11 +59,11 @@ const FormAddWorks = ({
       });
 
       if (!elementsResponse.ok) {
-        NotificationService.showErrorNotification('Дані не видалені');
+        NotificationService.showErrorNotification('Дані не видалені 1');
         return;
       }
 
-      const explDzResponse = await fetch(`http://localhost:3001/expl_dz/${id}`, {
+      const explDzResponse = await fetch(`http://localhost:3001/expl_dz/${uuid}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -71,11 +71,11 @@ const FormAddWorks = ({
       });
 
       if (!explDzResponse.ok) {
-        NotificationService.showErrorNotification('Дані не видалені');
+        NotificationService.showErrorNotification('Дані не видалені 2');
         return;
       }
 
-      const workTableResponse = await fetch(`http://localhost:3001/work_table/${id}`, {
+      const workTableResponse = await fetch(`http://localhost:3001/work_table/${uuid}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ const FormAddWorks = ({
       });
 
       if (!workTableResponse.ok) {
-        NotificationService.showErrorNotification('Дані не видалені');
+        NotificationService.showErrorNotification('Дані не видалені 3');
         return;
       }
 
@@ -335,7 +335,7 @@ const FormAddWorks = ({
             {buttonAddDocPressed &&
               <button
                 className="form__button form__button-addForm form__button-delete"
-                onClick={() => deleteRecordsById(idTable)}
+                onClick={() => deleteRecordsById(uuidTable)}
                 type="button"
               >
                 Скасувати

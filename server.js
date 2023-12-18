@@ -511,31 +511,35 @@ app.post("/elements", (req, res) => {
 
 //delete
 
-app.delete("/elements/:id", (req, res) => {
-  const elementId = req.params.id;
+app.delete("/elements/:uuid", (req, res) => {
+  const receivedUuid = req.params.uuid;
 
-  const query = `
+  const queryDelete = `
     DELETE FROM exploitation.elements
-    WHERE id_elmts = $1
+    WHERE uuid IN (
+      SELECT uuid
+      FROM exploitation.expl_dz
+      WHERE work_uuid = $1
+    )
   `;
 
-  const values = [elementId];
+  const valuesDelete = [receivedUuid];
 
-  client.query(query, values, (err, result) => {
+  client.query(queryDelete, valuesDelete, (err, result) => {
     if (err) {
-      console.error("Error deleting data from database", err);
-      res.status(500).send("Error deleting data from database");
+      console.error("Error deleting data from elements", err);
+      res.status(500).send("Error deleting data from elements");
     } else {
-      res.json({ message: "Data successfully deleted from database" });
+      res.json({ message: "Data successfully deleted from elements table" });
     }
   });
 });
 
-app.delete("/work_table/:id", (req, res) => {
-  const idToDelete = req.params.id;
+app.delete("/work_table/:uuid", (req, res) => {
+  const idToDelete = req.params.uuid;
 
   const query = {
-    text: "DELETE FROM exploitation.work_table WHERE id_wrk_tbl = $1 RETURNING id_wrk_tbl",
+    text: "DELETE FROM exploitation.work_table WHERE uuid = $1 RETURNING uuid",
     values: [idToDelete],
   };
 
@@ -544,26 +548,26 @@ app.delete("/work_table/:id", (req, res) => {
       console.error("Error executing deletion query", err);
       res.status(500).send("Error executing deletion query");
     } else {
-      if (result.rows && result.rows[0] && result.rows[0].id_wrk_tbl) {
-        const deletedId = result.rows[0].id_wrk_tbl;
+      if (result.rows && result.rows[0] && result.rows[0].uuid) {
+        const deletedId = result.rows[0].uuid;
         res.json({
-          message: `Record with id_wrk_tbl ${deletedId} successfully deleted`,
-          id_wrk_tbl: deletedId,
+          message: `Record with uuid ${deletedId} successfully deleted`,
+          uuid: deletedId,
         });
       } else {
         res.status(404).json({
-          message: `Record with id_wrk_tbl ${idToDelete} not found or could not be deleted.`,
+          message: `Record with uuid ${idToDelete} not found or could not be deleted.`,
         });
       }
     }
   });
 });
 
-app.delete("/expl_dz/:work_id", (req, res) => {
-  const workIdToDelete = req.params.work_id;
+app.delete("/expl_dz/:uuid", (req, res) => {
+  const workIdToDelete = req.params.uuid;
 
   const query = {
-    text: "DELETE FROM exploitation.expl_dz WHERE work_id = $1",
+    text: "DELETE FROM exploitation.expl_dz WHERE work_uuid = $1",
     values: [workIdToDelete],
   };
 
@@ -573,7 +577,7 @@ app.delete("/expl_dz/:work_id", (req, res) => {
       res.status(500).send("Error executing deletion query");
     } else {
       res.json({
-        message: `Records with work_id ${workIdToDelete} successfully deleted`,
+        message: `Records with uuid ${workIdToDelete} successfully deleted`,
       });
     }
   });
