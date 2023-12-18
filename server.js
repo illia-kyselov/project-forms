@@ -2,12 +2,14 @@ const express = require("express");
 const { Client } = require("pg");
 const cors = require("cors");
 const { v4: uuidv4 } = require("uuid");
+const authMiddleware = require('./auth/middleware');
 
 const app = express();
 const port = 3001;
 
 app.use(cors());
 app.use(express.json());
+app.use(authMiddleware);
 
 const client = new Client({
   user: "postgres",

@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+service AuthService {
+  // A method for token generation
+  rpc generateToken (TokenRequest) returns (TokenResponse);
+
+  // A method for token validation
+  rpc validateToken (TokenValidationRequest) returns (TokenValidationResponse);
+}
+
+message TokenRequest {
+  string client_id = 1;
+  bool refresh = 3;
+}
+
+message TokenResponse {
+  string access_token = 1;
+  string token_type = 2;
+  uint32 expires_in = 3;
+  string refresh_token = 4;
+}
+
+message TokenValidationRequest {
+  string access_token = 1;
+}
+
+message TokenValidationResponse {
+  string user_id = 2;
+}
