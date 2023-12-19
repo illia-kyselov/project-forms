@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.scss";
 import FormAddWorks from "./components/FormAddWorks/FormAddWorks";
 import LeafletMap from "./components/LeafletMap/LeafletMap";
@@ -71,7 +71,7 @@ function App() {
   });
   const [showUpdateElements, setShowUpdateElements] = useState(false);
 
-  console.log('uuidTable:', uuidTable);
+  // console.log('dataTable:', dataTable);
   // console.log('selectedRowData:', selectedRowData);
   // console.log('workToInsert:', workToInsert);
 
@@ -125,6 +125,12 @@ function App() {
           ? e.target.options[e.target.selectedIndex].text
           : value,
     }));
+  };
+
+  const removeElementsRelatedToRow = (rowIdToRemove) => {
+    const updatedElements = allElementsData.filter((element) => element.tableId !== rowIdToRemove);
+
+    setAllElementsData(updatedElements);
   };
 
   const handleSubmitElements = (e) => {
@@ -188,7 +194,6 @@ function App() {
     NotificationService.showSuccessNotification('Данні успішно оновлені');
     setShowUpdateElements(false);
   };
-
 
   const handleDzClick = (markerId) => {
     setSelectedMarkerId(markerId);
@@ -397,6 +402,7 @@ function App() {
                 isChecked={isChecked}
                 setTableToInsert={setTableToInsert}
                 tableToInsert={tableToInsert}
+                removeElementsRelatedToRow={removeElementsRelatedToRow}
               />
             )}
             {showSecondTable && dataTable.length > 0 &&

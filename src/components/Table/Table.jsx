@@ -36,6 +36,7 @@ const Table = ({
   isChecked,
   setTableToInsert,
   tableToInsert,
+  removeElementsRelatedToRow,
 }) => {
   const selectedRowRef = useRef(null);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -71,6 +72,8 @@ const Table = ({
       }
     };
   }, []);
+
+  console.log('data', data);
 
   useEffect(() => {
     const ids = data.map((item) => item.id);
@@ -161,6 +164,7 @@ const Table = ({
       }));
 
       setTableToInsert(rowsToInsert);
+      console.log('rowsToInsert', rowsToInsert)
 
       // const responses = await Promise.all(
       //   rowsToInsert.map((row) =>
@@ -233,9 +237,15 @@ const Table = ({
     }
     setData((prevData) => {
       const updatedData = prevData.filter((element) => element.id !== rowId);
+      setTableToInsert((prevTableToInsert) =>
+        prevTableToInsert.filter((element) => element.id_disl_dz !== rowId)
+      );
       return updatedData;
     });
+
+    removeElementsRelatedToRow(rowId);
   };
+
 
   const handleROwClick = async (rowId) => {
     if (!rowId) {
@@ -255,8 +265,6 @@ const Table = ({
     // }
     setDataSecondTable(rowId);
     const foundElement = tableToInsert.find((element) => element.id_disl_dz === rowId);
-    console.log(foundElement);
-
 
     if (foundElement) {
       setSelectedRowData(foundElement.uuid);

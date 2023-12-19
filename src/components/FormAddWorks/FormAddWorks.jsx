@@ -59,7 +59,7 @@ const FormAddWorks = ({
       });
 
       if (!elementsResponse.ok) {
-        NotificationService.showErrorNotification('Дані не видалені 1');
+        NotificationService.showErrorNotification('Дані не видалені');
         return;
       }
 
@@ -71,7 +71,7 @@ const FormAddWorks = ({
       });
 
       if (!explDzResponse.ok) {
-        NotificationService.showErrorNotification('Дані не видалені 2');
+        NotificationService.showErrorNotification('Дані не видалені');
         return;
       }
 
@@ -83,7 +83,7 @@ const FormAddWorks = ({
       });
 
       if (!workTableResponse.ok) {
-        NotificationService.showErrorNotification('Дані не видалені 3');
+        NotificationService.showErrorNotification('Дані не видалені');
         return;
       }
 
