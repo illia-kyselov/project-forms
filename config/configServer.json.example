@@ -1,0 +1,13 @@
+{
+    "PORT": 80,
+    "dbParams": {
+        "user": "user",
+        "host": "host",
+        "database": "database",
+        "password": "password",
+        "port": port
+    },
+    "grpcMicroservice": {
+        "auth": "authServerAddress"
+    }
+}
