@@ -12,9 +12,11 @@ app.use(authMiddleware);
 app.use(pgMiddleware);
 
 // Імпорт маршрутів
-const routes = require('./routes.js');
+const authRoutes = require('./auth/routes');
+const pgRoutes = require('./pg/routes');
 
 // Використання маршрутів
-app.use('/', routes);
+app.use('/auth', authRoutes);
+app.use('/', pgRoutes);
 
 module.exports = app;

@@ -5,11 +5,8 @@ module.exports = async (req, res, next) => {
             throw new Error('Токен не надано');
         }
 
-        const isValid = await require('../funcs/authFuncs')('validateToken')(token);
-        if (!isValid) {
-            throw new Error('Недійсний токен');
-        }
-
+        const { user_id: uuid } = await require('../funcs/authFuncs')('validateToken')(token);
+        req.uuid = uuid;
         next();
     } catch (error) {
         res.status(401).json({ message: 'Неавторизований доступ: ' + error.message });
