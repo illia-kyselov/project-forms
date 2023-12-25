@@ -363,6 +363,7 @@ function App() {
             dataSubmitted={dataSubmitted}
             formWorksData={formWorksData}
             setFormWorksData={setFormWorksData}
+            visibleButtonInsert={visibleButtonInsert}
           />
           <div className="flex">
             {buttonAddDocPressed && (

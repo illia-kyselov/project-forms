@@ -19,7 +19,8 @@ const FormAddWorks = ({
   uuidTable,
   dataSubmitted,
   formWorksData,
-  setFormWorksData
+  setFormWorksData,
+  visibleButtonInsert
 }) => {
   const [options, setOptions] = useState([]);
   const [formObjectId, setFormObjectId] = useState("");
@@ -332,7 +333,7 @@ const FormAddWorks = ({
             >
               Зберегти
             </button>
-            {buttonAddDocPressed &&
+            {!visibleButtonInsert &&
               <button
                 className="form__button form__button-addForm form__button-delete"
                 onClick={() => deleteRecordsById(uuidTable)}
