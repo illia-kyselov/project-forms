@@ -36,7 +36,8 @@ const Table = ({
   isChecked,
   setTableToInsert,
   tableToInsert,
-  removeElementsRelatedToRow,
+  allElementsData,
+  setAllElementsData,
 }) => {
   const selectedRowRef = useRef(null);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -72,8 +73,6 @@ const Table = ({
       }
     };
   }, []);
-
-  console.log('data', data);
 
   useEffect(() => {
     const ids = data.map((item) => item.id);
@@ -164,7 +163,6 @@ const Table = ({
       }));
 
       setTableToInsert(rowsToInsert);
-      console.log('rowsToInsert', rowsToInsert)
 
       // const responses = await Promise.all(
       //   rowsToInsert.map((row) =>
@@ -235,15 +233,23 @@ const Table = ({
     if (+focusMarker === rowId) {
       setFocusMarker(null);
     }
+
     setData((prevData) => {
       const updatedData = prevData.filter((element) => element.id !== rowId);
       setTableToInsert((prevTableToInsert) =>
         prevTableToInsert.filter((element) => element.id_disl_dz !== rowId)
       );
+
+      const linkedElements = allElementsData.filter(
+        (element) => element.tableId === data.find((item) => item.id === rowId)?.uuid
+      );
+      const updatedAllElementsData = allElementsData.filter(
+        (element) => !linkedElements.some((linkedElement) => linkedElement.id === element.id)
+      );
+      setAllElementsData(updatedAllElementsData);
+
       return updatedData;
     });
-
-    removeElementsRelatedToRow(rowId);
   };
 
 
@@ -388,6 +394,7 @@ const Table = ({
             </form>
           </div>
         )} */}
+
 
         <div className="flex">
           {isChecked &&

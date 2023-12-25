@@ -119,7 +119,7 @@ const LeafletMap = ({
       fetchPolygons();
       setPrevMapBounds(mapBounds);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -160,7 +160,7 @@ const LeafletMap = ({
     if (markerRef && markerRef.current && typeof markerRef.current.openPopup === 'function') {
       markerRef.current.openPopup();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focusMarker]);
 
   const filterMarkersWithinPolygon = (polygonCoordinates) => {
@@ -255,7 +255,6 @@ const LeafletMap = ({
     handleDzClick(markerId);
     const markerData = markers.find((marker) => marker.id === markerId);
     handleAddMarkerData(markerData);
-    console.log(markerData);
   };
 
   const filterMarkersByMapBounds = (polygonsInView) => {

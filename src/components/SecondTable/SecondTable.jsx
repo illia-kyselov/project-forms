@@ -22,7 +22,7 @@ const SecondTable = ({
   setAllElementsData,
   setInvalidInputs,
 }) => {
-  const [dataTable, setDataTable] = useState([]);
+  const [secondDataTable, setSecondDataTable] = useState([]);
   const tableRef = useRef();
 
   useEffect(() => {
@@ -30,9 +30,9 @@ const SecondTable = ({
       try {
         if (dataSecondTable) {
           const filteredData = allElementsData.filter(element => element.tableId === selectedRowData);
-          setDataTable(filteredData);
+          setSecondDataTable(filteredData);
         } else {
-          setDataTable([]);
+          setSecondDataTable([]);
         }
       } catch (error) {
         console.error("Error fetching data", error);
@@ -42,7 +42,7 @@ const SecondTable = ({
     if (selectedRowData !== null) {
       fetchData();
     } else {
-      setDataTable([]);
+      setSecondDataTable([]);
     }
   }, [dataSecondTable, selectedRowData, allElementsData]);
 
@@ -53,7 +53,7 @@ const SecondTable = ({
   //     });
 
   //     if (response.ok) {
-  //       setDataTable((prevData) => {
+  //       setSecondDataTable((prevData) => {
   //         const updatedData = prevData.filter((element) => element.id_elmts !== id);
   //         return updatedData;
   //       });
@@ -66,10 +66,11 @@ const SecondTable = ({
   //   }
   // };
 
-  const handleDeleteElements = (e) => {
-    e.preventDefault();
-    
-  }
+
+  const handleDeleteElements = (id) => {
+    const updatedElements = allElementsData.filter((element) => element.id !== id);
+    setAllElementsData(updatedElements);
+  }  
 
   const handleButtonClick = (e) => {
     e.preventDefault();
@@ -85,12 +86,11 @@ const SecondTable = ({
     setShowUpdateElements(true);
   }
 
-
   return (
     <div className="form-container-inside form-container-inside-width">
       <label className="block-label">Елементи до ДЗ № {dataSecondTable || '______'}</label>
       <div className="table" ref={tableRef}>
-        {Array.isArray(dataTable) && dataTable.length > 0 ? (
+        {Array.isArray(secondDataTable) && secondDataTable.length > 0 ? (
           <table>
             <thead>
               <tr>
@@ -102,8 +102,7 @@ const SecondTable = ({
               </tr>
             </thead>
             <tbody>
-
-              {dataTable.map((element) => (
+              {secondDataTable.map((element) => (
                 <tr
                   key={element.id_elmts}
                   onDoubleClick={() => handleShowUpdateForm(element)}
@@ -122,7 +121,7 @@ const SecondTable = ({
                     <button
                       className="delete-icon"
                       // onClick={() => deleteData(element.id_elmts)}
-                      onClick={handleDeleteElements}
+                      onClick={() => handleDeleteElements(element.id)}
                     >
                       X
                       {/* <img className="delete-icon-svg" src={img} alt="Удалить" /> */}

@@ -70,11 +70,6 @@ function App() {
     pers_work: "",
   });
   const [showUpdateElements, setShowUpdateElements] = useState(false);
-
-  // console.log('dataTable:', dataTable);
-  // console.log('selectedRowData:', selectedRowData);
-  // console.log('workToInsert:', workToInsert);
-
   const emptyInputs = validateEmptyInputs(formData);
   const hasEmptyInputs = emptyInputs.length > 0;
 
@@ -125,12 +120,6 @@ function App() {
           ? e.target.options[e.target.selectedIndex].text
           : value,
     }));
-  };
-
-  const removeElementsRelatedToRow = (rowIdToRemove) => {
-    const updatedElements = allElementsData.filter((element) => element.tableId !== rowIdToRemove);
-
-    setAllElementsData(updatedElements);
   };
 
   const handleSubmitElements = (e) => {
@@ -298,7 +287,6 @@ function App() {
 
       for (const row of tableToInsert) {
         const dataToSend = { ...row, work_uuid: workId };
-        console.log('dataToSend', dataToSend);
 
         const response = await fetch("http://localhost:3001/expl_dz", {
           method: "POST",
@@ -402,7 +390,8 @@ function App() {
                 isChecked={isChecked}
                 setTableToInsert={setTableToInsert}
                 tableToInsert={tableToInsert}
-                removeElementsRelatedToRow={removeElementsRelatedToRow}
+                allElementsData={allElementsData}
+                setAllElementsData={setAllElementsData}
               />
             )}
             {showSecondTable && dataTable.length > 0 &&
