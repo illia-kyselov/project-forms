@@ -98,6 +98,41 @@ const Table = ({
     }
   }, [data, focusMarker]);
 
+  console.log('focusMarker', focusMarker);
+  console.log('selectedRowRef', selectedRowRef);
+
+
+  useEffect(() => {
+    if (data.length > 0) {
+      // const hasEmptyForm = data.some((row) => !selectedFormByRow[row.id]);
+
+      // if (hasEmptyForm) {
+      //   NotificationService.showWarningNotification('Оберіть форму для всіх записів');
+      //   return;
+      // }
+
+      const idExists = data.some((row) => row.id === newRowData.id);
+
+      if (idExists) {
+        return;
+      }
+
+      const rowsToInsert = data.map((row) => ({
+        is_dz: true,
+        num_dz: row.num_pdr,
+        dz_form: selectedFormByRow[row.id],
+        id_disl_dz: row.id,
+        work_uuid: idFormAddWorks,
+        uuid: row.uuid
+      }));
+
+      setTableToInsert(rowsToInsert);
+
+      setShowSecondTable(true);
+      setShowButton(false);
+      setListGenerated(true);
+    }
+  }, [data]);
 
   const fetchForms = async () => {
     try {
@@ -137,56 +172,56 @@ const Table = ({
   };
 
   const handleFormSubmit = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
 
-    const hasEmptyForm = data.some((row) => !selectedFormByRow[row.id]);
+    // const hasEmptyForm = data.some((row) => !selectedFormByRow[row.id]);
 
-    if (hasEmptyForm) {
-      NotificationService.showWarningNotification('Оберіть форму для всіх записів');
-      return;
-    }
+    // if (hasEmptyForm) {
+    //   NotificationService.showWarningNotification('Оберіть форму для всіх записів');
+    //   return;
+    // }
 
-    const idExists = data.some((row) => row.id === newRowData.id);
+    // const idExists = data.some((row) => row.id === newRowData.id);
 
-    if (idExists) {
-      return;
-    }
+    // if (idExists) {
+    //   return;
+    // }
 
-    try {
-      const rowsToInsert = data.map((row) => ({
-        is_dz: true,
-        num_dz: row.num_pdr,
-        dz_form: selectedFormByRow[row.id],
-        id_disl_dz: row.id,
-        work_uuid: idFormAddWorks,
-        uuid: row.uuid
-      }));
+    // try {
+    //   const rowsToInsert = data.map((row) => ({
+    //     is_dz: true,
+    //     num_dz: row.num_pdr,
+    //     dz_form: selectedFormByRow[row.id],
+    //     id_disl_dz: row.id,
+    //     work_uuid: idFormAddWorks,
+    //     uuid: row.uuid
+    //   }));
 
-      setTableToInsert(rowsToInsert);
+    //   setTableToInsert(rowsToInsert);
 
-      // const responses = await Promise.all(
-      //   rowsToInsert.map((row) =>
-      //     fetch("http://localhost:3001/expl_dz", {
-      //       method: "POST",
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //       },
-      //       body: JSON.stringify(row),
-      //     }).then((response) => {
-      //       if (!response.ok) {
-      //         NotificationService.showWarningNotification('Будь ласка, заповніть всі поля та спробуйте ще раз!');
-      //       }
-      //     })
-      //   )
-      // );
-      // NotificationService.showSuccessNotification('Данні успішно відправлені');
+    //   // const responses = await Promise.all(
+    //   //   rowsToInsert.map((row) =>
+    //   //     fetch("http://localhost:3001/expl_dz", {
+    //   //       method: "POST",
+    //   //       headers: {
+    //   //         "Content-Type": "application/json",
+    //   //       },
+    //   //       body: JSON.stringify(row),
+    //   //     }).then((response) => {
+    //   //       if (!response.ok) {
+    //   //         NotificationService.showWarningNotification('Будь ласка, заповніть всі поля та спробуйте ще раз!');
+    //   //       }
+    //   //     })
+    //   //   )
+    //   // );
+    //   // NotificationService.showSuccessNotification('Данні успішно відправлені');
 
-      setShowSecondTable(true);
-      setShowButton(false);
-      setListGenerated(true);
-    } catch (error) {
-      console.error("Error inserting data into the database", error);
-    }
+    //   setShowSecondTable(true);
+    //   setShowButton(false);
+    //   setListGenerated(true);
+    // } catch (error) {
+    //   console.error("Error inserting data into the database", error);
+    // }
   };
 
   const handlePushToDZ = async (e) => {
@@ -251,7 +286,6 @@ const Table = ({
       return updatedData;
     });
   };
-
 
   const handleROwClick = async (rowId) => {
     if (!rowId) {
@@ -426,7 +460,7 @@ const Table = ({
               <tr
                 key={row.id}
                 onClick={() => handleROwClick(row.id)}
-                style={{ background: focusMarker === row.id ? "#a5d565" : "" }}
+                style={{ background: selectedRowRef.current === row.id ? "#a5d565" : "" }}
               >
                 <td>{row.id}</td>
                 <td>{row.num_pdr || "Немає в БД"}</td>
@@ -465,7 +499,7 @@ const Table = ({
             ))}
           </tbody>
         </table>
-        {showButton && (
+        {/* {showButton && (
           <button
             className="table-paragraph-button"
             onClick={handleFormSubmit}
@@ -473,7 +507,7 @@ const Table = ({
           >
             Сформувати перелік
           </button>
-        )}
+        )} */}
       </div>
     </div>
   )
