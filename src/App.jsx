@@ -133,7 +133,7 @@ function App() {
       return;
     }
 
-    if (formAddElementsData.quantity === 0 || formAddElementsData.quantity < 0) {
+    if (formAddElementsData.quantity === "" || formAddElementsData.quantity <= 0) {
       setInvalidInputs((prevInvalidInputs) => [...prevInvalidInputs, "quantity"]);
       NotificationService.showWarningNotification('Кількість елементів повинна бути більше 0');
       return;

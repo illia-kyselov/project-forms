@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import NotificationService from "../../services/NotificationService";
 import { validateEmptyInputs } from "../../helpers/validate-empty-inputs";
 // import Input from "../Input/Input";
-// import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 import img from '../../img/icon-trash.png';
 
@@ -98,10 +98,6 @@ const Table = ({
     }
   }, [data, focusMarker]);
 
-  console.log('focusMarker', focusMarker);
-  console.log('selectedRowRef', selectedRowRef);
-
-
   useEffect(() => {
     if (data.length > 0) {
       // const hasEmptyForm = data.some((row) => !selectedFormByRow[row.id]);
@@ -133,6 +129,13 @@ const Table = ({
       setListGenerated(true);
     }
   }, [data]);
+
+  useEffect(() => {
+    // Вызов функции для валидации при изменении данных или выбранных форм
+    const emptyInputsDZ = validateEmptyInputs(newRowData);
+    const hasEmptyInputsDz = emptyInputsDZ.length > 0;
+    setInvalidInputs(hasEmptyInputsDz);
+  }, [data, selectedFormByRow]);
 
   const fetchForms = async () => {
     try {
@@ -354,6 +357,7 @@ const Table = ({
     handleClearTable(e);
     setShowButton(true);
     setFocusMarker(null);
+    setDataSecondTable(null);
   }
 
   // async function deleteRecordsById(rowId) {
@@ -484,6 +488,9 @@ const Table = ({
                         </option>
                       ))}
                   </select>
+                  {invalidInputs.length > 0 && invalidInputs.includes("form") && (
+                    <ErrorMessage errorMessage={"Оберіть форму з переліку"} />
+                  )}
                 </td>
                 <td>
                   <button
