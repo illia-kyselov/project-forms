@@ -119,8 +119,10 @@ const Table = ({
         dz_form: selectedFormByRow[row.id],
         id_disl_dz: row.id,
         work_uuid: idFormAddWorks,
-        uuid: row.uuid
+        uuid: row.uuid,
       }));
+
+      console.log('rowsToInsert', { ...rowsToInsert });
 
       setTableToInsert(rowsToInsert);
 
@@ -128,13 +130,6 @@ const Table = ({
       setShowButton(false);
       setListGenerated(true);
     }
-  }, [data]);
-
-  useEffect(() => {
-    // Вызов функции для валидации при изменении данных или выбранных форм
-    const emptyInputsDZ = validateEmptyInputs(newRowData);
-    const hasEmptyInputsDz = emptyInputsDZ.length > 0;
-    setInvalidInputs(hasEmptyInputsDz);
   }, [data, selectedFormByRow]);
 
   const fetchForms = async () => {
@@ -173,6 +168,7 @@ const Table = ({
       handleRowClick(newSelectedRowId);
     }
   };
+
 
   const handleFormSubmit = async (e) => {
     // e.preventDefault();
@@ -297,15 +293,6 @@ const Table = ({
     handleRowClick(rowId);
     selectedRowRef.current = rowId;
 
-    // try {
-    //   const response = await fetch(`http://localhost:3001/expl_dz/${rowId}`);
-    //   const data = await response.json();
-
-    //   setSelectedRowData(data[data.length - 1].uuid);
-
-    // } catch (error) {
-    //   console.error("Error fetching data for SecondTable", error);
-    // }
     setDataSecondTable(rowId);
     const foundElement = tableToInsert.find((element) => element.id_disl_dz === rowId);
 
@@ -328,13 +315,14 @@ const Table = ({
     const updatedSelectedFormByRow = { ...selectedFormByRow };
 
     updatedSelectedFormByRow[rowId] = selectedText;
-
     setSelectedFormByRow(updatedSelectedFormByRow);
     const selectedValue = e.target.value;
     setSelectedFormByRow((prevSelectedForms) => ({
       ...prevSelectedForms,
       [rowId]: selectedValue,
     }));
+
+
   };
 
   const hideForm = (event) => {
@@ -397,41 +385,44 @@ const Table = ({
       <label className="block-label">Обрані дорожні знаки</label>
 
       <div className="table">
-        {/* {showAddForm && (
-          <div>
-            <form className="form-addDz">
-              <div className="form-addDz__group">
-                <label className="form-addDz-input_title">Номер ПДР знаку</label>
-                <Input
-                  className="form-addDz__input"
-                  type="text"
-                  name="num_pdr"
-                  value={newRowData.num_pdr}
-                  onChange={handleInputChange}
-                  placeholder="Номер ПДР"
-                  required
-                  errorMessage={"Введіть номер ПДР"}
-                  hasError={invalidInputs.includes("num_pdr")}
-                />
-              </div>
-              <div className="flex">
-                {!showSaveButton && (
-                  <button type="button" className="button-add-Dz" onClick={showDraggableDzMarker}>
-                    Показати на карті
+        {
+          /* Форма додавання нового знаку */
+          /* {showAddForm && (
+            <div>
+              <form className="form-addDz">
+                <div className="form-addDz__group">
+                  <label className="form-addDz-input_title">Номер ПДР знаку</label>
+                  <Input
+                    className="form-addDz__input"
+                    type="text"
+                    name="num_pdr"
+                    value={newRowData.num_pdr}
+                    onChange={handleInputChange}
+                    placeholder="Номер ПДР"
+                    required
+                    errorMessage={"Введіть номер ПДР"}
+                    hasError={invalidInputs.includes("num_pdr")}
+                  />
+                </div>
+                <div className="flex">
+                  {!showSaveButton && (
+                    <button type="button" className="button-add-Dz" onClick={showDraggableDzMarker}>
+                      Показати на карті
+                    </button>
+                  )}
+                  {showSaveButton && (
+                    <button className="button-add-Dz" onClick={handlePushToDZ}>
+                      Зберегти
+                    </button>
+                  )}
+                  <button className="button-add-Dz" onClick={hideForm}>
+                    Скасувати
                   </button>
-                )}
-                {showSaveButton && (
-                  <button className="button-add-Dz" onClick={handlePushToDZ}>
-                    Зберегти
-                  </button>
-                )}
-                <button className="button-add-Dz" onClick={hideForm}>
-                  Скасувати
-                </button>
-              </div>
-            </form>
-          </div>
-        )} */}
+                </div>
+              </form>
+            </div>
+          )} */
+        }
 
 
         <div className="flex">
@@ -506,15 +497,6 @@ const Table = ({
             ))}
           </tbody>
         </table>
-        {/* {showButton && (
-          <button
-            className="table-paragraph-button"
-            onClick={handleFormSubmit}
-            style={{ display: data.length > 0 ? 'block' : 'none' }}
-          >
-            Сформувати перелік
-          </button>
-        )} */}
       </div>
     </div>
   )

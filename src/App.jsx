@@ -287,6 +287,7 @@ function App() {
 
       for (const row of tableToInsert) {
         const dataToSend = { ...row, work_uuid: workId };
+        console.log(dataToSend);
 
         const response = await fetch("http://localhost:3001/expl_dz", {
           method: "POST",

@@ -8,7 +8,7 @@ import ErrorMessage from "../ErrorMessage/ErrorMessage";
 const FormUpdateElementsInfo = ({
   selectedElement,
   setShowUpdateElements,
-  invalidInputs,
+  // invalidInputs,
   allElementsData,
   setAllElementsData,
 }) => {
@@ -17,6 +17,7 @@ const FormUpdateElementsInfo = ({
     element: '',
     quantity: ''
   });
+  const [invalidInputs, setInvalidInputs] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -24,6 +25,21 @@ const FormUpdateElementsInfo = ({
 
   const handleUpdateElements = (e) => {
     e.preventDefault();
+
+    setInvalidInputs([]);
+
+    if (!formData.element) {
+      setInvalidInputs((prevInvalidInputs) => [...prevInvalidInputs, "element"]);
+      NotificationService.showWarningNotification('Будь ласка, оберіть елемент');
+      return;
+    }
+
+    if (formData.quantity === "" || formData.quantity <= 0) {
+      setInvalidInputs((prevInvalidInputs) => [...prevInvalidInputs, "quantity"]);
+      NotificationService.showWarningNotification('Кількість елементів повинна бути більше 0');
+      return;
+    }
+
     const elementId = selectedElement.id;
 
     const updatedData = allElementsData.map((element) => {
@@ -35,6 +51,8 @@ const FormUpdateElementsInfo = ({
 
     setAllElementsData(updatedData);
     setShowUpdateElements(false);
+
+    NotificationService.showSuccessNotification('Данні успішно оновлені');
   };
 
   useEffect(() => {
