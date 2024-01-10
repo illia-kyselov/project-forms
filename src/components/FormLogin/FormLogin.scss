@@ -1,10 +1,12 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,300,500);
 
-$bg: #1a1f25;
-$button: #dfaa25;
-$buttonHover: #daa318;
-$buttonFocus: #d49c0e;
-$border: #22272d;
+$bg: #f5f5f5;
+$button: #FFD700;
+$buttonHover: #FFC300;
+$buttonFocus: #fce293;
+$buttonActive: #fdcc38;
+$border: #1a1b1d;
+$text: #0a0c0e;
 
 .wrapper {
   width: 300px;
@@ -17,7 +19,7 @@ body {
 
 #man-people-user,
 #lock-locker {
-  fill: white;
+  fill: black;
 }
 
 .login__form {
@@ -26,8 +28,9 @@ body {
 
 .login__sign-in {
   float: left;
-  color: white;
+  color: $text;
   font-size: 1.3em;
+  font-weight: bold;
 }
 
 .login__button {
@@ -43,7 +46,8 @@ body {
 }
 
 .login__button:hover {
-  color: #d3d3d3
+  color: #595d61;
+  scale: 1.01;
 }
 
 .login__lock {
@@ -95,7 +99,7 @@ body {
 
 .login__input[type="email"]:focus,
 .login__input[type="password"]:focus {
-  border: 1px solid white;
+  border: 2px solid $border;
   box-shadow: none;
 }
 
@@ -106,25 +110,27 @@ body {
 
 .login__input[type="email"] {
   background-color: transparent;
-  border: 2px solid $border;
+  border: 1px solid $border;
   padding-left: 45px;
-  color: $button;
+  color: #7f8084;
 }
 
 .login__input[type="password"] {
   background-color: transparent;
-  border: 2px solid $border;
+  border: 1px solid $border;
   padding-left: 45px;
-  color: $button;
+  color: #7f8084;
 }
 
 .login__input[type="submit"] {
   background-color: $button;
   border: none;
-  color: white;
+  color: $text;
   text-align: center;
   font-size: 0.8em;
   cursor: pointer;
+  font-weight: bold;
+  transition: all 0.1s linear;
 
   &:hover {
     background-color: $buttonHover;
@@ -134,8 +140,8 @@ body {
     background-color: $buttonFocus;
   }
 
-  &:target {
-    background-color: pink;
+  &:active {
+    background-color: $buttonActive;
   }
 }
 
@@ -208,10 +214,6 @@ input:checked+.login__slider:before {
 .login__slider.round:before {
   border-radius: 50%;
 }
-
-// .radio-yes:checked~.switch-selection {
-//   margin-left: 25px !important;
-// }
 
 .login__check-label {
   font-size: 0.8em;

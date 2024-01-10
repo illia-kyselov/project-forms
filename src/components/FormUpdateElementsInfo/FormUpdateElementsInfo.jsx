@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import NotificationService from '../../services/NotificationService';
 import DraggablePopup from "../DraggablePopup/DraggablePopup";
-import { validateEmptyInputs } from "../../helpers/validate-empty-inputs";
 import Input from "../Input/Input";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 const FormUpdateElementsInfo = ({
   selectedElement,
   setShowUpdateElements,
-  // invalidInputs,
   allElementsData,
   setAllElementsData,
 }) => {

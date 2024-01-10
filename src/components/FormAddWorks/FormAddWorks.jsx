@@ -137,10 +137,12 @@ const FormAddWorks = ({
       NotificationService.showWarningNotification('Будь ласка заповніть всі поля!');
       return;
     }
-    // if (selectedDocValue) {
-    //   NotificationService.showWarningNotification('Будь ласка оберіть документ');
-    //   return;
-    // }
+
+    if (!selectedDocValue) {
+      NotificationService.showWarningNotification('Будь ласка оберіть документ');
+      return;
+    }
+
     setButtonAddDocPressed(true);
 
     setWorkToInsert({
@@ -224,6 +226,7 @@ const FormAddWorks = ({
               name="type_work"
               onChange={handleChange}
               disabled={buttonAddDocPressed}
+              style={{ cursor: 'pointer' }}
             >
               <option value="" defaultValue hidden>Оберіть тип роботи</option>
               {options.map((option) => (
@@ -248,6 +251,7 @@ const FormAddWorks = ({
               name="pers_work"
               disabled={buttonAddDocPressed}
               onChange={handleChange}
+              style={{ cursor: 'pointer' }}
             >
               <option value="" defaultValue hidden>Оберіть особу</option>
               <option value="Шевченко Тарас" className="form__input-option">Шевченко Тарас</option>
@@ -263,7 +267,7 @@ const FormAddWorks = ({
               type="datetime-local"
               id="additionalDatetime"
               className="form__input"
-              style={{ pointerEvents: buttonAddDocPressed ? "none" : '', }}
+              style={{ pointerEvents: buttonAddDocPressed ? "none" : '', cursor: 'pointer' }}
               disabled={buttonAddDocPressed}
               onChange={handleChange}
               name="date_work"
@@ -318,6 +322,7 @@ const FormAddWorks = ({
                   value={selectedDocValue}
                   onChange={handleInputChange}
                   readOnly
+                  style={{ cursor: 'auto' }}
                   name="id_doc"
                   disabled={buttonAddDocPressed}
                 />

@@ -8,7 +8,7 @@ const FormLogin = () => {
   return (
     <>
       <div className="wrapper">
-        <form action="#" className='login__form'>
+        <form action="#" method='post' className='login__form' >
           <div className="login__header">
             <h3 className="login__sign-in">Sign in</h3>
             <Link to={'/register'} className='login__button'>Register</Link>

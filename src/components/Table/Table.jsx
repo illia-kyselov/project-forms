@@ -100,12 +100,6 @@ const Table = ({
 
   useEffect(() => {
     if (data.length > 0) {
-      // const hasEmptyForm = data.some((row) => !selectedFormByRow[row.id]);
-
-      // if (hasEmptyForm) {
-      //   NotificationService.showWarningNotification('Оберіть форму для всіх записів');
-      //   return;
-      // }
 
       const idExists = data.some((row) => row.id === newRowData.id);
 
@@ -169,99 +163,45 @@ const Table = ({
     }
   };
 
+  // const handlePushToDZ = async (e) => {
+  //   e.preventDefault();
 
-  const handleFormSubmit = async (e) => {
-    // e.preventDefault();
+  //   if (hasEmptyInputsDz) {
+  //     if (hasEmptyInputsDz) {
+  //       setInvalidInputs(emptyInputsDZ);
+  //       NotificationService.showWarningNotification('Будь ласка заповніть всі поля!');
+  //     }
+  //     return;
+  //   }
 
-    // const hasEmptyForm = data.some((row) => !selectedFormByRow[row.id]);
+  //   setShowSecondTable(false);
 
-    // if (hasEmptyForm) {
-    //   NotificationService.showWarningNotification('Оберіть форму для всіх записів');
-    //   return;
-    // }
+  //   try {
+  //     const wktMultiPoint = `MULTIPOINT(${draggableDzMarkerWKT[1]} ${draggableDzMarkerWKT[0]} 0)`;
+  //     const insertData = {
+  //       geom: wktMultiPoint,
+  //       num_pdr: newRowData.num_pdr,
+  //     };
 
-    // const idExists = data.some((row) => row.id === newRowData.id);
+  //     const response = await fetch('http://localhost:3001/dz', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(insertData),
+  //     });
 
-    // if (idExists) {
-    //   return;
-    // }
-
-    // try {
-    //   const rowsToInsert = data.map((row) => ({
-    //     is_dz: true,
-    //     num_dz: row.num_pdr,
-    //     dz_form: selectedFormByRow[row.id],
-    //     id_disl_dz: row.id,
-    //     work_uuid: idFormAddWorks,
-    //     uuid: row.uuid
-    //   }));
-
-    //   setTableToInsert(rowsToInsert);
-
-    //   // const responses = await Promise.all(
-    //   //   rowsToInsert.map((row) =>
-    //   //     fetch("http://localhost:3001/expl_dz", {
-    //   //       method: "POST",
-    //   //       headers: {
-    //   //         "Content-Type": "application/json",
-    //   //       },
-    //   //       body: JSON.stringify(row),
-    //   //     }).then((response) => {
-    //   //       if (!response.ok) {
-    //   //         NotificationService.showWarningNotification('Будь ласка, заповніть всі поля та спробуйте ще раз!');
-    //   //       }
-    //   //     })
-    //   //   )
-    //   // );
-    //   // NotificationService.showSuccessNotification('Данні успішно відправлені');
-
-    //   setShowSecondTable(true);
-    //   setShowButton(false);
-    //   setListGenerated(true);
-    // } catch (error) {
-    //   console.error("Error inserting data into the database", error);
-    // }
-  };
-
-  const handlePushToDZ = async (e) => {
-    e.preventDefault();
-
-    if (hasEmptyInputsDz) {
-      if (hasEmptyInputsDz) {
-        setInvalidInputs(emptyInputsDZ);
-        NotificationService.showWarningNotification('Будь ласка заповніть всі поля!');
-      }
-      return;
-    }
-
-    setShowSecondTable(false);
-
-    try {
-      const wktMultiPoint = `MULTIPOINT(${draggableDzMarkerWKT[1]} ${draggableDzMarkerWKT[0]} 0)`;
-      const insertData = {
-        geom: wktMultiPoint,
-        num_pdr: newRowData.num_pdr,
-      };
-
-      const response = await fetch('http://localhost:3001/dz', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(insertData),
-      });
-
-      if (response.ok) {
-        NotificationService.showSuccessNotification('Данні успішно відправлені');
-        setPushToDZCalled(true);
-        hideForm(e);
-      } else {
-        NotificationService.showWarningNotification('Будь ласка, заповніть всі поля та спробуйте ще раз!');
-      }
-    } catch (error) {
-      console.error('An error occurred while sending data to the server:', error);
-    }
-  };
+  //     if (response.ok) {
+  //       NotificationService.showSuccessNotification('Данні успішно відправлені');
+  //       setPushToDZCalled(true);
+  //       hideForm(e);
+  //     } else {
+  //       NotificationService.showWarningNotification('Будь ласка, заповніть всі поля та спробуйте ще раз!');
+  //     }
+  //   } catch (error) {
+  //     console.error('An error occurred while sending data to the server:', error);
+  //   }
+  // };
 
   const deleteData = (rowId) => {
     if (+focusMarker === rowId) {
@@ -321,8 +261,6 @@ const Table = ({
       ...prevSelectedForms,
       [rowId]: selectedValue,
     }));
-
-
   };
 
   const hideForm = (event) => {
@@ -347,38 +285,6 @@ const Table = ({
     setFocusMarker(null);
     setDataSecondTable(null);
   }
-
-  // async function deleteRecordsById(rowId) {
-  //   try {
-  //     const elementsResponse = await fetch(`http://localhost:3001/elements/table/${rowId}`, {
-  //       method: 'DELETE',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     });
-
-  //     const explDzResponse = await fetch(`http://localhost:3001/expl_dz/table/${rowId}`, {
-  //       method: 'DELETE',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     });
-
-  //     if (explDzResponse.ok && elementsResponse.ok) {
-  //       if (rowId === focusMarker) {
-  //         setFocusMarker(null);
-  //       }
-  //       setData((prevData) => {
-  //         const updatedData = prevData.filter((element) => element.id !== rowId);
-  //         return updatedData;
-  //       });
-  //       NotificationService.showSuccessNotification('Дані успішно видалені');
-  //     }
-  //   } catch (error) {
-  //     NotificationService.showErrorNotification('Дані не видалені');
-  //     console.error('Error deleting record:', error);
-  //   }
-  // }
 
   return (
     <div className="form-container-inside form-container-inside-width">
@@ -459,7 +365,11 @@ const Table = ({
               >
                 <td>{row.id}</td>
                 <td>{row.num_pdr || "Немає в БД"}</td>
-                <td>
+                <td
+                  style={{
+                    background: selectedFormByRow[row.id] ? "" : "rgba(255, 68, 75, 0.6)",
+                    cursor: "pointer",
+                  }}>
                   <select
                     className="form__input form__input-select"
                     value={selectedFormByRow[row.id] || ""}
@@ -498,7 +408,7 @@ const Table = ({
           </tbody>
         </table>
       </div>
-    </div>
+    </div >
   )
 };
 

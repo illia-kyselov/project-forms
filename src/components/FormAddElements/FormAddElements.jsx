@@ -61,6 +61,7 @@ const FormAddElements = ({
               className={`form__input ${invalidInputs.includes("quantity") ? "has-error" : ""}`}
               onChange={handleChange}
               min="1"
+              pattern="[1-9][0-9]*"
               errorMessage={"Введіть кількість елементів"}
               hasError={invalidInputs.includes("quantity")}
             />

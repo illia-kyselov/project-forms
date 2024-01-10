@@ -7,7 +7,7 @@ const FormRegistration = () => {
   return (
     <>
       <div className="wrapper">
-        <form action="#" className='login__form'>
+        <form action="#" method='post' className='login__form'>
           <div className="login__header">
             <h3 className="login__sign-in">Sign up</h3>
           </div>
