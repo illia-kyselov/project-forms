@@ -10,10 +10,11 @@
   font-weight: bold;
   text-decoration: none;
   transition: all linear 0.1s;
+  margin-right: 50px;
 
   &:hover {
     color: #2f7401;
-    // scale: 1.02;
+    scale: 1.02;
   }
 }
 
@@ -27,4 +28,8 @@
     color: #2f7401;
     scale: 1.1;
   }
+}
+
+.wrapper1 {
+  display: flex;
 }
