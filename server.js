@@ -361,6 +361,40 @@ app.get("/dz_forms", (req, res) => {
   });
 });
 
+app.get("/catalog/work_table", (req, res) => {
+  const { pers_work } = req.query;
+
+  if (!pers_work) {
+    return res
+      .status(400)
+      .json({ error: 'Parameter "pers_work" is required.' });
+  }
+
+  const query = {
+    text: "SELECT id_wrk_tbl, type_work, is_doc, id_doc, address, date_work, pers_work, uuid FROM exploitation.work_table WHERE pers_work = $1",
+    values: [pers_work],
+  };
+
+  client.query(query, (err, result) => {
+    if (err) {
+      console.error("Error executing query", err);
+      res.status(500).send("Error executing query");
+    } else {
+      const data = result.rows.map((row) => ({
+        id_wrk_tbl: row.id_wrk_tbl,
+        type_work: row.type_work,
+        is_doc: row.is_doc,
+        id_doc: row.id_doc,
+        address: row.address,
+        date_work: row.date_work,
+        pers_work: row.pers_work,
+        uuid: row.uuid,
+      }));
+      res.json(data);
+    }
+  });
+});
+
 function parsePolygon(geom) {
   const polygonString = geom.replace(/^POLYGON\s*\(/i, "").replace(/\)$/, "");
   const coordinates = polygonString.split(",").map((pair) => {

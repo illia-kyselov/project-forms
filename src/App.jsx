@@ -14,7 +14,7 @@ import { validateEmptyInputs } from "./helpers/validate-empty-inputs";
 
 import { v4 as uuidv4 } from 'uuid';
 
-function App() {
+function App({ user }) {
   // const [showAddInfoForm, setShowAddInfoForm] = useState(false);
   const [selectedPolygon, setSelectedPolygon] = useState(null);
   const [showAddElements, setShowAddElements] = useState(false);
@@ -327,7 +327,7 @@ function App() {
 
   return (
     <div className="App">
-      <Header />
+      <Header user={user} />
       <div className="elements-container">
         <LeafletMap
           handlePolygonClick={handlePolygonClick}

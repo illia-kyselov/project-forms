@@ -361,15 +361,14 @@ const Table = ({
               <tr
                 key={row.id}
                 onClick={() => handleROwClick(row.id)}
-                style={{ background: selectedRowRef.current === row.id ? "#a5d565" : "" }}
+                style={{
+                  background: selectedRowRef.current === row.id ? "#a5d565" : "",
+                  backgroundColor: selectedFormByRow[row.id] ? "" : "#FDE3E3",
+                }}
               >
                 <td>{row.id}</td>
                 <td>{row.num_pdr || "Немає в БД"}</td>
-                <td
-                  style={{
-                    background: selectedFormByRow[row.id] ? "" : "rgba(255, 68, 75, 0.6)",
-                    cursor: "pointer",
-                  }}>
+                <td>
                   <select
                     className="form__input form__input-select"
                     value={selectedFormByRow[row.id] || ""}
