@@ -1,0 +1,29 @@
+.catalogTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+
+  &__th {
+    background-color: #f2f2f2;
+  }
+
+  &__th,
+  &__td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  &__user {
+    color: red;
+    font-weight: bold;
+  }
+
+  &__tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  &__tr:hover {
+    background-color: #e5e5e5;
+  }
+}
