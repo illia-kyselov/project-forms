@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import NotificationService from "../../services/NotificationService";
 import { validateEmptyInputs } from "../../helpers/validate-empty-inputs";
-// import Input from "../Input/Input";
+import Input from "../Input/Input";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 import img from '../../img/icon-trash.png';
@@ -38,11 +38,13 @@ const Table = ({
   tableToInsert,
   allElementsData,
   setAllElementsData,
+  setRotationAngle,
 }) => {
   const selectedRowRef = useRef(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [newRowData, setNewRowData] = useState({
     num_pdr: "",
+    ang_map: 0,
   });
   const [forms, setForms] = useState([]);
   const [selectedFormByRow, setSelectedFormByRow] = useState({});
@@ -84,7 +86,8 @@ const Table = ({
       ...prevData,
       position: dzMarkerPosition,
     }));
-  }, [dzMarkerPosition]);
+    setRotationAngle(newRowData.ang_map);
+  }, [dzMarkerPosition, newRowData.ang_map, setRotationAngle]);
 
   useEffect(() => {
     if (focusMarker === null) {
@@ -115,8 +118,6 @@ const Table = ({
         work_uuid: idFormAddWorks,
         uuid: row.uuid,
       }));
-
-      console.log('rowsToInsert', { ...rowsToInsert });
 
       setTableToInsert(rowsToInsert);
 
@@ -163,45 +164,49 @@ const Table = ({
     }
   };
 
-  // const handlePushToDZ = async (e) => {
-  //   e.preventDefault();
+  const handlePushToDZ = async (e) => {
+    e.preventDefault();
 
-  //   if (hasEmptyInputsDz) {
-  //     if (hasEmptyInputsDz) {
-  //       setInvalidInputs(emptyInputsDZ);
-  //       NotificationService.showWarningNotification('Будь ласка заповніть всі поля!');
-  //     }
-  //     return;
-  //   }
+    if (hasEmptyInputsDz) {
+      if (hasEmptyInputsDz) {
+        setInvalidInputs(emptyInputsDZ);
+        NotificationService.showWarningNotification('Будь ласка заповніть всі поля!');
+      }
+      return;
+    }
 
-  //   setShowSecondTable(false);
+    setShowSecondTable(false);
 
-  //   try {
-  //     const wktMultiPoint = `MULTIPOINT(${draggableDzMarkerWKT[1]} ${draggableDzMarkerWKT[0]} 0)`;
-  //     const insertData = {
-  //       geom: wktMultiPoint,
-  //       num_pdr: newRowData.num_pdr,
-  //     };
+    try {
+      const wktMultiPoint = `MULTIPOINT(${draggableDzMarkerWKT[1]} ${draggableDzMarkerWKT[0]} 0)`;
+      const insertData = {
+        geom: wktMultiPoint,
+        num_pdr: newRowData.num_pdr,
+        id: 2727,
+        ang_map: newRowData.ang_map,
+      };
 
-  //     const response = await fetch('http://localhost:3001/dz', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify(insertData),
-  //     });
+      console.log('ang_map', newRowData.ang_map);
 
-  //     if (response.ok) {
-  //       NotificationService.showSuccessNotification('Данні успішно відправлені');
-  //       setPushToDZCalled(true);
-  //       hideForm(e);
-  //     } else {
-  //       NotificationService.showWarningNotification('Будь ласка, заповніть всі поля та спробуйте ще раз!');
-  //     }
-  //   } catch (error) {
-  //     console.error('An error occurred while sending data to the server:', error);
-  //   }
-  // };
+      const response = await fetch('http://localhost:3001/dz', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(insertData),
+      });
+
+      if (response.ok) {
+        NotificationService.showSuccessNotification('Данні успішно відправлені');
+        setPushToDZCalled(true);
+        hideForm(e);
+      } else {
+        NotificationService.showWarningNotification('Будь ласка, заповніть всі поля та спробуйте ще раз!');
+      }
+    } catch (error) {
+      console.error('An error occurred while sending data to the server:', error);
+    }
+  };
 
   const deleteData = (rowId) => {
     if (+focusMarker === rowId) {
@@ -293,7 +298,7 @@ const Table = ({
       <div className="table">
         {
           /* Форма додавання нового знаку */
-          /* {showAddForm && (
+          showAddForm && (
             <div>
               <form className="form-addDz">
                 <div className="form-addDz__group">
@@ -308,6 +313,19 @@ const Table = ({
                     required
                     errorMessage={"Введіть номер ПДР"}
                     hasError={invalidInputs.includes("num_pdr")}
+                  />
+                </div>
+                <div className="form-addDz__group">
+                  <label className="form-addDz-input_title">Провернути знак</label>
+                  <Input
+                    className="form-addDz__input"
+                    type="range"
+                    name="ang_map"
+                    max={360}
+                    min={0}
+                    value={newRowData.ang_map}
+                    onChange={handleInputChange}
+                    required
                   />
                 </div>
                 <div className="flex">
@@ -327,10 +345,7 @@ const Table = ({
                 </div>
               </form>
             </div>
-          )} */
-        }
-
-
+          )}
         <div className="flex">
           {isChecked &&
             <button className="button-add-Dz" onClick={handleAddDzFromPolygon} style={{ backgroundColor: buttonPressed ? '#46aa03' : '' }}>
@@ -338,8 +353,8 @@ const Table = ({
             </button>}
           <button
             className="button-add-Dz"
-            // onClick={() => setShowAddForm(true)}
-            onClick={() => NotificationService.showInfoNotification('Нові знаки можуть бути додані через відповідний проект QGIS')}
+            onClick={() => setShowAddForm(true)}
+          // onClick={() => NotificationService.showInfoNotification('Нові знаки можуть бути додані через відповідний проект QGIS')}
           >
             Додати ДЗ
           </button>

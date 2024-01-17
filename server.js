@@ -442,13 +442,15 @@ app.post("/dz", (req, res) => {
   const wktGeom = req.body.geom;
   const num_pdr = req.body.num_pdr;
   const num_sing = req.body.num_sing;
+  const id = req.body.id;
+  const ang_map = req.body.ang_map;
 
   const query = `
-    INSERT INTO exploitation.dz (geom, num_pdr, num_sing)
-    VALUES (ST_GeomFromText($1, 4326), $2, $3)
+    INSERT INTO exploitation.dz (geom, num_pdr, num_sing, id, ang_map)
+    VALUES (ST_GeomFromText($1, 4326), $2, $3, $4, $5)
   `;
 
-  const values = [wktGeom, num_pdr, num_sing];
+  const values = [wktGeom, num_pdr, num_sing, id, ang_map];
 
   client.query(query, values, (err, result) => {
     if (err) {

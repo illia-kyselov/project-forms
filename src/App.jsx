@@ -50,7 +50,7 @@ function App({ user }) {
   const [tableToInsert, setTableToInsert] = useState([]);
   const [allElementsData, setAllElementsData] = useState([]);
 
-
+  const [rotationAngle, setRotationAngle] = useState(0);
   const [visibleButtonInsert, setVisibleButtonInsert] = useState(true);
   const [formAddElementsData, setformAddElementsData] = useState({
     tableId: selectedRowData,
@@ -346,6 +346,7 @@ function App({ user }) {
           pushToDZCalled={pushToDZCalled}
           setPushToDZCalled={setPushToDZCalled}
           isChecked={isChecked}
+          rotationAngle={rotationAngle}
         />
         <div className="form-container">
           <FormAddWorks
@@ -394,6 +395,7 @@ function App({ user }) {
                 tableToInsert={tableToInsert}
                 allElementsData={allElementsData}
                 setAllElementsData={setAllElementsData}
+                setRotationAngle={setRotationAngle}
               />
             )}
             {showSecondTable && dataTable.length > 0 &&

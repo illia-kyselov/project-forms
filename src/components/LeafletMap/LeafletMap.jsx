@@ -50,6 +50,7 @@ const LeafletMap = ({
   setPushToDZCalled,
   isChecked,
   setFocusMarker,
+  rotationAngle,
 }) => {
   const containerStyle = {
     height: "calc(96vh - 10px)",
@@ -417,6 +418,7 @@ const LeafletMap = ({
           <DraggableDzMarker
             handleMarkerPosition={handleMarkerDragEnd}
             setDraggableDzMarkerWKT={setDraggableDzMarkerWKT}
+            rotationAngle={rotationAngle}
           />
         )}
 

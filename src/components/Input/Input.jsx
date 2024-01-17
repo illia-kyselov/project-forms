@@ -15,6 +15,7 @@ const Input = ({
   style,
   autoComplete,
   min,
+  max,
   pattern,
 }) => {
   return (
@@ -31,6 +32,7 @@ const Input = ({
         style={style}
         autoComplete={autoComplete}
         min={min}
+        max={max}
         pattern={pattern}
       />
       {hasError && errorMessage && <ErrorMessage errorMessage={errorMessage} />}

@@ -718,6 +718,10 @@ input:checked+.slider:before {
   outline: none;
 }
 
+.leaflet-marker-icon {
+  transform-origin: center;
+}
+
 .loader-overlay {
   position: absolute;
   top: 0;
