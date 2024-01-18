@@ -43,7 +43,6 @@ function App({ user }) {
   const [invalidInputs, setInvalidInputs] = useState([]);
   const [uuidTable, setUuidTable] = useState();
 
-
   const [selectedElement, setSelectedElement] = useState(null);
 
   const [workToInsert, setWorkToInsert] = useState([]);

@@ -39,6 +39,7 @@ const Table = ({
   allElementsData,
   setAllElementsData,
   setRotationAngle,
+  setUpdateMapDz,
 }) => {
   const selectedRowRef = useRef(null);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -200,6 +201,7 @@ const Table = ({
         NotificationService.showSuccessNotification('Данні успішно відправлені');
         setPushToDZCalled(true);
         hideForm(e);
+        setUpdateMapDz(true);
       } else {
         NotificationService.showWarningNotification('Будь ласка, заповніть всі поля та спробуйте ще раз!');
       }
@@ -301,34 +303,38 @@ const Table = ({
           showAddForm && (
             <div>
               <form className="form-addDz">
-                <div className="form-addDz__group">
-                  <label className="form-addDz-input_title">Номер ПДР знаку</label>
-                  <Input
-                    className="form-addDz__input"
-                    type="text"
-                    name="num_pdr"
-                    value={newRowData.num_pdr}
-                    onChange={handleInputChange}
-                    placeholder="Номер ПДР"
-                    required
-                    errorMessage={"Введіть номер ПДР"}
-                    hasError={invalidInputs.includes("num_pdr")}
-                  />
+                <div className="form-addDz__group-flex">
+                  <div className="form-addDz__group">
+                    <label className="form-addDz-input_title">Номер ПДР знаку</label>
+                    <Input
+                      className="form-addDz__input"
+                      type="text"
+                      name="num_pdr"
+                      value={newRowData.num_pdr}
+                      onChange={handleInputChange}
+                      placeholder="Номер ПДР"
+                      required
+                      errorMessage={"Введіть номер ПДР"}
+                      hasError={invalidInputs.includes("num_pdr")}
+                    />
+                  </div>
+                  <div className="form-addDz__group">
+                    <label className="form-addDz-input_title">Провернути знак</label>
+                    <Input
+                      className="form-addDz__input-range"
+                      type="range"
+                      name="ang_map"
+                      max={360}
+                      min={0}
+                      step={5}
+                      value={newRowData.ang_map || 0}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+
                 </div>
-                <div className="form-addDz__group">
-                  <label className="form-addDz-input_title">Провернути знак</label>
-                  <Input
-                    className="form-addDz__input"
-                    type="range"
-                    name="ang_map"
-                    max={360}
-                    min={0}
-                    value={newRowData.ang_map}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div className="flex">
+                <div className="form-addDz__group-flex">
                   {!showSaveButton && (
                     <button type="button" className="button-add-Dz" onClick={showDraggableDzMarker}>
                       Показати на карті

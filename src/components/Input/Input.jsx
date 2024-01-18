@@ -17,6 +17,7 @@ const Input = ({
   min,
   max,
   pattern,
+  step,
 }) => {
   return (
     <div>
@@ -34,6 +35,7 @@ const Input = ({
         min={min}
         max={max}
         pattern={pattern}
+        step={step}
       />
       {hasError && errorMessage && <ErrorMessage errorMessage={errorMessage} />}
     </div>

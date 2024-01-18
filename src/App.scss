@@ -635,7 +635,15 @@ input:checked+.slider:before {
 
   &__group {
     margin-bottom: 10px;
+
+    &-flex {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+    }
   }
+
 
   &-input_title {
     display: block;
