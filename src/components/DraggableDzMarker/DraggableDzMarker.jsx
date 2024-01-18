@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { Popup, Marker, useMap } from "react-leaflet";
 import markerImage from "../../img/1.39z.png";
 import L from "leaflet";
-import "leaflet-rotatedmarker"; // Import the leaflet-rotatedmarker library
+import "leaflet-rotatedmarker";
 
 const customIcon = new L.Icon({
   iconUrl: markerImage,
@@ -33,7 +33,6 @@ const DraggableDzMarker = ({ handleMarkerPosition, setDraggableDzMarkerWKT, rota
 
   useEffect(() => {
     if (selectMarkerRef.current) {
-      // Update the marker rotation when the rotationAngle prop changes
       selectMarkerRef.current.setRotationAngle(rotationAngle);
     }
   }, [rotationAngle]);

@@ -166,6 +166,19 @@ const FormAddWorks = ({
     }
   }, [buttonAddDocPressed, selectedInfo]);
 
+  const handleCancelClick = async () => {
+    if (uuidTable) {
+      try {
+        await deleteRecordsById(uuidTable);
+      } catch (error) {
+        console.error('Error deleting record:', error);
+        return;
+      }
+    }
+
+    window.location.reload();
+  };
+
   return (
     <div className="form-container-inside">
       <label className="block-label" style={{ backgroundColor: buttonAddDocPressed ? 'grey' : '' }}>Загальна інформація</label>
@@ -296,18 +309,17 @@ const FormAddWorks = ({
             >
               Зберегти
             </button>
-            {!visibleButtonInsert &&
-              <button
-                className="form__button form__button-addForm form__button-delete"
-                onClick={() => deleteRecordsById(uuidTable)}
-                type="button"
-              >
-                Скасувати
-              </button>}
+            <button
+              className="form__button form__button-addForm form__button-delete"
+              onClick={handleCancelClick}
+              type="button"
+            >
+              Скасувати
+            </button>
           </div>
         </div>
-      </form>
-    </div>
+      </form >
+    </div >
   );
 };
 
