@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './styles.scss';
 
-const CatalogTable = ({
-  user,
-}) => {
+const CatalogTable = ({ user }) => {
   const [catalogData, setCatalogData] = useState([]);
+  const [sortOrder, setSortOrder] = useState({
+    field: null,
+    ascending: true,
+  });
 
   useEffect(() => {
     const fetchDataFromDB = async () => {
@@ -18,7 +20,7 @@ const CatalogTable = ({
     };
 
     fetchDataFromDB();
-  }, []);
+  }, [user]);
 
   const formatDate = (originalDate) => {
     const dateObject = new Date(originalDate);
@@ -28,20 +30,52 @@ const CatalogTable = ({
     return `${day}.${month}.${year}`;
   };
 
+  const handleSort = (field) => {
+    setSortOrder({
+      field,
+      ascending: sortOrder.field === field ? !sortOrder.ascending : true,
+    });
+  };
+
+  const sortedData = catalogData.slice().sort((a, b) => {
+    const aValue = sortOrder.field ? a[sortOrder.field] : null;
+    const bValue = sortOrder.field ? b[sortOrder.field] : null;
+
+    if (aValue === bValue) {
+      return 0;
+    }
+
+    if (sortOrder.ascending) {
+      return aValue < bValue ? -1 : 1;
+    } else {
+      return aValue > bValue ? -1 : 1;
+    }
+  });
+
   return (
     <table className='catalogTable'>
       <thead>
         <tr className='catalogTable__tr'>
-          <th className='catalogTable__th'>Дата роботи</th>
-          <th className='catalogTable__th'>Документ</th>
-          <th className='catalogTable__th'>Адреса</th>
-          <th className='catalogTable__th'>ID документа</th>
-          <th className='catalogTable__th'>Тип робіт</th>
+          <th className='catalogTable__th' onClick={() => handleSort('date_work')}>
+            Дата роботи
+          </th>
+          <th className='catalogTable__th' onClick={() => handleSort('is_doc')}>
+            Документ
+          </th>
+          <th className='catalogTable__th' onClick={() => handleSort('address')}>
+            Адреса
+          </th>
+          <th className='catalogTable__th' onClick={() => handleSort('id_doc')}>
+            ID документа
+          </th>
+          <th className='catalogTable__th' onClick={() => handleSort('type_work')}>
+            Тип робіт
+          </th>
         </tr>
       </thead>
       <tbody>
-        {catalogData.length > 0
-          ? catalogData.map((row, index) => (
+        {sortedData.length > 0 ? (
+          sortedData.map((row, index) => (
             <tr key={index} className='catalogTable__tr'>
               <td className='catalogTable__td'>{formatDate(row.date_work)}</td>
               <td className='catalogTable__td'>{row.is_doc ? '+' : '-'}</td>
@@ -50,7 +84,9 @@ const CatalogTable = ({
               <td className='catalogTable__td'>{row.type_work}</td>
             </tr>
           ))
-          : <span className='catalogTable__user' >Користувач не залогінений</span>}
+        ) : (
+          <span className='catalogTable__user'>Користувач не залогінений</span>
+        )}
       </tbody>
     </table>
   );

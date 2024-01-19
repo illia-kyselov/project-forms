@@ -5,6 +5,11 @@
 
   &__th {
     background-color: #f2f2f2;
+
+    &:hover {
+      cursor: pointer;
+      background-color: #e5e5e5;
+    }
   }
 
   &__th,
