@@ -91,13 +91,15 @@ const CatalogTable = ({ user }) => {
   });
 
   return (
-    <div>
-      <input
-        type="text"
-        placeholder="Пошук"
-        value={searchQuery}
-        onChange={(e) => handleSearch(e.target.value)}
-      />
+    <div className='catalogTable__container'>
+      <label className='catalogTable__title'>{`Операції користувача `}
+        <input
+          type="text"
+          placeholder="Пошук"
+          value={searchQuery}
+          onChange={(e) => handleSearch(e.target.value)}
+        />
+      </label>
       <table className='catalogTable'>
         <thead>
           <tr className='catalogTable__tr'>
