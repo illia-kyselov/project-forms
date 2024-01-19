@@ -10,6 +10,16 @@
       cursor: pointer;
       background-color: #e5e5e5;
     }
+
+    &-asc::after {
+      display: inline-block;
+      content: " ▼";
+    }
+
+    &-desc::after {
+      display: inline-block;
+      content: " ▲";
+    }
   }
 
   &__th,
