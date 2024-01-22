@@ -51,6 +51,7 @@ const LeafletMap = ({
   isChecked,
   setFocusMarker,
   rotationAngle,
+  setRotationAngle,
 }) => {
   const containerStyle = {
     height: "calc(96vh - 10px)",
@@ -85,6 +86,8 @@ const LeafletMap = ({
     acc[marker.id] = React.createRef();
     return acc;
   }, {});
+
+  console.log('rotationAngle', rotationAngle);
 
   useEffect(() => {
     const fetchPolygons = async () => {
@@ -419,6 +422,7 @@ const LeafletMap = ({
             handleMarkerPosition={handleMarkerDragEnd}
             setDraggableDzMarkerWKT={setDraggableDzMarkerWKT}
             rotationAngle={rotationAngle}
+            setRotationAngle={setRotationAngle}
           />
         )}
 

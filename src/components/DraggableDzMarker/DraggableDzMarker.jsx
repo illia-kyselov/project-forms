@@ -3,6 +3,7 @@ import { Popup, Marker, useMap } from "react-leaflet";
 import markerImage from "../../img/1.39z.png";
 import L from "leaflet";
 import "leaflet-rotatedmarker";
+import RotateControl from "../RotateControl/RotateControl";
 
 const customIcon = new L.Icon({
   iconUrl: markerImage,
@@ -12,7 +13,7 @@ const customIcon = new L.Icon({
   iconAnchor: [30, 30],
 });
 
-const DraggableDzMarker = ({ handleMarkerPosition, setDraggableDzMarkerWKT, rotationAngle }) => {
+const DraggableDzMarker = ({ handleMarkerPosition, setDraggableDzMarkerWKT, rotationAngle, setRotationAngle }) => {
   const map = useMap();
   const [markerPosition, setMarkerPosition] = useState(map.getCenter());
   const selectMarkerRef = useRef(null);
@@ -48,6 +49,15 @@ const DraggableDzMarker = ({ handleMarkerPosition, setDraggableDzMarkerWKT, rota
       }}
     >
       <Popup openPopup={true}>Перемістіть знак у потрібне місце</Popup>
+      <RotateControl
+        rotationAngle={rotationAngle}
+        setRotationAngle={setRotationAngle}
+        markerPosition={markerPosition}
+        map={map}
+        setMarkerPosition={setMarkerPosition}
+        handleMarkerPosition={handleMarkerPosition}
+        setDraggableDzMarkerWKT={setDraggableDzMarkerWKT}
+      />
     </Marker>
   );
 };

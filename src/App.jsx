@@ -346,6 +346,7 @@ function App({ user }) {
           setPushToDZCalled={setPushToDZCalled}
           isChecked={isChecked}
           rotationAngle={rotationAngle}
+          setRotationAngle={setRotationAngle}
         />
         <div className="form-container">
           <FormAddWorks

@@ -338,6 +338,11 @@ body {
   flex-direction: column;
 }
 
+.leaflet-popup-content-wrapper {
+  position: relative;
+  z-index: 405;
+}
+
 .content {
   max-width: 1000px;
 }
