@@ -4,6 +4,8 @@ import { validateEmptyInputs } from "../../helpers/validate-empty-inputs";
 import Input from "../Input/Input";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
+import { deleteRecordsByUuid } from "../../helpers/deleteRecordByUuid";
+
 const FormAddWorks = ({
   objectid,
   selectedMarkerId,
@@ -50,50 +52,50 @@ const FormAddWorks = ({
     handleChange(e);
   };
 
-  async function deleteRecordsById(uuid) {
-    try {
-      const elementsResponse = await fetch(`http://localhost:3001/elements/${uuid}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+  // async function deleteRecordsById(uuid) {
+  //   try {
+  //     const elementsResponse = await fetch(`http://localhost:3001/elements/${uuid}`, {
+  //       method: 'DELETE',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     });
 
-      if (!elementsResponse.ok) {
-        NotificationService.showErrorNotification('Дані не видалені');
-        return;
-      }
+  //     if (!elementsResponse.ok) {
+  //       NotificationService.showErrorNotification('Дані не видалені');
+  //       return;
+  //     }
 
-      const explDzResponse = await fetch(`http://localhost:3001/expl_dz/${uuid}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+  //     const explDzResponse = await fetch(`http://localhost:3001/expl_dz/${uuid}`, {
+  //       method: 'DELETE',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     });
 
-      if (!explDzResponse.ok) {
-        NotificationService.showErrorNotification('Дані не видалені');
-        return;
-      }
+  //     if (!explDzResponse.ok) {
+  //       NotificationService.showErrorNotification('Дані не видалені');
+  //       return;
+  //     }
 
-      const workTableResponse = await fetch(`http://localhost:3001/work_table/${uuid}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+  //     const workTableResponse = await fetch(`http://localhost:3001/work_table/${uuid}`, {
+  //       method: 'DELETE',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     });
 
-      if (!workTableResponse.ok) {
-        NotificationService.showErrorNotification('Дані не видалені');
-        return;
-      }
+  //     if (!workTableResponse.ok) {
+  //       NotificationService.showErrorNotification('Дані не видалені');
+  //       return;
+  //     }
 
-      NotificationService.showSuccessNotification('Дані успішно видалені');
-      window.location.reload();
-    } catch (error) {
-      console.error('Error deleting record:', error);
-    }
-  }
+  //     NotificationService.showSuccessNotification('Дані успішно видалені');
+  //     window.location.reload();
+  //   } catch (error) {
+  //     console.error('Error deleting record:', error);
+  //   }
+  // }
 
   const selectedInfoFromTableRowClick =
     polygonTableRowClick.objectid && polygonTableRowClick.pro_name
@@ -169,7 +171,7 @@ const FormAddWorks = ({
   const handleCancelClick = async () => {
     if (uuidTable) {
       try {
-        await deleteRecordsById(uuidTable);
+        await deleteRecordsByUuid(uuidTable);
       } catch (error) {
         console.error('Error deleting record:', error);
         return;

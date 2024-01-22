@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './styles.scss';
+import CustomSVG from '../../img/delete_icon';
+import { deleteRecordsByUuid } from '../../helpers/deleteRecordByUuid';
 
 const CatalogTable = ({ user }) => {
   const [catalogData, setCatalogData] = useState([]);
@@ -133,6 +135,7 @@ const CatalogTable = ({ user }) => {
             >
               Тип робіт
             </th>
+            <th className={`catalogTable__th catalogTable__th-delete`}></th>
           </tr>
         </thead>
         <tbody>
@@ -144,6 +147,11 @@ const CatalogTable = ({ user }) => {
                 <td className='catalogTable__td'>{row.address}</td>
                 <td className='catalogTable__td'>{row.id_doc ? row.id_doc : 'Не документ'}</td>
                 <td className='catalogTable__td'>{row.type_work}</td>
+                <td
+                  className='catalogTable__td catalogTable__td-delete'
+                >
+                  {<CustomSVG onClick={() => deleteRecordsByUuid(row.uuid)} />}
+                </td>
               </tr>
             ))
           ) : (

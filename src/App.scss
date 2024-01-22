@@ -751,3 +751,13 @@ input:checked+.slider:before {
   visibility: visible;
   transition: opacity 1s ease, visibility 0.3s linear;
 }
+
+.customSVG {
+  fill: red;
+  cursor: pointer;
+  transition: all linear 0.2s;
+
+  &:hover {
+    scale: 1.2;
+  }
+}
