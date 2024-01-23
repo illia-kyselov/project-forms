@@ -40,6 +40,7 @@ const Table = ({
   setAllElementsData,
   setRotationAngle,
   setUpdateMapDz,
+  rotationAngle,
 }) => {
   const selectedRowRef = useRef(null);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -85,10 +86,13 @@ const Table = ({
   useEffect(() => {
     setNewRowData((prevData) => ({
       ...prevData,
-      position: dzMarkerPosition,
+      ang_map: Math.round(rotationAngle),
     }));
-    setRotationAngle(newRowData.ang_map);
-  }, [dzMarkerPosition, newRowData.ang_map, setRotationAngle]);
+  }, [rotationAngle]);
+
+  const handleRotationChange = (value) => {
+    setRotationAngle(value);
+  };
 
   useEffect(() => {
     if (focusMarker === null) {
@@ -168,6 +172,8 @@ const Table = ({
   const handlePushToDZ = async (e) => {
     e.preventDefault();
 
+    const roundedAngMap = Math.round(newRowData.ang_map);
+
     if (hasEmptyInputsDz) {
       if (hasEmptyInputsDz) {
         setInvalidInputs(emptyInputsDZ);
@@ -184,10 +190,8 @@ const Table = ({
         geom: wktMultiPoint,
         num_pdr: newRowData.num_pdr,
         id: 2727,
-        ang_map: newRowData.ang_map,
+        ang_map: roundedAngMap,
       };
-
-      console.log('ang_map', newRowData.ang_map);
 
       const response = await fetch('http://localhost:3001/dz', {
         method: 'POST',
@@ -328,7 +332,7 @@ const Table = ({
                       min={0}
                       step={5}
                       value={newRowData.ang_map || 0}
-                      onChange={handleInputChange}
+                      onChange={(e) => handleRotationChange(e.target.value)}
                       required
                     />
                   </div>

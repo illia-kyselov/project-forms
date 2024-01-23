@@ -87,7 +87,6 @@ const LeafletMap = ({
     return acc;
   }, {});
 
-  console.log('rotationAngle', rotationAngle);
 
   useEffect(() => {
     const fetchPolygons = async () => {

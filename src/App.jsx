@@ -396,6 +396,7 @@ function App({ user }) {
                 allElementsData={allElementsData}
                 setAllElementsData={setAllElementsData}
                 setRotationAngle={setRotationAngle}
+                rotationAngle={rotationAngle}
               />
             )}
             {showSecondTable && dataTable.length > 0 &&
