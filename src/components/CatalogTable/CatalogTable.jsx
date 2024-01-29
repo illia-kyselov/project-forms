@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import './styles.scss';
 import CustomSVG from '../../img/delete_icon';
-import { deleteRecordsByUuid } from '../../helpers/deleteRecordByUuid';
+
+import { deleteRecordsByUuid } from '../../api/deleteRecordByUuid';
+import { updateRecordByUuid } from '../../api/updateRecordByUuid';
+
+import { BeatLoader } from 'react-spinners';
+import DeleteSVG from '../../img/delete_icon';
+import CloseSVG from '../../img/CloseSVG';
+import CheckSVG from '../../img/CheckSVG';
 
 const CatalogTable = ({ user }) => {
   const [catalogData, setCatalogData] = useState([]);
@@ -10,20 +17,37 @@ const CatalogTable = ({ user }) => {
     ascending: true,
   });
   const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [editingRow, setEditingRow] = useState(null);
+  const [editedData, setEditedData] = useState({});
+  const [options, setOptions] = useState([]);
 
   useEffect(() => {
-    const fetchDataFromDB = async () => {
-      try {
-        const response = await fetch(`http://localhost:3001/catalog/work_table?pers_work=${user}`);
-        const data = await response.json();
-        setCatalogData(data);
-      } catch (error) {
-        console.error('Error fetching data', error);
-      }
-    };
-
     fetchDataFromDB();
+    fetchOptions();
   }, [user]);
+
+  const fetchDataFromDB = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`http://localhost:3001/catalog/work_table?pers_work=${user}`);
+      const data = await response.json();
+      setCatalogData(data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching data', error);
+    }
+  };
+
+  const fetchOptions = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/dict_work");
+      const data = await response.json();
+      setOptions(data);
+    } catch (error) {
+      console.error("Error fetching data", error);
+    }
+  };
 
   const formatDate = (originalDate) => {
     const dateObject = new Date(originalDate);
@@ -42,6 +66,32 @@ const CatalogTable = ({ user }) => {
 
   const handleSearch = (query) => {
     setSearchQuery(query);
+  };
+
+  const handleDoubleClick = (row) => {
+    if (!editingRow || editingRow === row.uuid) {
+      setEditingRow(row.uuid);
+      setEditedData({ ...row });
+    } else {
+      setEditingRow(row.uuid);
+      setEditedData({ ...row });
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingRow(null);
+    setEditedData({});
+  };
+
+  const handleUpdate = async () => {
+    try {
+      await updateRecordByUuid(editedData.uuid, editedData);
+      setEditingRow(null);
+      setEditedData({});
+      fetchDataFromDB();
+    } catch (error) {
+      console.error('Error updating data', error);
+    }
   };
 
   const filteredData = catalogData.filter((row) => {
@@ -76,7 +126,6 @@ const CatalogTable = ({ user }) => {
     });
   });
 
-
   const sortedData = filteredData.slice().sort((a, b) => {
     const aValue = sortOrder.field ? a[sortOrder.field] : null;
     const bValue = sortOrder.field ? b[sortOrder.field] : null;
@@ -97,6 +146,7 @@ const CatalogTable = ({ user }) => {
       <label className='catalogTable__title'>{`Операції користувача `}
         <input
           type="text"
+          className='catalogTable__search'
           placeholder="Пошук"
           value={searchQuery}
           onChange={(e) => handleSearch(e.target.value)}
@@ -141,16 +191,57 @@ const CatalogTable = ({ user }) => {
         <tbody>
           {sortedData.length > 0 ? (
             sortedData.map((row, index) => (
-              <tr key={index} className='catalogTable__tr'>
-                <td className='catalogTable__td'>{formatDate(row.date_work)}</td>
+              <tr
+                key={index}
+                className={`catalogTable__tr ${editingRow === row.uuid ? 'editing' : ''}`}
+                onDoubleClick={() => handleDoubleClick(row)}
+              >
+                <td className='catalogTable__td'>{editingRow === row.uuid ? (
+                  <input
+                    type="text"
+                    value={editedData.date_work}
+                    onChange={(e) => setEditedData({ ...editedData, date_work: e.target.value })}
+                  />
+                ) : formatDate(row.date_work)}</td>
                 <td className='catalogTable__td'>{row.is_doc ? '+' : '-'}</td>
-                <td className='catalogTable__td'>{row.address}</td>
+                <td className='catalogTable__td'>{editingRow === row.uuid ? (
+                  <input
+                    type="text"
+                    value={editedData.address}
+                    onChange={(e) => setEditedData({ ...editedData, address: e.target.value })}
+                  />
+                ) : row.address}</td>
                 <td className='catalogTable__td'>{row.id_doc ? row.id_doc : 'Не документ'}</td>
-                <td className='catalogTable__td'>{row.type_work}</td>
-                <td
-                  className='catalogTable__td catalogTable__td-delete'
-                >
-                  {<CustomSVG onClick={() => deleteRecordsByUuid(row.uuid)} />}
+                <td className='catalogTable__td'>{editingRow === row.uuid ? (
+                  <select
+                    className="form__input form__input-select"
+                    name="type_work"
+                    onChange={(e) => setEditedData({ ...editedData, type_work: e.target.value })}
+                    value={editedData.type_work || ''}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {options.map((option) => (
+                      <option
+                        key={option}
+                        value={option}
+                        className="form__input-option"
+                      >
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                ) : row.type_work}</td>
+                <td className='catalogTable__td catalogTable__td-edit'>
+                  {editingRow === row.uuid ? (
+                    <>
+                      <CheckSVG onClick={() => handleUpdate()}></CheckSVG>
+                      <CloseSVG onClick={() => handleCancelEdit()}></CloseSVG>
+                    </>
+                  ) : (
+                    <>
+                      <DeleteSVG onClick={() => deleteRecordsByUuid(row.uuid)} />
+                    </>
+                  )}
                 </td>
               </tr>
             ))
@@ -159,6 +250,11 @@ const CatalogTable = ({ user }) => {
           )}
         </tbody>
       </table>
+      {loading && (
+        <div className={`loader-overlay ${loading ? 'show' : ''}`}>
+          <BeatLoader color="#36d7b7" loading={true} size={50} />
+        </div>
+      )}
     </div>
   );
 };

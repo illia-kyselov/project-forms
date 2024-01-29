@@ -4,7 +4,7 @@ import { validateEmptyInputs } from "../../helpers/validate-empty-inputs";
 import Input from "../Input/Input";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
-import { deleteRecordsByUuid } from "../../helpers/deleteRecordByUuid";
+import { deleteRecordsByUuid } from "../../api/deleteRecordByUuid";
 
 const FormAddWorks = ({
   objectid,

@@ -145,7 +145,6 @@ function App({ user }) {
     };
 
     setAllElementsData((prevData) => [...prevData, newData]);
-    NotificationService.showSuccessNotification('Данні успішно додані');
     setformAddElementsData({
       tableId: selectedRowData,
       element: "",
@@ -314,8 +313,6 @@ function App({ user }) {
           NotificationService.showWarningNotification('Помилка під час надсилання даних елементів');
         }
       }
-
-
 
       NotificationService.showInfoNotification('Всі дані надіслані');
       setVisibleButtonInsert(false);

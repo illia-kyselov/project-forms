@@ -175,7 +175,7 @@ app.get("/dict_dz_form", (req, res) => {
 });
 
 app.get("/dz", (req, res) => {
-  const limit = 4000;
+  const limit = 3000;
   const { minLat, minLng, maxLat, maxLng } = req.query;
 
   const query = {
@@ -702,6 +702,44 @@ app.put("/elements/:id", (req, res) => {
       res.status(500).send("Error updating data in the database");
     } else {
       res.json({ message: "Data successfully updated in the database" });
+    }
+  });
+});
+
+app.put("/work_table/:uuid", (req, res) => {
+  const idToUpdate = req.params.uuid;
+  const updatedData = req.body;
+
+  const keys = Object.keys(updatedData);
+  const values = Object.values(updatedData);
+
+  const setClause = keys
+    .map((key, index) => `${key} = $${index + 1}`)
+    .join(", ");
+
+  const query = {
+    text: `UPDATE exploitation.work_table SET ${setClause} WHERE uuid = $${
+      keys.length + 1
+    } RETURNING uuid`,
+    values: [...values, idToUpdate],
+  };
+
+  client.query(query, (err, result) => {
+    if (err) {
+      console.error("Error executing update query", err);
+      res.status(500).send("Error executing update query");
+    } else {
+      if (result.rows && result.rows[0] && result.rows[0].uuid) {
+        const updatedId = result.rows[0].uuid;
+        res.json({
+          message: `Record with uuid ${updatedId} successfully updated`,
+          uuid: updatedId,
+        });
+      } else {
+        res.status(404).json({
+          message: `Record with uuid ${idToUpdate} not found or could not be updated.`,
+        });
+      }
     }
   });
 });

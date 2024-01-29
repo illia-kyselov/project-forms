@@ -202,7 +202,7 @@ const Table = ({
       });
 
       if (response.ok) {
-        NotificationService.showSuccessNotification('Данні успішно відправлені');
+        NotificationService.showSuccessNotification('Дорожній знак успішно створений!');
         setPushToDZCalled(true);
         hideForm(e);
         setUpdateMapDz(true);
@@ -278,7 +278,9 @@ const Table = ({
     event.preventDefault();
     setNewRowData({
       num_pdr: "",
+      ang_map: 0,
     });
+    setRotationAngle(0);
     setShowSaveButton(false);
     setShowAddForm(false);
     setDraggableDzMarkerShow(false);

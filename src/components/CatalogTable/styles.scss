@@ -16,6 +16,10 @@
     color: #fff;
   }
 
+  &__search {
+    outline: none;
+  }
+
   &__th {
     background-color: #f2f2f2;
 
@@ -42,9 +46,7 @@
     text-align: left;
 
 
-    &-delete {
-
-    }
+    &-delete {}
   }
 
   &__user {

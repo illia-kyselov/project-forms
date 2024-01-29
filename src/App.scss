@@ -757,8 +757,28 @@ input:checked+.slider:before {
   transition: opacity 1s ease, visibility 0.3s linear;
 }
 
-.customSVG {
+.deleteSVG {
   fill: red;
+  cursor: pointer;
+  transition: all linear 0.2s;
+
+  &:hover {
+    scale: 1.2;
+  }
+}
+
+.closeSVG {
+  fill: red;
+  cursor: pointer;
+  transition: all linear 0.2s;
+
+  &:hover {
+    scale: 1.2;
+  }
+}
+
+.checkSVG {
+  fill: green;
   cursor: pointer;
   transition: all linear 0.2s;
 
