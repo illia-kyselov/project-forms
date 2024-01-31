@@ -24,8 +24,8 @@ const RotateControl = ({ rotationAngle, setRotationAngle, markerPosition, map })
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
       const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX);
-      const degrees = (angle * 360) / Math.PI * rotationCoefficient;
-      setRotationAngle(degrees);
+      let degrees = (angle * (180 / Math.PI) + 360) % 360;
+      setRotationAngle(degrees.toFixed());
     }
   };
 
@@ -49,6 +49,7 @@ const RotateControl = ({ rotationAngle, setRotationAngle, markerPosition, map })
         top: `${map.latLngToContainerPoint(markerPosition).y - 35}px`,
         left: `${map.latLngToContainerPoint(markerPosition).x + 35}px`,
         transform: `translate(-50%, -50%) rotate(${rotationAngle}deg)`,
+        cursor: 'drag',
         zIndex: 400,
       }}
       onMouseDown={handleMouseDown}

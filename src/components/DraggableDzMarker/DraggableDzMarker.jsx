@@ -26,6 +26,8 @@ const DraggableDzMarker = ({ handleMarkerPosition, setDraggableDzMarkerWKT, rota
     setDraggableDzMarkerWKT([newPosition.lat, newPosition.lng]);
   };
 
+  console.log(rotationAngle);
+
   useEffect(() => {
     if (selectMarkerRef.current) {
       selectMarkerRef.current.openPopup();

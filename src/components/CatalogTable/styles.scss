@@ -6,6 +6,25 @@
     margin: 15px 20px;
   }
 
+  &__input,
+  &__select {
+    background-color: rgba(255, 167, 181, 0.3);
+    display: inline-flex;
+    flex-wrap: nowrap;
+    box-sizing: border-box;
+    border: 1px solid rgb(252, 20, 55);
+    border-radius: 5px;
+    font-size: 1em;
+    padding: .5em;
+    min-width: 100px;
+    max-width: 500px;
+  }
+
+  &__option:checked {
+    color: #fff;
+    background-color: #fd7373;
+  }
+
   &__title {
     display: flex;
     flex-direction: row;
@@ -44,9 +63,6 @@
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
-
-
-    &-delete {}
   }
 
   &__user {

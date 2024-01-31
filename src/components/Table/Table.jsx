@@ -91,7 +91,7 @@ const Table = ({
   }, [rotationAngle]);
 
   const handleRotationChange = (value) => {
-    setRotationAngle(value);
+    setRotationAngle(value % 360);
   };
 
   useEffect(() => {

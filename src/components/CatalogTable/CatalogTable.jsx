@@ -199,7 +199,8 @@ const CatalogTable = ({ user }) => {
                 <td className='catalogTable__td'>{editingRow === row.uuid ? (
                   <input
                     type="text"
-                    value={editedData.date_work}
+                    className='catalogTable__input'
+                    value={formatDate(editedData.date_work)}
                     onChange={(e) => setEditedData({ ...editedData, date_work: e.target.value })}
                   />
                 ) : formatDate(row.date_work)}</td>
@@ -208,13 +209,14 @@ const CatalogTable = ({ user }) => {
                   <input
                     type="text"
                     value={editedData.address}
+                    className='catalogTable__input'
                     onChange={(e) => setEditedData({ ...editedData, address: e.target.value })}
                   />
                 ) : row.address}</td>
                 <td className='catalogTable__td'>{row.id_doc ? row.id_doc : 'Не документ'}</td>
                 <td className='catalogTable__td'>{editingRow === row.uuid ? (
                   <select
-                    className="form__input form__input-select"
+                    className="catalogTable__select"
                     name="type_work"
                     onChange={(e) => setEditedData({ ...editedData, type_work: e.target.value })}
                     value={editedData.type_work || ''}
@@ -224,7 +226,7 @@ const CatalogTable = ({ user }) => {
                       <option
                         key={option}
                         value={option}
-                        className="form__input-option"
+                        className="catalogTable__option"
                       >
                         {option}
                       </option>
