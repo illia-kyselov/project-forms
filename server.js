@@ -513,7 +513,7 @@ app.post("/dz", (req, res) => {
   const ang_map = req.body.ang_map;
 
   const query = `
-    INSERT INTO exploitation.dz (geom, num_pdr, num_sing,  ang_map)
+    INSERT INTO exploitation.dz (geom, num_pdr, num_sing, ang_map)
     VALUES (ST_GeomFromText($1, 4326), $2, $3, $4)
   `;
 

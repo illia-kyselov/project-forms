@@ -298,8 +298,6 @@ const Table = ({
     setDataSecondTable(null);
   }
 
-  console.log(data);
-
   return (
     <div className="form-container-inside form-container-inside-width">
       <label className="block-label">Обрані дорожні знаки</label>
