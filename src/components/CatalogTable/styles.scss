@@ -1,0 +1,80 @@
+.catalogTable {
+  width: 100%;
+  border-collapse: collapse;
+
+  &__container {
+    margin: 15px 20px;
+  }
+
+  &__input,
+  &__select {
+    background-color: rgba(255, 167, 181, 0.3);
+    display: inline-flex;
+    flex-wrap: nowrap;
+    box-sizing: border-box;
+    border: 1px solid rgb(252, 20, 55);
+    border-radius: 5px;
+    font-size: 1em;
+    padding: .5em;
+    min-width: 100px;
+    max-width: 500px;
+  }
+
+  &__option:checked {
+    color: #fff;
+    background-color: #fd7373;
+  }
+
+  &__title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 5px 10px;
+    background-color: #326d0c;
+    border-radius: 4px 4px 0 0;
+    color: #fff;
+  }
+
+  &__search {
+    outline: none;
+  }
+
+  &__th {
+    background-color: #f2f2f2;
+
+    &:hover {
+      cursor: pointer;
+      background-color: #e5e5e5;
+    }
+
+    &-asc::after {
+      display: inline-block;
+      content: " ▼";
+    }
+
+    &-desc::after {
+      display: inline-block;
+      content: " ▲";
+    }
+  }
+
+  &__th,
+  &__td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  &__user {
+    color: red;
+    font-weight: bold;
+  }
+
+  &__tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  &__tr:hover {
+    background-color: #e5e5e5;
+  }
+}
