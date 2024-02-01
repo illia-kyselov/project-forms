@@ -9,7 +9,6 @@ import { BeatLoader } from 'react-spinners';
 import DeleteSVG from '../../img/delete_icon';
 import CloseSVG from '../../img/CloseSVG';
 import CheckSVG from '../../img/CheckSVG';
-import AdditionalInfo from './AdditionalInfo';
 
 const CatalogTable = ({ user }) => {
   const [catalogData, setCatalogData] = useState([]);
@@ -22,8 +21,6 @@ const CatalogTable = ({ user }) => {
   const [editingRow, setEditingRow] = useState(null);
   const [editedData, setEditedData] = useState({});
   const [options, setOptions] = useState([]);
-  const [elementsCatalog, setElementsCataog] = useState(null);
-  const [clickedRow, setClickedRow] = useState(null);
 
   useEffect(() => {
     fetchDataFromDB();
@@ -96,19 +93,6 @@ const CatalogTable = ({ user }) => {
       console.error('Error updating data', error);
     }
   };
-
-
-  const handleRowClick = async (row) => {
-    try {
-      const response = await fetch(`http://localhost:3001/catalog/elements?uuid=${row.uuid}`);
-      const data = await response.json();
-      setElementsCataog(data);
-      setClickedRow(row);
-    } catch (error) {
-      console.error('Error updating data', error);
-    }
-  }
-  console.log('Данні:', elementsCatalog);
 
   const filteredData = catalogData.filter((row) => {
     const lowerCaseQuery = searchQuery.toLowerCase();
@@ -207,72 +191,61 @@ const CatalogTable = ({ user }) => {
         <tbody>
           {sortedData.length > 0 ? (
             sortedData.map((row, index) => (
-              <React.Fragment key={index}>
-                <tr
-                  key={index}
-                  className={`catalogTable__tr ${editingRow === row.uuid ? 'editing' : ''}`}
-                  onDoubleClick={() => handleDoubleClick(row)}
-                  onClick={() => handleRowClick(row)}
-                >
-                  <td className='catalogTable__td'>{editingRow === row.uuid ? (
-                    <input
-                      type="text"
-                      className='catalogTable__input'
-                      value={formatDate(editedData.date_work)}
-                      onChange={(e) => setEditedData({ ...editedData, date_work: e.target.value })}
-                    />
-                  ) : formatDate(row.date_work)}</td>
-                  <td className='catalogTable__td'>{row.is_doc ? '+' : '-'}</td>
-                  <td className='catalogTable__td'>{editingRow === row.uuid ? (
-                    <input
-                      type="text"
-                      value={editedData.address}
-                      className='catalogTable__input'
-                      onChange={(e) => setEditedData({ ...editedData, address: e.target.value })}
-                    />
-                  ) : row.address}</td>
-                  <td className='catalogTable__td'>{row.id_doc ? row.id_doc : 'Не документ'}</td>
-                  <td className='catalogTable__td'>{editingRow === row.uuid ? (
-                    <select
-                      className="catalogTable__select"
-                      name="type_work"
-                      onChange={(e) => setEditedData({ ...editedData, type_work: e.target.value })}
-                      value={editedData.type_work || ''}
-                      style={{ cursor: 'pointer' }}
-                    >
-                      {options.map((option) => (
-                        <option
-                          key={option}
-                          value={option}
-                          className="catalogTable__option"
-                        >
-                          {option}
-                        </option>
-                      ))}
-                    </select>
-                  ) : row.type_work}</td>
-                  <td className='catalogTable__td catalogTable__td-edit'>
-                    {editingRow === row.uuid ? (
-                      <>
-                        <CheckSVG onClick={() => handleUpdate()}></CheckSVG>
-                        <CloseSVG onClick={() => handleCancelEdit()}></CloseSVG>
-                      </>
-                    ) : (
-                      <>
-                        <DeleteSVG onClick={() => deleteRecordsByUuid(row.uuid)} />
-                      </>
-                    )}
-                  </td>
-                </tr>
-                {clickedRow && clickedRow.uuid === row.uuid && (
-                  <tr>
-                    <td colSpan="6">
-                      <AdditionalInfo data={elementsCatalog} />
-                    </td>
-                  </tr>
-                )}
-              </React.Fragment>
-
+              <tr
+                key={index}
+                className={`catalogTable__tr ${editingRow === row.uuid ? 'editing' : ''}`}
+                onDoubleClick={() => handleDoubleClick(row)}
+              >
+                <td className='catalogTable__td'>{editingRow === row.uuid ? (
+                  <input
+                    type="text"
+                    className='catalogTable__input'
+                    value={formatDate(editedData.date_work)}
+                    onChange={(e) => setEditedData({ ...editedData, date_work: e.target.value })}
+                  />
+                ) : formatDate(row.date_work)}</td>
+                <td className='catalogTable__td'>{row.is_doc ? '+' : '-'}</td>
+                <td className='catalogTable__td'>{editingRow === row.uuid ? (
+                  <input
+                    type="text"
+                    value={editedData.address}
+                    className='catalogTable__input'
+                    onChange={(e) => setEditedData({ ...editedData, address: e.target.value })}
+                  />
+                ) : row.address}</td>
+                <td className='catalogTable__td'>{row.id_doc ? row.id_doc : 'Не документ'}</td>
+                <td className='catalogTable__td'>{editingRow === row.uuid ? (
+                  <select
+                    className="catalogTable__select"
+                    name="type_work"
+                    onChange={(e) => setEditedData({ ...editedData, type_work: e.target.value })}
+                    value={editedData.type_work || ''}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {options.map((option) => (
+                      <option
+                        key={option}
+                        value={option}
+                        className="catalogTable__option"
+                      >
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                ) : row.type_work}</td>
+                <td className='catalogTable__td catalogTable__td-edit'>
+                  {editingRow === row.uuid ? (
+                    <>
+                      <CheckSVG onClick={() => handleUpdate()}></CheckSVG>
+                      <CloseSVG onClick={() => handleCancelEdit()}></CloseSVG>
+                    </>
+                  ) : (
+                    <>
+                      <DeleteSVG onClick={() => deleteRecordsByUuid(row.uuid)} />
+                    </>
+                  )}
+                </td>
+              </tr>
             ))
           ) : (
             <span className='catalogTable__user'>{user.length > 0 ? 'Нічого не знайдено' : "Користувач не залогінений"}</span>

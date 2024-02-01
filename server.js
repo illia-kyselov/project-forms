@@ -395,73 +395,6 @@ app.get("/catalog/work_table", (req, res) => {
   });
 });
 
-/* Select 
-w.uuid,
-w.type_work,
-w.address,
-w.date_work,
-w.pers_work,
-d.num_dz,
-d.dz_form
-from exploitation.work_table w
-left join exploitation.expl_dz d
-on w.uuid = d.work_uuid */
-
-app.get("/catalog/elements", (req, res) => {
-  const { uuid } = req.query;
-
-  if (!uuid) {
-    return res
-      .status(400)
-      .json({ error: 'Parameter "uuid" is required.' });
-  }
-
-  const query = {
-    text: `
-      SELECT 
-        w.uuid,
-        w.type_work,
-        w.address,
-        w.date_work,
-        w.pers_work,
-        d.num_dz,
-        d.dz_form,
-        d.uuid,
-        e.name_elmns,
-        e.cnt_elmnt,
-        e.uuid,
-        e.cdate
-      FROM exploitation.work_table w
-      LEFT JOIN exploitation.expl_dz d ON w.uuid = d.work_uuid
-      LEFT JOIN exploitation.elements e ON e.uuid = d.uuid
-      WHERE w.uuid = $1
-    `,
-    values: [uuid],
-  };
-
-  client.query(query, (err, result) => {
-    if (err) {
-      console.error("Error executing query", err);
-      res.status(500).send("Error executing query");
-    } else {
-      if (result.rows.length === 0) {
-        res.status(404).json({ error: 'Record not found.' });
-      } else {
-        const data = result.rows.map((row) => ({
-          uuid: row.uuid,
-          type_work: row.type_work,
-          address: row.address,
-          date_work: row.date_work,
-          pers_work: row.pers_work,
-          num_dz: row.num_dz,
-          dz_form: row.dz_form,
-        }));
-        res.json(data[0]);
-      }
-    }
-  });
-});
-
 function parsePolygon(geom) {
   const polygonString = geom.replace(/^POLYGON\s*\(/i, "").replace(/\)$/, "");
   const coordinates = polygonString.split(",").map((pair) => {
@@ -513,11 +446,11 @@ app.post("/dz", (req, res) => {
   const ang_map = req.body.ang_map;
 
   const query = `
-    INSERT INTO exploitation.dz (geom, num_pdr, num_sing,  ang_map)
-    VALUES (ST_GeomFromText($1, 4326), $2, $3, $4)
+    INSERT INTO exploitation.dz (geom, num_pdr, num_sing, id, ang_map)
+    VALUES (ST_GeomFromText($1, 4326), $2, $3, $4, $5)
   `;
 
-  const values = [wktGeom, num_pdr, num_sing, ang_map];
+  const values = [wktGeom, num_pdr, num_sing, id, ang_map];
 
   client.query(query, values, (err, result) => {
     if (err) {
@@ -785,8 +718,9 @@ app.put("/work_table/:uuid", (req, res) => {
     .join(", ");
 
   const query = {
-    text: `UPDATE exploitation.work_table SET ${setClause} WHERE uuid = $${keys.length + 1
-      } RETURNING uuid`,
+    text: `UPDATE exploitation.work_table SET ${setClause} WHERE uuid = $${
+      keys.length + 1
+    } RETURNING uuid`,
     values: [...values, idToUpdate],
   };
 

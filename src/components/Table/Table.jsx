@@ -6,7 +6,7 @@ import Input from "../Input/Input";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 import img from '../../img/icon-trash.png';
-import { v4 as uuidv4 } from 'uuid';
+
 
 const KeyCodesEnum = {
   ArrowUp: 38,
@@ -189,6 +189,7 @@ const Table = ({
       const insertData = {
         geom: wktMultiPoint,
         num_pdr: newRowData.num_pdr,
+        id: 2727,
         ang_map: roundedAngMap,
       };
 
@@ -297,8 +298,6 @@ const Table = ({
     setFocusMarker(null);
     setDataSecondTable(null);
   }
-
-  console.log(data);
 
   return (
     <div className="form-container-inside form-container-inside-width">
