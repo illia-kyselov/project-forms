@@ -6,6 +6,11 @@
     margin: 15px 20px;
   }
 
+  &_Additional {
+    margin-left: 20px;
+    width: calc(100% - 20px);
+  }
+
   &__input,
   &__select {
     background-color: rgba(255, 167, 181, 0.3);
@@ -77,4 +82,8 @@
   &__tr:hover {
     background-color: #e5e5e5;
   }
+}
+
+.clicked {
+  background-color: #d3d3d3;
 }

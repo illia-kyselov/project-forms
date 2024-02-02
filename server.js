@@ -411,30 +411,28 @@ app.get("/catalog/elements", (req, res) => {
   const { uuid } = req.query;
 
   if (!uuid) {
-    return res
-      .status(400)
-      .json({ error: 'Parameter "uuid" is required.' });
+    return res.status(400).json({ error: 'Parameter "uuid" is required.' });
   }
 
   const query = {
     text: `
-      SELECT 
-        w.uuid,
-        w.type_work,
-        w.address,
-        w.date_work,
-        w.pers_work,
-        d.num_dz,
-        d.dz_form,
-        d.uuid,
-        e.name_elmns,
-        e.cnt_elmnt,
-        e.uuid,
-        e.cdate
+    SELECT 
+    w.uuid as work_uuid,
+    w.type_work,
+    w.address,
+    w.date_work,
+    w.pers_work,
+    d.num_dz,
+    d.uuid as explDz_uuid,
+    d.dz_form,
+    e.name_elmns,
+    e.cnt_elmnt,
+    e.uuid as element_uuid,
+    e.cdate
       FROM exploitation.work_table w
       LEFT JOIN exploitation.expl_dz d ON w.uuid = d.work_uuid
-      LEFT JOIN exploitation.elements e ON e.uuid = d.uuid
-      WHERE w.uuid = $1
+      LEFT JOIN exploitation.elements e ON d.uuid = e.uuid
+      WHERE w.uuid = $1;
     `,
     values: [uuid],
   };
@@ -445,18 +443,9 @@ app.get("/catalog/elements", (req, res) => {
       res.status(500).send("Error executing query");
     } else {
       if (result.rows.length === 0) {
-        res.status(404).json({ error: 'Record not found.' });
+        res.status(404).json({ error: "No records found." });
       } else {
-        const data = result.rows.map((row) => ({
-          uuid: row.uuid,
-          type_work: row.type_work,
-          address: row.address,
-          date_work: row.date_work,
-          pers_work: row.pers_work,
-          num_dz: row.num_dz,
-          dz_form: row.dz_form,
-        }));
-        res.json(data[0]);
+        res.json(result.rows);
       }
     }
   });
@@ -785,8 +774,9 @@ app.put("/work_table/:uuid", (req, res) => {
     .join(", ");
 
   const query = {
-    text: `UPDATE exploitation.work_table SET ${setClause} WHERE uuid = $${keys.length + 1
-      } RETURNING uuid`,
+    text: `UPDATE exploitation.work_table SET ${setClause} WHERE uuid = $${
+      keys.length + 1
+    } RETURNING uuid`,
     values: [...values, idToUpdate],
   };
 

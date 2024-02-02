@@ -102,13 +102,13 @@ const CatalogTable = ({ user }) => {
     try {
       const response = await fetch(`http://localhost:3001/catalog/elements?uuid=${row.uuid}`);
       const data = await response.json();
+      console.log(data);
       setElementsCataog(data);
       setClickedRow(row);
     } catch (error) {
       console.error('Error updating data', error);
     }
   }
-  console.log('Данні:', elementsCatalog);
 
   const filteredData = catalogData.filter((row) => {
     const lowerCaseQuery = searchQuery.toLowerCase();
@@ -210,7 +210,7 @@ const CatalogTable = ({ user }) => {
               <React.Fragment key={index}>
                 <tr
                   key={index}
-                  className={`catalogTable__tr ${editingRow === row.uuid ? 'editing' : ''}`}
+                  className={`catalogTable__tr ${editingRow === row.uuid ? 'editing' : ''} ${clickedRow && clickedRow.uuid === row.uuid ? 'clicked' : ''}`}
                   onDoubleClick={() => handleDoubleClick(row)}
                   onClick={() => handleRowClick(row)}
                 >
@@ -267,7 +267,7 @@ const CatalogTable = ({ user }) => {
                 {clickedRow && clickedRow.uuid === row.uuid && (
                   <tr>
                     <td colSpan="6">
-                      <AdditionalInfo data={elementsCatalog} />
+                      <AdditionalInfo dataList={elementsCatalog} formatDate={formatDate} />
                     </td>
                   </tr>
                 )}

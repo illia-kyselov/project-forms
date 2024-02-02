@@ -248,8 +248,16 @@ function App({ user }) {
     cleanedObjectidInput = null;
   }
 
+  console.log('allElementsData', allElementsData);
+  console.log('workToInsert', workToInsert);
+  console.log('tableToInsert', tableToInsert);
+
   const handleSendAllData = async () => {
     try {
+      if (allElementsData.length === 0) {
+        NotificationService.showWarningNotification('Додайте елементи для відправки данних!');
+        return;
+      }
       const workResponse = await fetch("http://localhost:3001/work_table", {
         method: "POST",
         headers: {
@@ -289,6 +297,11 @@ function App({ user }) {
       setDataSubmitted(true);
 
       for (const row of tableToInsert) {
+        const elementsForTable = allElementsData.filter(element => element.tableId === row.uuid);
+
+        if (elementsForTable.length === 0) {
+          continue;
+        }
         const dataToSend = { ...row, work_uuid: workId };
 
         const response = await fetch("http://localhost:3001/expl_dz", {
