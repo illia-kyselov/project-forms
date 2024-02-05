@@ -248,10 +248,6 @@ function App({ user }) {
     cleanedObjectidInput = null;
   }
 
-  console.log('allElementsData', allElementsData);
-  console.log('workToInsert', workToInsert);
-  console.log('tableToInsert', tableToInsert);
-
   const handleSendAllData = async () => {
     try {
       if (allElementsData.length === 0) {

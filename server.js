@@ -420,15 +420,16 @@ app.get("/catalog/elements", (req, res) => {
     w.uuid as work_uuid,
     w.type_work,
     w.address,
-    w.date_work,
+    w.date_work as workDate,
     w.pers_work,
     d.num_dz,
     d.uuid as explDz_uuid,
+    d.cdate as explDzDate,
     d.dz_form,
     e.name_elmns,
     e.cnt_elmnt,
     e.uuid as element_uuid,
-    e.cdate
+    e.cdate as elementDate
       FROM exploitation.work_table w
       LEFT JOIN exploitation.expl_dz d ON w.uuid = d.work_uuid
       LEFT JOIN exploitation.elements e ON d.uuid = e.uuid

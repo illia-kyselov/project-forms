@@ -29,15 +29,16 @@ const AdditionalInfo = ({ dataList, formatDate }) => {
       <table className='catalogTable catalogTable_Additional'>
         <thead>
           <tr className='catalogTable__tr'>
-            <th className='catalogTable__th'>Фото картка знаку</th>
+            <th className='catalogTable__th'>Умовний знак</th>
             <th className='catalogTable__th'>Номер знаку</th>
             <th className='catalogTable__th'>Форма знаку</th>
+            {/* <th className='catalogTable__th'>Операція</th> */}
             <th className='catalogTable__th'>Дата створення</th>
           </tr>
         </thead>
         <tbody>
           {uniqueDataList.map((data, index) => {
-            const { num_dz, dz_form, type_work, expldz_uuid } = data;
+            const { num_dz, dz_form, type_work, expldz_uuid, expldzdate } = data;
             const imagePath = markerImage[num_dz];
             const rowClassName = clickedRow === index ? 'clicked' : '';
 
@@ -47,7 +48,8 @@ const AdditionalInfo = ({ dataList, formatDate }) => {
                   <td className='catalogTable__td'>{imagePath && <img src={imagePath} alt={`photoDz-${index}`} style={{ width: '30px' }} />}</td>
                   <td className='catalogTable__td'>{num_dz}</td>
                   <td className='catalogTable__td'>{dz_form}</td>
-                  <td className='catalogTable__td'>{type_work}</td>
+                  {/* <td className='catalogTable__td'>{type_work}</td> */}
+                  <td className='catalogTable__td'>{formatDate(expldzdate)}</td>
                 </tr>
 
                 {selectedRowData && selectedRowData.expldz_uuid === expldz_uuid && (
@@ -66,7 +68,7 @@ const AdditionalInfo = ({ dataList, formatDate }) => {
                             <tr key={elementIndex} className='catalogTable__tr'>
                               <td className='catalogTable__td'>{element.name_elmns}</td>
                               <td className='catalogTable__td'>{element.cnt_elmnt}</td>
-                              <td className='catalogTable__td'>{formatDate(element.cdate)}</td>
+                              <td className='catalogTable__td'>{formatDate(element.elementdate)}</td>
                             </tr>
                           ))}
                         </tbody>
