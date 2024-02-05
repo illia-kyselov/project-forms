@@ -371,7 +371,7 @@ app.get("/catalog/work_table", (req, res) => {
   }
 
   const query = {
-    text: "SELECT id_wrk_tbl, type_work, is_doc, id_doc, address, date_work, pers_work, uuid FROM exploitation.work_table WHERE pers_work = $1",
+    text: "SELECT id_wrk_tbl, type_work, is_doc, id_doc, address, cdate, pers_work, uuid FROM exploitation.work_table WHERE pers_work = $1",
     values: [pers_work],
   };
 
@@ -386,7 +386,7 @@ app.get("/catalog/work_table", (req, res) => {
         is_doc: row.is_doc,
         id_doc: row.id_doc,
         address: row.address,
-        date_work: row.date_work,
+        cdate: row.cdate,
         pers_work: row.pers_work,
         uuid: row.uuid,
       }));
@@ -420,7 +420,7 @@ app.get("/catalog/elements", (req, res) => {
     w.uuid as work_uuid,
     w.type_work,
     w.address,
-    w.date_work as workDate,
+    w.cdate as workdate,
     w.pers_work,
     d.num_dz,
     d.uuid as explDz_uuid,

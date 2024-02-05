@@ -57,7 +57,10 @@ const CatalogTable = ({ user }) => {
     const day = dateObject.getDate().toString().padStart(2, '0');
     const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
     const year = dateObject.getFullYear();
-    return `${day}.${month}.${year}`;
+    const hours = dateObject.getHours().toString().padStart(2, '0');
+    const minutes = dateObject.getMinutes().toString().padStart(2, '0');
+
+    return `${day}.${month}.${year} ${hours}:${minutes}`;
   };
 
   const handleSort = (field) => {
@@ -117,7 +120,7 @@ const CatalogTable = ({ user }) => {
       const lowerCaseValue = value ? value.toString().toLowerCase() : '';
 
       switch (key) {
-        case 'date_work':
+        case 'cdate':
           if (!isNaN(new Date(value).getTime())) {
             const formattedDate = formatDate(value);
             return formattedDate.includes(lowerCaseQuery);
@@ -172,22 +175,10 @@ const CatalogTable = ({ user }) => {
         <thead>
           <tr className='catalogTable__tr'>
             <th
-              className={`catalogTable__th ${sortOrder.field === 'date_work' ? `catalogTable__th-${sortOrder.ascending ? 'asc' : 'desc'}` : ''}`}
-              onClick={() => handleSort('date_work')}
-            >
-              Дата роботи
-            </th>
-            <th
-              className={`catalogTable__th ${sortOrder.field === 'is_doc' ? `catalogTable__th-${sortOrder.ascending ? 'asc' : 'desc'}` : ''}`}
-              onClick={() => handleSort('is_doc')}
-            >
-              Документ
-            </th>
-            <th
               className={`catalogTable__th ${sortOrder.field === 'address' ? `catalogTable__th-${sortOrder.ascending ? 'asc' : 'desc'}` : ''}`}
               onClick={() => handleSort('address')}
             >
-              Адреса
+              Назва вулиці
             </th>
             <th
               className={`catalogTable__th ${sortOrder.field === 'id_doc' ? `catalogTable__th-${sortOrder.ascending ? 'asc' : 'desc'}` : ''}`}
@@ -199,7 +190,13 @@ const CatalogTable = ({ user }) => {
               className={`catalogTable__th ${sortOrder.field === 'type_work' ? `catalogTable__th-${sortOrder.ascending ? 'asc' : 'desc'}` : ''}`}
               onClick={() => handleSort('type_work')}
             >
-              Тип робіт
+              Тип операції
+            </th>
+            <th
+              className={`catalogTable__th ${sortOrder.field === 'cdate' ? `catalogTable__th-${sortOrder.ascending ? 'asc' : 'desc'}` : ''}`}
+              onClick={() => handleSort('cdate')}
+            >
+              Дата роботи
             </th>
             <th className={`catalogTable__th catalogTable__th-delete`}></th>
           </tr>
@@ -214,15 +211,6 @@ const CatalogTable = ({ user }) => {
                   onDoubleClick={() => handleDoubleClick(row)}
                   onClick={() => handleRowClick(row)}
                 >
-                  <td className='catalogTable__td'>{editingRow === row.uuid ? (
-                    <input
-                      type="text"
-                      className='catalogTable__input'
-                      value={formatDate(editedData.date_work)}
-                      onChange={(e) => setEditedData({ ...editedData, date_work: e.target.value })}
-                    />
-                  ) : formatDate(row.date_work)}</td>
-                  <td className='catalogTable__td'>{row.is_doc ? '+' : '-'}</td>
                   <td className='catalogTable__td'>{editingRow === row.uuid ? (
                     <input
                       type="text"
@@ -251,6 +239,14 @@ const CatalogTable = ({ user }) => {
                       ))}
                     </select>
                   ) : row.type_work}</td>
+                  <td className='catalogTable__td'>{editingRow === row.uuid ? (
+                    <input
+                      type="text"
+                      className='catalogTable__input'
+                      value={formatDate(editedData.workdate)}
+                      onChange={(e) => setEditedData({ ...editedData, cdate: e.target.value })}
+                    />
+                  ) : formatDate(row.cdate)}</td>
                   <td className='catalogTable__td catalogTable__td-edit'>
                     {editingRow === row.uuid ? (
                       <>
