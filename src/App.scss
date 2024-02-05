@@ -661,6 +661,12 @@ input:checked+.slider:before {
     font-weight: 600;
   }
 
+  &__ang {
+    display: block;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+
   &__input {
     padding: 5px 10px;
     border: 1px solid #4e4e4e;
@@ -672,6 +678,12 @@ input:checked+.slider:before {
     width: 150px;
     margin-right: 10px;
     display: inline-block;
+
+    &-range {
+      display: flex;
+      flex-direction: row;
+      justify-content: baseline;
+    }
   }
 }
 

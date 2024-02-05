@@ -324,20 +324,23 @@ const Table = ({
                     />
                   </div>
                   <div className="form-addDz__group">
-                    <label className="form-addDz-input_title">Провернути знак</label>
-                    <Input
-                      className="form-addDz__input-range"
-                      type="range"
-                      name="ang_map"
-                      max={360}
-                      min={0}
-                      step={5}
-                      value={newRowData.ang_map || 0}
-                      onChange={(e) => handleRotationChange(e.target.value)}
-                      required
-                    />
-                  </div>
+                    <div className="form-addDz__input-range-container">
+                      <label className="form-addDz-input_title">Провернути знак</label>
+                      <span className="form-addDz__ang">{newRowData.ang_map}°</span>
 
+                      <Input
+                        className="form-addDz__input-range"
+                        type="range"
+                        name="ang_map"
+                        max={360}
+                        min={0}
+                        step={5}
+                        value={newRowData.ang_map || 0}
+                        onChange={(e) => handleRotationChange(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
                 </div>
                 <div className="form-addDz__group-flex">
                   {!showSaveButton && (
