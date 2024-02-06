@@ -327,7 +327,6 @@ const Table = ({
                     <div className="form-addDz__input-range-container">
                       <label className="form-addDz-input_title">Провернути знак</label>
                       <span className="form-addDz__ang">{newRowData.ang_map}°</span>
-
                       <Input
                         className="form-addDz__input-range"
                         type="range"
@@ -336,6 +335,18 @@ const Table = ({
                         min={0}
                         step={5}
                         value={newRowData.ang_map || 0}
+                        onChange={(e) => handleRotationChange(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="form-addDz__group">
+                    <div className="form-addDz__input-range-container">
+                      <label className="form-addDz-input_title">ANG</label>
+                      <Input
+                        className="form-addDz__input-ang" 
+                        type="text"
+                        value={newRowData.ang_map}
                         onChange={(e) => handleRotationChange(e.target.value)}
                         required
                       />
