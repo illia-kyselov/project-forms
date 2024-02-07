@@ -802,3 +802,13 @@ input:checked+.slider:before {
     scale: 1.2;
   }
 }
+
+.arrowDown {
+  display: inline-block;
+  cursor: pointer;
+  transition: all linear 0.1s;
+
+  &:hover {
+    scale: 1.2;
+  }
+}

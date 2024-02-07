@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './styles.scss';
-import CustomSVG from '../../img/delete_icon';
 
 import { deleteRecordsByUuid } from '../../api/deleteRecordByUuid';
 import { updateRecordByUuid } from '../../api/updateRecordByUuid';
@@ -10,6 +9,7 @@ import DeleteSVG from '../../img/delete_icon';
 import CloseSVG from '../../img/CloseSVG';
 import CheckSVG from '../../img/CheckSVG';
 import AdditionalInfo from './AdditionalInfo';
+import ArrowDown from '../../img/ArrowDown';
 
 const CatalogTable = ({ user }) => {
   const [catalogData, setCatalogData] = useState([]);
@@ -22,13 +22,17 @@ const CatalogTable = ({ user }) => {
   const [editingRow, setEditingRow] = useState(null);
   const [editedData, setEditedData] = useState({});
   const [options, setOptions] = useState([]);
-  const [elementsCatalog, setElementsCataog] = useState(null);
+  const [elementsCatalog, setElementsCatalog] = useState(null);
   const [clickedRow, setClickedRow] = useState(null);
 
   useEffect(() => {
     fetchDataFromDB();
     fetchOptions();
   }, [user]);
+
+  console.log('clickedRow', clickedRow);
+  console.log('elementsCatalog', elementsCatalog);
+
 
   const fetchDataFromDB = async () => {
     try {
@@ -105,8 +109,7 @@ const CatalogTable = ({ user }) => {
     try {
       const response = await fetch(`http://localhost:3001/catalog/elements?uuid=${row.uuid}`);
       const data = await response.json();
-      console.log(data);
-      setElementsCataog(data);
+      setElementsCatalog(data);
       setClickedRow(row);
     } catch (error) {
       console.error('Error updating data', error);
@@ -160,6 +163,13 @@ const CatalogTable = ({ user }) => {
     }
   });
 
+  const handleArrowClickCatalog = () => {
+    if (clickedRow) {
+      setElementsCatalog(null);
+    }
+    setClickedRow(null);
+  };
+
   return (
     <div className='catalogTable__container'>
       <label className='catalogTable__title'>{`Операції користувача `}
@@ -208,10 +218,9 @@ const CatalogTable = ({ user }) => {
                 <tr
                   key={index}
                   className={`catalogTable__tr ${editingRow === row.uuid ? 'editing' : ''} ${clickedRow && clickedRow.uuid === row.uuid ? 'clicked' : ''}`}
-                  onDoubleClick={() => handleDoubleClick(row)}
-                  onClick={() => handleRowClick(row)}
                 >
-                  <td className='catalogTable__td'>{editingRow === row.uuid ? (
+                  <td className='catalogTable__td' onClick={() => handleRowClick(row)} onDoubleClick={() => handleDoubleClick(row)}>{editingRow === row.uuid ? (
+
                     <input
                       type="text"
                       value={editedData.address}
@@ -219,8 +228,8 @@ const CatalogTable = ({ user }) => {
                       onChange={(e) => setEditedData({ ...editedData, address: e.target.value })}
                     />
                   ) : row.address}</td>
-                  <td className='catalogTable__td'>{row.id_doc ? row.id_doc : 'Не документ'}</td>
-                  <td className='catalogTable__td'>{editingRow === row.uuid ? (
+                  <td className='catalogTable__td' onClick={() => handleRowClick(row)} onDoubleClick={() => handleDoubleClick(row)}>{row.id_doc ? row.id_doc : 'Не документ'}</td>
+                  <td className='catalogTable__td' onClick={() => handleRowClick(row)} onDoubleClick={() => handleDoubleClick(row)}>{editingRow === row.uuid ? (
                     <select
                       className="catalogTable__select"
                       name="type_work"
@@ -239,11 +248,11 @@ const CatalogTable = ({ user }) => {
                       ))}
                     </select>
                   ) : row.type_work}</td>
-                  <td className='catalogTable__td'>{editingRow === row.uuid ? (
+                  <td className='catalogTable__td' onClick={() => handleRowClick(row)} onDoubleClick={() => handleDoubleClick(row)}>{editingRow === row.uuid ? (
                     <input
                       type="text"
                       className='catalogTable__input'
-                      value={formatDate(editedData.workdate)}
+                      value={formatDate(editedData.cdate)}
                       onChange={(e) => setEditedData({ ...editedData, cdate: e.target.value })}
                     />
                   ) : formatDate(row.cdate)}</td>
@@ -256,6 +265,7 @@ const CatalogTable = ({ user }) => {
                     ) : (
                       <>
                         <DeleteSVG onClick={() => deleteRecordsByUuid(row.uuid)} />
+                        {clickedRow && clickedRow.uuid === row.uuid && <ArrowDown onClick={handleArrowClickCatalog} />}
                       </>
                     )}
                   </td>

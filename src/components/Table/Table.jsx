@@ -342,7 +342,7 @@ const Table = ({
                   </div>
                   <div className="form-addDz__group">
                     <div className="form-addDz__input-range-container">
-                      <label className="form-addDz-input_title">ANG</label>
+                      <label className="form-addDz-input_title">Кут</label>
                       <Input
                         className="form-addDz__input-ang" 
                         type="text"
