@@ -57,6 +57,8 @@ const Table = ({
   const [showSaveButton, setShowSaveButton] = useState(false);
   const [listGenerated, setListGenerated] = useState(false);
   const [invalidInputs, setInvalidInputs] = useState([]);
+  const [numPdrOptions, setNumPdrOptions] = useState(forms);
+
 
   const emptyInputsDZ = validateEmptyInputs(newRowData);
 
@@ -257,6 +259,11 @@ const Table = ({
       ...prevData,
       [name]: value,
     }));
+
+    const filteredOptions = forms.filter((form) =>
+    form.num_pdr_new.toLowerCase().includes(value.toLowerCase())
+  );
+  setNumPdrOptions(filteredOptions);
   };
 
   const handleFormSelect = (e, rowId) => {
@@ -318,10 +325,15 @@ const Table = ({
                       value={newRowData.num_pdr}
                       onChange={handleInputChange}
                       placeholder="Номер ПДР"
+                      list="numPdrOptions"
                       required
-                      errorMessage={"Введіть номер ПДР"}
-                      hasError={invalidInputs.includes("num_pdr")}
+                      autoComplete={"off"}
                     />
+                    <datalist id="numPdrOptions">
+                      {numPdrOptions.map((form) => (
+                        <option key={form.id} value={form.num_pdr_new} />
+                      ))}
+                    </datalist>
                   </div>
                   <div className="form-addDz__group">
                     <div className="form-addDz__input-range-container">
