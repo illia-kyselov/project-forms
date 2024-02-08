@@ -265,11 +265,11 @@ const CatalogTable = ({ user }) => {
                     />
                   ) : formatDate(row.cdate)}</td>
                   <td className='catalogTable__td catalogTable__td-edit'>
-                  {clickedRow && clickedRow.uuid === row.uuid &&
+                  
                   <ArrowDown
                     onClick={() => handleArrowDownClickCatalog(row)}
                     arrowDownActive={arrowDownActive}
-                  />}
+                  />
                   {clickedRow && clickedRow.uuid === row.uuid &&
                   <ArrowUp
                     onClick={handleArrowClickCatalog}

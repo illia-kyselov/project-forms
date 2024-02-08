@@ -4,6 +4,7 @@ import NotificationService from "../../services/NotificationService";
 import { validateEmptyInputs } from "../../helpers/validate-empty-inputs";
 import Input from "../Input/Input";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import markerImage from '../../img';
 
 import img from '../../img/icon-trash.png';
 import { v4 as uuidv4 } from 'uuid';
@@ -59,9 +60,7 @@ const Table = ({
   const [invalidInputs, setInvalidInputs] = useState([]);
   const [numPdrOptions, setNumPdrOptions] = useState(forms);
 
-
   const emptyInputsDZ = validateEmptyInputs(newRowData);
-
   const hasEmptyInputsDz = emptyInputsDZ.length > 0;
 
   useEffect(() => {
