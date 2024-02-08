@@ -1,6 +1,6 @@
 const ArrowUp = ({ onClick, arrowUpActive, arrowUpActiveInfo }) => (
   <svg
-  style={{ fill: arrowUpActive || arrowUpActiveInfo ? 'purple' : 'grey', cursor: arrowUpActive  ? 'default' : 'pointer', }}
+  style={{ fill: arrowUpActive || arrowUpActiveInfo ? 'purple' : 'grey', cursor: !arrowUpActiveInfo && !arrowUpActive ? 'default' : 'pointer', }}
   xmlns="http://www.w3.org/2000/svg" 
   className="arrowDown" 
   height="30"

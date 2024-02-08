@@ -34,10 +34,6 @@ const CatalogTable = ({ user }) => {
     fetchOptions();
   }, [user]);
 
-  console.log('clickedRow', clickedRow);
-  console.log('elementsCatalog', elementsCatalog);
-
-
   const fetchDataFromDB = async () => {
     try {
       setLoading(true);
