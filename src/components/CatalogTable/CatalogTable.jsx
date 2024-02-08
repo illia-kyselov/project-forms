@@ -10,6 +10,8 @@ import CloseSVG from '../../img/CloseSVG';
 import CheckSVG from '../../img/CheckSVG';
 import AdditionalInfo from './AdditionalInfo';
 import ArrowDown from '../../img/ArrowDown';
+import ArrowUp from '../../img/ArrowUp';
+
 
 const CatalogTable = ({ user }) => {
   const [catalogData, setCatalogData] = useState([]);
@@ -24,6 +26,8 @@ const CatalogTable = ({ user }) => {
   const [options, setOptions] = useState([]);
   const [elementsCatalog, setElementsCatalog] = useState(null);
   const [clickedRow, setClickedRow] = useState(null);
+  const [arrowDownActive, setArrowDownActive] = useState(true);
+  const [arrowUpActive, setArrowUpActive] = useState(false);
 
   useEffect(() => {
     fetchDataFromDB();
@@ -111,6 +115,8 @@ const CatalogTable = ({ user }) => {
       const data = await response.json();
       setElementsCatalog(data);
       setClickedRow(row);
+      setArrowUpActive(true);
+      setArrowDownActive(false);
     } catch (error) {
       console.error('Error updating data', error);
     }
@@ -164,10 +170,16 @@ const CatalogTable = ({ user }) => {
   });
 
   const handleArrowClickCatalog = () => {
-    if (clickedRow) {
-      setElementsCatalog(null);
-    }
+    setElementsCatalog(null);
     setClickedRow(null);
+    setArrowDownActive(true);
+    setArrowUpActive(false);
+  };
+
+  const handleArrowDownClickCatalog = (row) => {
+    handleRowClick(row);
+    setArrowUpActive(true);
+    setArrowDownActive(false);
   };
 
   return (
@@ -257,7 +269,19 @@ const CatalogTable = ({ user }) => {
                     />
                   ) : formatDate(row.cdate)}</td>
                   <td className='catalogTable__td catalogTable__td-edit'>
-                    {editingRow === row.uuid ? (
+                  {clickedRow && clickedRow.uuid === row.uuid &&
+                  <ArrowDown
+                    onClick={() => handleArrowDownClickCatalog(row)}
+                    arrowDownActive={arrowDownActive}
+                  />}
+                  {clickedRow && clickedRow.uuid === row.uuid &&
+                  <ArrowUp
+                    onClick={handleArrowClickCatalog}
+                    arrowUpActive={arrowUpActive}
+                  />}
+                  </td>
+                  <td className='catalogTable__td catalogTable__td-edit'>
+                    {editingRow === row.uuid  ? (
                       <>
                         <CheckSVG onClick={() => handleUpdate()}></CheckSVG>
                         <CloseSVG onClick={() => handleCancelEdit()}></CloseSVG>
@@ -265,7 +289,6 @@ const CatalogTable = ({ user }) => {
                     ) : (
                       <>
                         <DeleteSVG onClick={() => deleteRecordsByUuid(row.uuid)} />
-                        {clickedRow && clickedRow.uuid === row.uuid && <ArrowDown onClick={handleArrowClickCatalog} />}
                       </>
                     )}
                   </td>

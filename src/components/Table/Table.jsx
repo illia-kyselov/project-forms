@@ -376,13 +376,13 @@ const Table = ({
             <button className="button-add-Dz" onClick={handleAddDzFromPolygon} style={{ backgroundColor: buttonPressed ? '#46aa03' : '' }}>
               Додати з полігону
             </button>}
-          <button
+          {!showAddForm && <button
             className="button-add-Dz"
             onClick={() => setShowAddForm(true)}
           // onClick={() => NotificationService.showInfoNotification('Нові знаки можуть бути додані через відповідний проект QGIS')}
           >
             Додати ДЗ
-          </button>
+          </button>}
           <button className="button-add-Dz" onClick={handleClickRemoveButton}>
             Очистити
           </button>

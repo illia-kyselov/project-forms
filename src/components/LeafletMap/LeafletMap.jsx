@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Polygon, Popup, Marker } from "react-leaflet";
+import { MapContainer, TileLayer, Polygon, Popup, Marker,WMSTileLayer } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -309,6 +309,8 @@ const LeafletMap = ({
     });
   };
 
+  const wmsLayerUrl = 'http://192.168.1.3/cgi-bin/mapserv?map=/var/www/html/map/kyivcl.map';
+
   return (
     <div className="LeafletMapContainer ">
       <MapContainer
@@ -318,11 +320,17 @@ const LeafletMap = ({
         style={containerStyle}
         preferCanvas={true}
       >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          noWrap={true}
+        <WMSTileLayer
+          layers="dz"
+          url={wmsLayerUrl}
+          format="image/png"
+          transparent={true}
         />
+        <TileLayer
+    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    url="http://192.168.1.3/cgi-bin/mapserv?map=/var/www/html/map/kyivcl.map"
+    noWrap={true}
+  />
         <MapBoundsHandler setMapBounds={setMapBounds} />
         <MarkerClusterGroup disableClusteringAtZoom={18}>
           {isChecked ? (

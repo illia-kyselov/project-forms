@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
 import markerImage from '../../img';
 import ArrowDown from '../../img/ArrowDown';
+import ArrowUp from '../../img/ArrowUp';
 
 const AdditionalInfo = ({ dataList = [], formatDate }) => {
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [clickedRow, setClickedRow] = useState(null);
-  const [arrowDownClick, setArrowDownClick] = useState(false);
+
+  const [arrowDownActiveInfo, setArrowDownActiveInfo] = useState(false);
+  const [arrowUpActiveInfo, setArrowUpActiveInfo] = useState(true);
 
   const handleRowClick = (expldz_uuid, index) => () => {
     const selectedData = dataList.find((data) => data.expldz_uuid === expldz_uuid);
     setSelectedRowData(selectedData);
     setClickedRow(index);
-    setArrowDownClick(false);
+    setArrowDownActiveInfo(false);
+    setArrowUpActiveInfo(true);
   };
 
   const uniqueDataList = dataList.filter((data, index, self) =>
@@ -27,8 +31,14 @@ const AdditionalInfo = ({ dataList = [], formatDate }) => {
     data.element_uuid === (selectedRowData && selectedRowData.element_uuid)
   );
 
-  const handleArrowClick = () => {
-    setArrowDownClick((prevArrowDownClick) => !prevArrowDownClick);
+  const handleArrowUpClick = () => {
+    setArrowUpActiveInfo(false);
+    setArrowDownActiveInfo(true);
+  };
+
+  const handleArrowDownClick = () => {
+    setArrowDownActiveInfo(false);
+    setArrowUpActiveInfo(true);
   };
 
   return (
@@ -57,10 +67,13 @@ const AdditionalInfo = ({ dataList = [], formatDate }) => {
                   <td className='catalogTable__td' onClick={handleRowClick(expldz_uuid, index)}>{num_dz}</td>
                   <td className='catalogTable__td' onClick={handleRowClick(expldz_uuid, index)}>{dz_form}</td>
                   <td className='catalogTable__td' onClick={handleRowClick(expldz_uuid, index)}>{formatDate(expldzdate)}</td>
-                  <td className='catalogTable__td'>{isCurrentRowClicked && <ArrowDown onClick={handleArrowClick} />}</td>
+                  <td className='catalogTable__td'>
+                    {isCurrentRowClicked && <ArrowDown onClick={handleArrowDownClick}  arrowDownActiveInfo={arrowDownActiveInfo} /> }
+                    {isCurrentRowClicked && <ArrowUp  onClick={handleArrowUpClick} arrowUpActiveInfo={arrowUpActiveInfo} /> }
+                  </td>
                 </tr>
 
-                {selectedRowData && selectedRowData.expldz_uuid === expldz_uuid && !arrowDownClick && (
+                {selectedRowData && selectedRowData.expldz_uuid === expldz_uuid && arrowUpActiveInfo  && (
                   <tr>
                     <td colSpan="4">
                       <table className='catalogTable catalogTable_Additional' >
