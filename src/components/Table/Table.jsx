@@ -328,12 +328,18 @@ const Table = ({
                       required
                       autoComplete={"off"}
                     />
-                    <datalist id="numPdrOptions">
-                      {numPdrOptions.map((form) => (
-                        <option key={form.id} value={form.num_pdr_new} />
-                      ))}
-                    </datalist>
-                  </div>
+                   <datalist id="numPdrOptions">
+  {numPdrOptions.map((form) => (
+    <option key={form.id} >
+      {form.num_pdr_new}
+      {/* <img src={markerImage[form.num_pdr_new]} alt={`Marker for ${form.num_pdr_new}`} /> */}
+      {/* {console.log(markerImage[form.num_pdr_new])} */}
+      {/* {} */}
+    </option>
+  ))}
+</datalist>
+
+                </div>
                   <div className="form-addDz__group">
                     <div className="form-addDz__input-range-container">
                       <label className="form-addDz-input_title">Провернути знак</label>

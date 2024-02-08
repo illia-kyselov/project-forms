@@ -59,7 +59,7 @@ const AdditionalInfo = ({ dataList = [], formatDate }) => {
             const imagePath = markerImage[num_dz];
             const rowClassName = clickedRow === index ? 'clicked' : '';
             const isCurrentRowClicked = clickedRow === index;
-
+            {console.log(imagePath)}
             return (
               <React.Fragment key={index}>
                 <tr className={`catalogTable__tr ${rowClassName}`}>
