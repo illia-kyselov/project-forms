@@ -68,8 +68,7 @@ const AdditionalInfo = ({ dataList = [], formatDate }) => {
                   <td className='catalogTable__td' onClick={handleRowClick(expldz_uuid, index)}>{dz_form}</td>
                   <td className='catalogTable__td' onClick={handleRowClick(expldz_uuid, index)}>{formatDate(expldzdate)}</td>
                   <td className='catalogTable__td'>
-                    {isCurrentRowClicked && <ArrowDown onClick={handleArrowDownClick}  arrowDownActiveInfo={arrowDownActiveInfo} /> }
-                    {isCurrentRowClicked && <ArrowUp  onClick={handleArrowUpClick} arrowUpActiveInfo={arrowUpActiveInfo} /> }
+                    {<ArrowDown onClick={handleArrowDownClick}  arrowDownActiveInfo={arrowDownActiveInfo} /> }
                   </td>
                 </tr>
 
