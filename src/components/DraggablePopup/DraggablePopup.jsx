@@ -45,13 +45,18 @@ const DraggablePopup = ({ children }) => {
   const onMouseDown = (e) => {
     if (e.button !== 0) return;
     if (excludedElementsToClick.includes(e.target.tagName)) return;
+  
     const { clientX, clientY } = e;
+    const rect = divRef.current.getBoundingClientRect();
+  
     setDragging(true);
-    setRelX(clientX - x);
-    setRelY(clientY - y);
+    setRelX(clientX - rect.left);
+    setRelY(clientY - rect.top);
+  
     e.stopPropagation();
     e.preventDefault();
   };
+  
 
   const onMouseMove = (e) => {
     if (!dragging) return;

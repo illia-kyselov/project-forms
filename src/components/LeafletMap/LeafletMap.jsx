@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Polygon, Popup, Marker,WMSTileLayer } from "react-leaflet";
+import { MapContainer, TileLayer, Polygon, Popup, Marker, WMSTileLayer, LayersControl, FeatureGroup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -24,10 +24,13 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require("leaflet/dist/images/marker-shadow.png").default,
 });
 
+const { Overlay } = LayersControl;
+
 const coordinatesStyle = {
   position: "absolute",
-  top: "20px",
+  bottom: "20px",
   right: "10px",
+  padding: "5px",
   backgroundColor: "white",
   borderRadius: "5px",
   zIndex: 1000,
@@ -320,110 +323,120 @@ const LeafletMap = ({
         style={containerStyle}
         preferCanvas={true}
       >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          noWrap={true}
-        />
-        <WMSTileLayer
-          layers="dz"
-          url={wmsLayerUrl}
-          format="image/png"
-          transparent={true}
-        />
+        <LayersControl position="topright">
+          <LayersControl.BaseLayer checked name="OSM">
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              noWrap={true}
+            />
+          </LayersControl.BaseLayer>
+          <LayersControl.BaseLayer name="WMS">
+            <WMSTileLayer
+              layers="dz"
+              url={wmsLayerUrl}
+              format="image/png"
+              transparent={true}
+            />
+          </LayersControl.BaseLayer>
+          <Overlay name="Markers" checked>
+            <MarkerClusterGroup disableClusteringAtZoom={18}>
+              {isChecked ? (
+                filteredMarkers.map((marker) => (
+                  <Marker
+                    key={marker.id}
+                    position={marker.coordinates}
+                    icon={createMarkerIcon(
+                      marker.num_pdr,
+                      marker.ang_map,
+                      marker.id === focusMarker
+                    )}
+                    zIndexOffset={marker.id === focusMarker ? 999000 : 100}
+                    eventHandlers={{
+                      click: () => {
+                        handleMarkerClick(marker.id);
+                      },
+                    }}
+                    ref={refs[marker.id]}
+                  >
+                    <Popup position={marker.coordinates} autoClose={true}>
+                      {`${marker.num_pdr}[${marker.id}]`}
+                    </Popup>
+                  </Marker>
+                ))
+              ) : (
+                markers.map((marker) => (
+                  <Marker
+                    key={marker.id}
+                    position={marker.coordinates}
+                    icon={createMarkerIcon(
+                      marker.num_pdr,
+                      marker.ang_map,
+                      marker.id === focusMarker
+                    )}
+                    zIndexOffset={marker.id === focusMarker ? 1000 : 100}
+                    eventHandlers={{
+                      click: () => {
+                        handleMarkerClick(marker.id);
+                      },
+                    }}
+                    ref={refs[marker.id]}
+                  >
+                    <Popup position={marker.coordinates} autoClose={true}>
+                      {`${marker.num_pdr}[${marker.id}]`}
+                    </Popup>
+                  </Marker>
+                ))
+              )}
+            </MarkerClusterGroup>
+          </Overlay>
+          <Overlay name="Polygons" checked>
+            <FeatureGroup>
+              {isChecked && selectedPolygon && selectedPolygon.geom && (
+                <Polygon
+                  key={selectedPolygonId}
+                  positions={selectedPolygon.geom.coordinates || []}
+                  pathOptions={{
+                    color: "red",
+                    zIndex: "2147483647",
+                    opacity: "1",
+                  }}
+                  eventHandlers={{
+                    click: (e) => handleClick(e, selectedPolygon),
+                  }}
+                >
+                  <Popup>{selectedPolygon.pro_name}</Popup>
+                </Polygon>
+              )}
+              {filteredPolygons.map((polygon) => (
+                <Polygon
+                  key={polygon.objectid}
+                  positions={polygon.geom.coordinates}
+                  pathOptions={{
+                    color:
+                      selectedPolygon === polygon || selectedPolygonIdFromList === polygon.objectid
+                        ? "red"
+                        : "purple",
+                    zIndex:
+                      selectedPolygon === polygon || selectedPolygonIdFromList === polygon.objectid
+                        ? '2147483647'
+                        : '',
+                    opacity:
+                      selectedPolygon === polygon || selectedPolygonIdFromList === polygon.objectid
+                        ? '1'
+                        : '0.7',
+                  }}
+                  eventHandlers={{
+                    click: (e) => handleClick(e, polygon),
+                  }}
+                >
+                  <Popup>{polygon.pro_name}</Popup>
+                </Polygon>
+              ))}
+            </FeatureGroup>
+          </Overlay>
+        </LayersControl>
         <MapBoundsHandler setMapBounds={setMapBounds} />
-        <MarkerClusterGroup disableClusteringAtZoom={18}>
-          {isChecked ? (
-            filteredMarkers.map((marker) => (
-              <Marker
-                key={marker.id}
-                position={marker.coordinates}
-                icon={createMarkerIcon(
-                  marker.num_pdr,
-                  marker.ang_map,
-                  marker.id === focusMarker
-                )}
-                zIndexOffset={marker.id === focusMarker ? 999000 : 100}
-                eventHandlers={{
-                  click: () => {
-                    handleMarkerClick(marker.id);
-                  },
-                }}
-                ref={refs[marker.id]}
-              >
-                <Popup position={marker.coordinates} autoClose={true}>
-                  {`${marker.num_pdr}[${marker.id}]`}
-                </Popup>
-              </Marker>
-            ))
-          ) : (
-            markers.map((marker) => (
-              <Marker
-                key={marker.id}
-                position={marker.coordinates}
-                icon={createMarkerIcon(
-                  marker.num_pdr,
-                  marker.ang_map,
-                  marker.id === focusMarker
-                )}
-                zIndexOffset={marker.id === focusMarker ? 1000 : 100}
-                eventHandlers={{
-                  click: () => {
-                    handleMarkerClick(marker.id);
-                  },
-                }}
-                ref={refs[marker.id]}
-              >
-                <Popup position={marker.coordinates} autoClose={true}>
-                  {`${marker.num_pdr}[${marker.id}]`}
-                </Popup>
-              </Marker>
-            ))
-          )}
-        </MarkerClusterGroup>
-        {isChecked &&
-          (buttonAddDocPressed ? (
-            <Polygon
-              key={selectedPolygonId}
-              positions={selectedPolygon.geom.coordinates}
-              pathOptions={{
-                color: "green",
-                zIndex: "2147483647",
-                opacity: "1",
-              }}
-              eventHandlers={{
-                click: (e) => handleClick(e, selectedPolygon),
-              }}
-            >
-              <Popup>{selectedPolygon.pro_name}</Popup>
-            </Polygon>
-          ) : (
-            filteredPolygons.map((polygon) => (
-              <Polygon
-                key={polygon.objectid}
-                positions={polygon.geom.coordinates}
-                pathOptions={{
-                  color:
-                    selectedPolygon === polygon || selectedPolygonIdFromList === polygon.objectid
-                      ? "red"
-                      : "purple",
-                  zIndex:
-                    selectedPolygon === polygon || selectedPolygonIdFromList === polygon.objectid
-                      ? '2147483647'
-                      : '',
-                  opacity:
-                    selectedPolygon === polygon || selectedPolygonIdFromList === polygon.objectid
-                      ? '1'
-                      : '0.7',
-                }}
-                eventHandlers={{
-                  click: (e) => handleClick(e, polygon),
-                }}
-              >
-                <Popup>{polygon.pro_name}</Popup>
-              </Polygon>
-            ))
-          ))}
         {showDraggableDzMarker && (
           <DraggableDzMarker
             handleMarkerPosition={handleMarkerDragEnd}

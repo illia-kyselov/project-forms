@@ -6,9 +6,6 @@ import Input from "../Input/Input";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import markerImage from '../../img';
 
-import img from '../../img/icon-trash.png';
-import { v4 as uuidv4 } from 'uuid';
-
 const KeyCodesEnum = {
   ArrowUp: 38,
   ArrowDown: 40,
@@ -260,9 +257,9 @@ const Table = ({
     }));
 
     const filteredOptions = forms.filter((form) =>
-    form.num_pdr_new.toLowerCase().includes(value.toLowerCase())
-  );
-  setNumPdrOptions(filteredOptions);
+      form.num_pdr_new.toLowerCase().includes(value.toLowerCase())
+    );
+    setNumPdrOptions(filteredOptions);
   };
 
   const handleFormSelect = (e, rowId) => {
@@ -328,18 +325,18 @@ const Table = ({
                       required
                       autoComplete={"off"}
                     />
-                   <datalist id="numPdrOptions">
-  {numPdrOptions.map((form) => (
-    <option key={form.id} >
-      {form.num_pdr_new}
-      {/* <img src={markerImage[form.num_pdr_new]} alt={`Marker for ${form.num_pdr_new}`} /> */}
-      {/* {console.log(markerImage[form.num_pdr_new])} */}
-      {/* {} */}
-    </option>
-  ))}
-</datalist>
+                    <datalist id="numPdrOptions">
+                      {numPdrOptions.map((form) => (
+                        <div key={form.id}>
+                          <option>
+                            {form.num_pdr_new}
+                            <img src={markerImage[form.num_pdr_new]} alt={form.num_pdr_new} />
+                          </option>
+                        </div>
+                      ))}
 
-                </div>
+                    </datalist>
+                  </div>
                   <div className="form-addDz__group">
                     <div className="form-addDz__input-range-container">
                       <label className="form-addDz-input_title">Провернути знак</label>
@@ -361,7 +358,7 @@ const Table = ({
                     <div className="form-addDz__input-range-container">
                       <label className="form-addDz-input_title">Кут</label>
                       <Input
-                        className="form-addDz__input-ang" 
+                        className="form-addDz__input-ang"
                         type="text"
                         value={newRowData.ang_map}
                         onChange={(e) => handleRotationChange(e.target.value)}

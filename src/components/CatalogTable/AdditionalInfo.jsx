@@ -59,7 +59,6 @@ const AdditionalInfo = ({ dataList = [], formatDate }) => {
             const imagePath = markerImage[num_dz];
             const rowClassName = clickedRow === index ? 'clicked' : '';
             const isCurrentRowClicked = clickedRow === index;
-            {console.log(imagePath)}
             return (
               <React.Fragment key={index}>
                 <tr className={`catalogTable__tr ${rowClassName}`}>
@@ -68,11 +67,12 @@ const AdditionalInfo = ({ dataList = [], formatDate }) => {
                   <td className='catalogTable__td' onClick={handleRowClick(expldz_uuid, index)}>{dz_form}</td>
                   <td className='catalogTable__td' onClick={handleRowClick(expldz_uuid, index)}>{formatDate(expldzdate)}</td>
                   <td className='catalogTable__td'>
-                    {<ArrowDown onClick={handleArrowDownClick}  arrowDownActiveInfo={arrowDownActiveInfo} /> }
+                    {<ArrowDown onClick={handleArrowDownClick} arrowDownActiveInfo={arrowDownActiveInfo} />}
+                    {<ArrowUp onClick={handleArrowUpClick} arrowUpActiveInfo={arrowUpActiveInfo} />}
                   </td>
                 </tr>
 
-                {selectedRowData && selectedRowData.expldz_uuid === expldz_uuid && arrowUpActiveInfo  && (
+                {selectedRowData && selectedRowData.expldz_uuid === expldz_uuid && arrowUpActiveInfo && (
                   <tr>
                     <td colSpan="4">
                       <table className='catalogTable catalogTable_Additional' >
