@@ -60,6 +60,10 @@ function App({ user }) {
     element: '',
     quantity: ''
   });
+  const [newRowData, setNewRowData] = useState({
+    num_pdr: "",
+    ang_map: 0,
+  });
   const [formWorksData, setFormWorksData] = useState({
     type_work: "",
     is_doc: true,
@@ -357,6 +361,7 @@ function App({ user }) {
           isChecked={isChecked}
           rotationAngle={rotationAngle}
           setRotationAngle={setRotationAngle}
+          newRowData={newRowData}
         />
         <div className="form-container">
           <FormAddWorks
@@ -407,6 +412,8 @@ function App({ user }) {
                 setAllElementsData={setAllElementsData}
                 setRotationAngle={setRotationAngle}
                 rotationAngle={rotationAngle}
+                newRowData={newRowData}
+                setNewRowData={setNewRowData}
               />
             )}
             {showSecondTable && dataTable.length > 0 &&

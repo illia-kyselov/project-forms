@@ -644,10 +644,9 @@ input:checked+.slider:before {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 20px;
+      gap: 10px;
     }
   }
-
 
   &-input_title {
     display: block;
@@ -811,4 +810,14 @@ input:checked+.slider:before {
   &:hover {
     scale: 1.2;
   }
+}
+
+.num_pdr_img {
+  width: 35px;
+  height: 35px;
+}
+
+.leaflet-div-icon {
+  background: transparent !important;
+  border: none !important;
 }

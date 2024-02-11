@@ -1,32 +1,31 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Popup, Marker, useMap } from "react-leaflet";
-import markerImage from "../../img/1.39z.png";
+import markerLogo from "../../img/1.39z.png";
+import markerImage from "../../img";
 import L from "leaflet";
 import "leaflet-rotatedmarker";
 import RotateControl from "../RotateControl/RotateControl";
 
-const customIcon = new L.Icon({
-  iconUrl: markerImage,
-  iconRetinaUrl: markerImage,
+const defaultIcon = new L.Icon({
+  iconUrl: markerLogo,
+  iconRetinaUrl: markerLogo,
   iconSize: [60, 60],
   iconAngle: 100,
   iconAnchor: [30, 30],
 });
 
-const DraggableDzMarker = ({ handleMarkerPosition, setDraggableDzMarkerWKT, rotationAngle, setRotationAngle }) => {
+const DraggableDzMarker = ({ handleMarkerPosition, setDraggableDzMarkerWKT, rotationAngle, setRotationAngle, newRowData }) => {
   const map = useMap();
   const [markerPosition, setMarkerPosition] = useState(map.getCenter());
   const selectMarkerRef = useRef(null);
+  const [customIcon, setCustomIcon] = useState(defaultIcon);
 
   const handleDragEnd = (e) => {
     const newPosition = e.target.getLatLng();
     setMarkerPosition([newPosition.lat, newPosition.lng]);
     handleMarkerPosition(newPosition);
-
     setDraggableDzMarkerWKT([newPosition.lat, newPosition.lng]);
   };
-
-  console.log(rotationAngle);
 
   useEffect(() => {
     if (selectMarkerRef.current) {
@@ -39,6 +38,19 @@ const DraggableDzMarker = ({ handleMarkerPosition, setDraggableDzMarkerWKT, rota
       selectMarkerRef.current.setRotationAngle(rotationAngle);
     }
   }, [rotationAngle]);
+
+  useEffect(() => {
+    if (newRowData.num_pdr !== undefined) {
+      const iconUrl = markerImage[newRowData.num_pdr];
+      setCustomIcon(
+        L.divIcon({
+          iconSize: [50, 50],
+          iconAnchor: [30, 30],
+          html: `<img src="${iconUrl}" style="width: 50px; height: 50px; transform: rotate(${rotationAngle}deg);">`,
+        })
+      );
+    }
+  }, [newRowData, rotationAngle]);
 
   return (
     <Marker

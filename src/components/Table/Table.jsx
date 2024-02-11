@@ -39,13 +39,11 @@ const Table = ({
   setRotationAngle,
   setUpdateMapDz,
   rotationAngle,
+  newRowData,
+  setNewRowData,
 }) => {
   const selectedRowRef = useRef(null);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [newRowData, setNewRowData] = useState({
-    num_pdr: "",
-    ang_map: 0,
-  });
   const [forms, setForms] = useState([]);
   const [selectedFormByRow, setSelectedFormByRow] = useState({});
   const [showButton, setShowButton] = useState(true);
@@ -303,7 +301,7 @@ const Table = ({
 
   return (
     <div className="form-container-inside form-container-inside-width">
-      <label className="block-label">Обрані дорожні знаки</label>
+      <label className="block-label">{!showAddForm ? 'Обрані дорожні знаки' : "Додавання нового дорожнього знаку"}</label>
 
       <div className="table">
         {
@@ -312,6 +310,9 @@ const Table = ({
             <div>
               <form className="form-addDz">
                 <div className="form-addDz__group-flex">
+                  {markerImage[newRowData.num_pdr] && (
+                    <img src={markerImage[newRowData.num_pdr]} alt={newRowData.num_pdr} className="num_pdr_img"/>
+                  )}
                   <div className="form-addDz__group">
                     <label className="form-addDz-input_title">Номер ПДР знаку</label>
                     <Input
@@ -330,15 +331,14 @@ const Table = ({
                         <div key={form.id}>
                           <option>
                             {form.num_pdr_new}
-                            <img src={markerImage[form.num_pdr_new]} alt={form.num_pdr_new} />
                           </option>
                         </div>
                       ))}
-
                     </datalist>
+
                   </div>
                   <div className="form-addDz__group">
-                    <div className="form-addDz__input-range-container">
+                    {showSaveButton && <div className="form-addDz__input-range-container">
                       <label className="form-addDz-input_title">Провернути знак</label>
                       <span className="form-addDz__ang">{newRowData.ang_map}°</span>
                       <Input
@@ -352,9 +352,9 @@ const Table = ({
                         onChange={(e) => handleRotationChange(e.target.value)}
                         required
                       />
-                    </div>
+                    </div>}
                   </div>
-                  <div className="form-addDz__group">
+                  {showSaveButton && <div className="form-addDz__group">
                     <div className="form-addDz__input-range-container">
                       <label className="form-addDz-input_title">Кут</label>
                       <Input
@@ -365,10 +365,10 @@ const Table = ({
                         required
                       />
                     </div>
-                  </div>
+                  </div>}
                 </div>
                 <div className="form-addDz__group-flex">
-                  {!showSaveButton && (
+                  {!showSaveButton && markerImage[newRowData.num_pdr] && (
                     <button type="button" className="button-add-Dz" onClick={showDraggableDzMarker}>
                       Показати на карті
                     </button>

@@ -55,6 +55,7 @@ const LeafletMap = ({
   setFocusMarker,
   rotationAngle,
   setRotationAngle,
+  newRowData,
 }) => {
   const containerStyle = {
     height: "calc(96vh - 10px)",
@@ -443,6 +444,7 @@ const LeafletMap = ({
             setDraggableDzMarkerWKT={setDraggableDzMarkerWKT}
             rotationAngle={rotationAngle}
             setRotationAngle={setRotationAngle}
+            newRowData={newRowData}
           />
         )}
 
