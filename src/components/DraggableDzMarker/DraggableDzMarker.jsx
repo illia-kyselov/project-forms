@@ -43,10 +43,12 @@ const DraggableDzMarker = ({ handleMarkerPosition, setDraggableDzMarkerWKT, rota
     if (newRowData.num_pdr !== undefined) {
       const iconUrl = markerImage[newRowData.num_pdr];
       setCustomIcon(
-        L.divIcon({
+        new L.Icon({
+          iconUrl: iconUrl,
+          iconRetinaUrl: iconUrl,
           iconSize: [50, 50],
           iconAnchor: [30, 30],
-          html: `<img src="${iconUrl}" style="width: 50px; height: 50px; transform: rotate(${rotationAngle}deg);">`,
+          iconAngle: rotationAngle,
         })
       );
     }

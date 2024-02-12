@@ -85,6 +85,7 @@ function App({ user }) {
     setShowAddElements(true);
   };
 
+
   const handleRemoveElements = (e) => {
     e.preventDefault();
     setShowAddElements(false);
