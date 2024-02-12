@@ -311,7 +311,7 @@ const Table = ({
               <form className="form-addDz">
                 <div className="form-addDz__group-flex">
                   {markerImage[newRowData.num_pdr] && (
-                    <img src={markerImage[newRowData.num_pdr]} alt={newRowData.num_pdr} className="num_pdr_img"/>
+                    <img src={markerImage[newRowData.num_pdr]} alt={newRowData.num_pdr} className="num_pdr_img" />
                   )}
                   <div className="form-addDz__group">
                     <label className="form-addDz-input_title">Номер ПДР знаку</label>
@@ -327,15 +327,12 @@ const Table = ({
                       autoComplete={"off"}
                     />
                     <datalist id="numPdrOptions">
-                      {numPdrOptions.map((form) => (
-                        <div key={form.id}>
-                          <option>
-                            {form.num_pdr_new}
-                          </option>
+                      {Array.from(new Set(numPdrOptions.map(form => form.num_pdr_new))).map((uniqueValue) => (
+                        <div key={uniqueValue}>
+                          <option>{uniqueValue}</option>
                         </div>
                       ))}
                     </datalist>
-
                   </div>
                   <div className="form-addDz__group">
                     {showSaveButton && <div className="form-addDz__input-range-container">

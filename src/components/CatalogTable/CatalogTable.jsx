@@ -265,19 +265,19 @@ const CatalogTable = ({ user }) => {
                     />
                   ) : formatDate(row.cdate)}</td>
                   <td className='catalogTable__td catalogTable__td-edit'>
-                  
-                  <ArrowDown
-                    onClick={() => handleArrowDownClickCatalog(row)}
-                    arrowDownActive={arrowDownActive}
-                  />
-                  {clickedRow && clickedRow.uuid === row.uuid &&
-                  <ArrowUp
-                    onClick={handleArrowClickCatalog}
-                    arrowUpActive={arrowUpActive}
-                  />}
+
+                    <ArrowDown
+                      onClick={() => handleArrowDownClickCatalog(row)}
+                      arrowDownActive={arrowDownActive}
+                    />
+                    {clickedRow && clickedRow.uuid === row.uuid &&
+                      <ArrowUp
+                        onClick={handleArrowClickCatalog}
+                        arrowUpActive={arrowUpActive}
+                      />}
                   </td>
                   <td className='catalogTable__td catalogTable__td-edit'>
-                    {editingRow === row.uuid  ? (
+                    {editingRow === row.uuid ? (
                       <>
                         <CheckSVG onClick={() => handleUpdate()}></CheckSVG>
                         <CloseSVG onClick={() => handleCancelEdit()}></CloseSVG>
