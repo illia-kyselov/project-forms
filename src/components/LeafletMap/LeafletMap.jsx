@@ -358,6 +358,12 @@ const LeafletMap = ({
               ext="png"
             />
           </LayersControl.BaseLayer>
+          <LayersControl.BaseLayer name="Real">
+            <TileLayer
+              url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+              attribution='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+            />
+          </LayersControl.BaseLayer>
           <Overlay name="Markers" checked>
             <MarkerClusterGroup disableClusteringAtZoom={18}>
               {isChecked ? (
@@ -379,7 +385,7 @@ const LeafletMap = ({
                     ref={refs[marker.id]}
                   >
                     <Popup position={marker.coordinates} autoClose={true}>
-                      {`${marker.num_pdr}[${marker.id}]`}
+                      {`${marker.num_pdr} [${marker.id}]`}
                     </Popup>
                   </Marker>
                 ))
