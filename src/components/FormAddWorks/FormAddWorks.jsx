@@ -5,6 +5,7 @@ import Input from "../Input/Input";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 import { deleteRecordsByUuid } from "../../api/deleteRecordByUuid";
+import ModalMessage from "../ModalMessage/ModalMessage";
 
 const FormAddWorks = ({
   objectid,
@@ -28,6 +29,30 @@ const FormAddWorks = ({
   const [formObjectId, setFormObjectId] = useState("");
   const [selectedDocValue, setSelectedDocValue] = useState("");
   const [invalidInputs, setInvalidInputs] = useState([]);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+
+  const handleCancelClick = async () => {
+    setShowCancelModal(true);
+  };
+
+  const handleCancelConfirmed = async () => {
+    setShowCancelModal(false);
+
+    if (uuidTable) {
+      try {
+        await deleteRecordsByUuid(uuidTable);
+      } catch (error) {
+        console.error('Error deleting record:', error);
+        return;
+      }
+    }
+
+    window.location.reload();
+  };
+
+  const handleCancelRejected = () => {
+    setShowCancelModal(false);
+  };
 
   useEffect(() => {
     fetchData();
@@ -52,51 +77,6 @@ const FormAddWorks = ({
     handleChange(e);
   };
 
-  // async function deleteRecordsById(uuid) {
-  //   try {
-  //     const elementsResponse = await fetch(`http://localhost:3001/elements/${uuid}`, {
-  //       method: 'DELETE',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     });
-
-  //     if (!elementsResponse.ok) {
-  //       NotificationService.showErrorNotification('Дані не видалені');
-  //       return;
-  //     }
-
-  //     const explDzResponse = await fetch(`http://localhost:3001/expl_dz/${uuid}`, {
-  //       method: 'DELETE',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     });
-
-  //     if (!explDzResponse.ok) {
-  //       NotificationService.showErrorNotification('Дані не видалені');
-  //       return;
-  //     }
-
-  //     const workTableResponse = await fetch(`http://localhost:3001/work_table/${uuid}`, {
-  //       method: 'DELETE',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     });
-
-  //     if (!workTableResponse.ok) {
-  //       NotificationService.showErrorNotification('Дані не видалені');
-  //       return;
-  //     }
-
-  //     NotificationService.showSuccessNotification('Дані успішно видалені');
-  //     window.location.reload();
-  //   } catch (error) {
-  //     console.error('Error deleting record:', error);
-  //   }
-  // }
-
   const selectedInfoFromTableRowClick =
     polygonTableRowClick.objectid && polygonTableRowClick.pro_name
       ? `${polygonTableRowClick.objectid} / ${polygonTableRowClick.pro_name}`
@@ -113,7 +93,7 @@ const FormAddWorks = ({
     const parts = selectedInfo.split('/').map(part => part.trim());
     objectidInput = parts.length > 0 ? parts[0] : null;
 
-    objectidInput = objectidInput.replace(/_/g, '');
+    objectidInput.replace(/_/g, '');
   }
 
   const handleChange = (e) => {
@@ -168,18 +148,18 @@ const FormAddWorks = ({
     }
   }, [buttonAddDocPressed, selectedInfo]);
 
-  const handleCancelClick = async () => {
-    if (uuidTable) {
-      try {
-        await deleteRecordsByUuid(uuidTable);
-      } catch (error) {
-        console.error('Error deleting record:', error);
-        return;
-      }
-    }
+  // const handleCancelClick = async () => {
+  //   if (uuidTable) {
+  //     try {
+  //       await deleteRecordsByUuid(uuidTable);
+  //     } catch (error) {
+  //       console.error('Error deleting record:', error);
+  //       return;
+  //     }
+  //   }
 
-    window.location.reload();
-  };
+  //   window.location.reload();
+  // };
 
   return (
     <div className="form-container-inside">
@@ -321,6 +301,12 @@ const FormAddWorks = ({
           </div>
         </div>
       </form >
+      <ModalMessage
+        title="Ви дійсно хочете відмінити Ваш запис?"
+        isOpen={showCancelModal}
+        onConfirm={handleCancelConfirmed}
+        onReject={handleCancelRejected}
+      />
     </div >
   );
 };

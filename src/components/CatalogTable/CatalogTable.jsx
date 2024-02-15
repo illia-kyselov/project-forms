@@ -11,6 +11,7 @@ import CheckSVG from '../../img/CheckSVG';
 import AdditionalInfo from './AdditionalInfo';
 import ArrowDown from '../../img/ArrowDown';
 import ArrowUp from '../../img/ArrowUp';
+import ModalMessage from '../ModalMessage/ModalMessage';
 
 
 const CatalogTable = ({ user }) => {
@@ -28,6 +29,9 @@ const CatalogTable = ({ user }) => {
   const [clickedRow, setClickedRow] = useState(null);
   const [arrowDownActive, setArrowDownActive] = useState(true);
   const [arrowUpActive, setArrowUpActive] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [selectedRowUuid, setSelectedRowUuid] = useState(null);
+
 
   useEffect(() => {
     fetchDataFromDB();
@@ -55,6 +59,31 @@ const CatalogTable = ({ user }) => {
       console.error("Error fetching data", error);
     }
   };
+
+  const handleDeleteClick = (rowUuid) => {
+    setSelectedRowUuid(rowUuid);
+    setShowCancelModal(true);
+  };
+
+
+  const handleCancelConfirmed = async (rowUuid) => {
+    try {
+      await deleteRecordsByUuid(rowUuid);
+      fetchDataFromDB();
+    } catch (error) {
+      console.error('Error deleting record:', error);
+    } finally {
+      setShowCancelModal(false);
+      setSelectedRowUuid(null);
+    }
+  };
+
+
+  const handleCancelRejected = () => {
+    setShowCancelModal(false);
+    setSelectedRowUuid(null);
+  };
+
 
   const formatDate = (originalDate) => {
     const dateObject = new Date(originalDate);
@@ -284,7 +313,7 @@ const CatalogTable = ({ user }) => {
                       </>
                     ) : (
                       <>
-                        <DeleteSVG onClick={() => deleteRecordsByUuid(row.uuid)} />
+                        <DeleteSVG onClick={() => handleDeleteClick(row.uuid)} />
                       </>
                     )}
                   </td>
@@ -297,7 +326,6 @@ const CatalogTable = ({ user }) => {
                   </tr>
                 )}
               </React.Fragment>
-
             ))
           ) : (
             <span className='catalogTable__user'>{user.length > 0 ? 'Нічого не знайдено' : "Користувач не залогінений"}</span>
@@ -309,6 +337,13 @@ const CatalogTable = ({ user }) => {
           <BeatLoader color="#36d7b7" loading={true} size={50} />
         </div>
       )}
+
+      <ModalMessage
+        title="Ви дійсно хочете видалити Ваш запис?"
+        isOpen={showCancelModal}
+        onConfirm={() => handleCancelConfirmed(selectedRowUuid)}
+        onReject={handleCancelRejected}
+      />
     </div>
   );
 };

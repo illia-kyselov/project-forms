@@ -13,6 +13,7 @@ import icon from '../src/img/saveIcon.png';
 import { validateEmptyInputs } from "./helpers/validate-empty-inputs";
 
 import { v4 as uuidv4 } from 'uuid';
+import ModalMessage from "./components/ModalMessage/ModalMessage";
 
 function App({ user }) {
   // const [showAddInfoForm, setShowAddInfoForm] = useState(false);
@@ -73,11 +74,20 @@ function App({ user }) {
     pers_work: "",
   });
   const [showUpdateElements, setShowUpdateElements] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  const handleShowModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
   const emptyInputs = validateEmptyInputs(formData);
   const hasEmptyInputs = emptyInputs.length > 0;
 
   const handleRowClick = (markerId) => {
     setFocusMarker(markerId);
+  };
+
+  const handleConfirmDelete = () => {
+
+    handleCloseModal();
   };
 
   const handleAddElements = (e) => {
@@ -382,6 +392,7 @@ function App({ user }) {
             formWorksData={formWorksData}
             setFormWorksData={setFormWorksData}
             visibleButtonInsert={visibleButtonInsert}
+            handleShowModal={handleShowModal}
           />
           <div className="flex">
             {buttonAddDocPressed && (
@@ -452,6 +463,14 @@ function App({ user }) {
         </div>
       </div>
       <NotificationContainer />
+
+      <ModalMessage
+        show={showModal}
+        onClose={handleCloseModal}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCloseModal}
+        question="Ви впевнені що хочете скасувати запис?"
+      />
     </div>
   );
 }

@@ -525,7 +525,6 @@ input:checked+.slider:before {
   border-radius: 8px;
   box-shadow: 0 2px 4px #0000001a;
   z-index: 10;
-  border: 3px solid #326d0c;
 }
 
 .form-info {
@@ -820,4 +819,84 @@ input:checked+.slider:before {
 .leaflet-div-icon {
   background: transparent !important;
   border: none !important;
+}
+
+.modal {
+  font-size: 12px;
+  padding: 10px 20px;
+  background-color: #212529;
+  border: none;
+  box-sizing: border-box;
+  border-radius: 0.5rem;
+}
+
+.modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  color: #dee2e6;
+  border-bottom: 1px solid #80808073;
+  font-size: 18px;
+  text-align: center;
+  padding: 5px;
+
+  &-title {
+    margin-right: 20px;
+  }
+
+  &-close {
+    cursor: pointer;
+    display: block;
+    padding: 2px 5px;
+    line-height: 20px;
+    font-size: 24px;
+    background: #ffffff;
+    border-radius: 3px;
+    background-color: #212529;
+    color: #909294;
+    border: none;
+  }
+}
+
+.modal__actions {
+  width: 100%;
+  margin: auto;
+  text-align: center;
+}
+
+.modal__button {
+  padding: 6px 12px;
+  margin: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  transition: all linear 0.2s;
+
+  &-cancel {
+    background-color: #6c757d;
+
+    &:hover {
+      background-color: #5c636a;
+    }
+
+    &:active {
+      background-color: #565e64;
+    }
+  }
+
+  &-agree {
+    background-color: #0d6efd;
+
+    &:hover {
+      background-color: #0b5ed7;
+    }
+
+    &:active {
+      background-color: #0a58ca;
+    }
+  }
 }
