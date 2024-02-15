@@ -857,6 +857,11 @@ input:checked+.slider:before {
     background-color: #212529;
     color: #909294;
     border: none;
+    transition: all linear 0.2s;
+
+    &:hover {
+      scale: 1.1;
+    }
   }
 }
 
