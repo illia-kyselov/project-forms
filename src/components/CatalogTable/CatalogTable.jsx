@@ -340,6 +340,7 @@ const CatalogTable = ({ user }) => {
 
       <ModalMessage
         title="Ви дійсно хочете видалити Ваш запис?"
+        butonText="Видалити запис"
         isOpen={showCancelModal}
         onConfirm={() => handleCancelConfirmed(selectedRowUuid)}
         onReject={handleCancelRejected}

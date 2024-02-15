@@ -303,6 +303,7 @@ const FormAddWorks = ({
       </form >
       <ModalMessage
         title="Ви дійсно хочете відмінити Ваш запис?"
+        butonText="Скасувати запис"
         isOpen={showCancelModal}
         onConfirm={handleCancelConfirmed}
         onReject={handleCancelRejected}
