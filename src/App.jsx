@@ -61,10 +61,11 @@ function App({ user }) {
     element: '',
     quantity: ''
   });
-  const [newRowData, setNewRowData] = useState({
+  const [dzList, setDzList] = useState({
     num_pdr: "",
     ang_map: 0,
   });
+  const [insertDzArray, setInsertDzArray] = useState([]);
   const [formWorksData, setFormWorksData] = useState({
     type_work: "",
     is_doc: true,
@@ -86,7 +87,6 @@ function App({ user }) {
   };
 
   const handleConfirmDelete = () => {
-
     handleCloseModal();
   };
 
@@ -307,6 +307,34 @@ function App({ user }) {
 
       setDataSubmitted(true);
 
+      for (const insertData of insertDzArray) {
+        const lng = insertData.coordinates[0];
+        const lat = insertData.coordinates[1];
+
+        const wktMultiPoint = `MULTIPOINT(${lng} ${lat} 0)`;
+
+        const requestData = {
+          geom: wktMultiPoint,
+          num_pdr: insertData.num_pdr,
+          ang_map: insertData.ang_map,
+        };
+
+        const response = await fetch('http://localhost:3001/dz', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestData),
+        });
+
+        if (response.ok) {
+          NotificationService.showSuccessNotification('Дорожні знаки успішно додані!');
+          setInsertDzArray([]);
+        } else {
+          NotificationService.showWarningNotification('Будь ласка, спробуйте ще раз!');
+        }
+      }
+
       for (const row of tableToInsert) {
         const elementsForTable = allElementsData.filter(element => element.tableId === row.uuid);
 
@@ -372,7 +400,8 @@ function App({ user }) {
           isChecked={isChecked}
           rotationAngle={rotationAngle}
           setRotationAngle={setRotationAngle}
-          newRowData={newRowData}
+          dzList={dzList}
+          insertDzArray={insertDzArray}
         />
         <div className="form-container">
           <FormAddWorks
@@ -424,8 +453,9 @@ function App({ user }) {
                 setAllElementsData={setAllElementsData}
                 setRotationAngle={setRotationAngle}
                 rotationAngle={rotationAngle}
-                newRowData={newRowData}
-                setNewRowData={setNewRowData}
+                dzList={dzList}
+                setDzList={setDzList}
+                setInsertDzArray={setInsertDzArray}
               />
             )}
             {showSecondTable && dataTable.length > 0 &&

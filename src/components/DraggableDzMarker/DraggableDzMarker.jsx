@@ -14,7 +14,7 @@ const defaultIcon = new L.Icon({
   iconAnchor: [30, 30],
 });
 
-const DraggableDzMarker = ({ handleMarkerPosition, setDraggableDzMarkerWKT, rotationAngle, setRotationAngle, newRowData }) => {
+const DraggableDzMarker = ({ handleMarkerPosition, setDraggableDzMarkerWKT, rotationAngle, setRotationAngle, dzList }) => {
   const map = useMap();
   const [markerPosition, setMarkerPosition] = useState(map.getCenter());
   const selectMarkerRef = useRef(null);
@@ -40,8 +40,8 @@ const DraggableDzMarker = ({ handleMarkerPosition, setDraggableDzMarkerWKT, rota
   }, [rotationAngle]);
 
   useEffect(() => {
-    if (newRowData.num_pdr !== undefined) {
-      const iconUrl = markerImage[newRowData.num_pdr];
+    if (dzList.num_pdr !== undefined) {
+      const iconUrl = markerImage[dzList.num_pdr];
       setCustomIcon(
         new L.Icon({
           iconUrl: iconUrl,
@@ -52,7 +52,7 @@ const DraggableDzMarker = ({ handleMarkerPosition, setDraggableDzMarkerWKT, rota
         })
       );
     }
-  }, [newRowData, rotationAngle]);
+  }, [dzList, rotationAngle]);
 
   return (
     <Marker

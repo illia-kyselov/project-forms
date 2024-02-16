@@ -39,8 +39,9 @@ const Table = ({
   setRotationAngle,
   setUpdateMapDz,
   rotationAngle,
-  newRowData,
-  setNewRowData,
+  dzList,
+  setDzList,
+  setInsertDzArray,
 }) => {
   const selectedRowRef = useRef(null);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -55,7 +56,7 @@ const Table = ({
   const [invalidInputs, setInvalidInputs] = useState([]);
   const [numPdrOptions, setNumPdrOptions] = useState(forms);
 
-  const emptyInputsDZ = validateEmptyInputs(newRowData);
+  const emptyInputsDZ = validateEmptyInputs(dzList);
   const hasEmptyInputsDz = emptyInputsDZ.length > 0;
 
   useEffect(() => {
@@ -80,7 +81,7 @@ const Table = ({
   }, [data]);
 
   useEffect(() => {
-    setNewRowData((prevData) => ({
+    setDzList((prevData) => ({
       ...prevData,
       ang_map: Math.round(rotationAngle),
     }));
@@ -105,7 +106,7 @@ const Table = ({
   useEffect(() => {
     if (data.length > 0) {
 
-      const idExists = data.some((row) => row.id === newRowData.id);
+      const idExists = data.some((row) => row.id === dzList.id);
 
       if (idExists) {
         return;
@@ -168,45 +169,27 @@ const Table = ({
   const handlePushToDZ = async (e) => {
     e.preventDefault();
 
-    const roundedAngMap = Math.round(newRowData.ang_map);
+    const roundedAngMap = Math.round(dzList.ang_map);
 
     if (hasEmptyInputsDz) {
-      if (hasEmptyInputsDz) {
-        setInvalidInputs(emptyInputsDZ);
-        NotificationService.showWarningNotification('Будь ласка заповніть всі поля!');
-      }
+      setInvalidInputs(emptyInputsDZ);
+      NotificationService.showWarningNotification('Будь ласка заповніть всі поля!');
       return;
     }
 
     setShowSecondTable(false);
 
-    try {
-      const wktMultiPoint = `MULTIPOINT(${draggableDzMarkerWKT[1]} ${draggableDzMarkerWKT[0]} 0)`;
-      const insertData = {
-        geom: wktMultiPoint,
-        num_pdr: newRowData.num_pdr,
-        ang_map: roundedAngMap,
-      };
+    const newInsertData = {
+      id: 'Новий знак',
+      coordinates: [draggableDzMarkerWKT[0] || 0, draggableDzMarkerWKT[1] || 0],
+      num_pdr: dzList.num_pdr,
+      ang_map: roundedAngMap,
+    };
 
-      const response = await fetch('http://localhost:3001/dz', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(insertData),
-      });
-
-      if (response.ok) {
-        NotificationService.showSuccessNotification('Дорожній знак успішно створений!');
-        setPushToDZCalled(true);
-        hideForm(e);
-        setUpdateMapDz(true);
-      } else {
-        NotificationService.showWarningNotification('Будь ласка, заповніть всі поля та спробуйте ще раз!');
-      }
-    } catch (error) {
-      console.error('An error occurred while sending data to the server:', error);
-    }
+    setInsertDzArray(prevArray => [...prevArray, newInsertData]);
+    setPushToDZCalled(true);
+    hideForm(e);
+    NotificationService.showSuccessNotification('Дорожній знак успішно доданий!');
   };
 
   const deleteData = (rowId) => {
@@ -249,7 +232,7 @@ const Table = ({
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewRowData((prevData) => ({
+    setDzList((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -276,7 +259,7 @@ const Table = ({
 
   const hideForm = (event) => {
     event.preventDefault();
-    setNewRowData({
+    setDzList({
       num_pdr: "",
       ang_map: 0,
     });
@@ -310,8 +293,8 @@ const Table = ({
             <div>
               <form className="form-addDz">
                 <div className="form-addDz__group-flex">
-                  {markerImage[newRowData.num_pdr] && (
-                    <img src={markerImage[newRowData.num_pdr]} alt={newRowData.num_pdr} className="num_pdr_img" />
+                  {markerImage[dzList.num_pdr] && (
+                    <img src={markerImage[dzList.num_pdr]} alt={dzList.num_pdr} className="num_pdr_img" />
                   )}
                   <div className="form-addDz__group">
                     <label className="form-addDz-input_title">Номер ПДР знаку</label>
@@ -319,7 +302,7 @@ const Table = ({
                       className="form-addDz__input"
                       type="text"
                       name="num_pdr"
-                      value={newRowData.num_pdr}
+                      value={dzList.num_pdr}
                       onChange={handleInputChange}
                       placeholder="Номер ПДР"
                       list="numPdrOptions"
@@ -337,7 +320,7 @@ const Table = ({
                   <div className="form-addDz__group">
                     {showSaveButton && <div className="form-addDz__input-range-container">
                       <label className="form-addDz-input_title">Провернути знак</label>
-                      <span className="form-addDz__ang">{newRowData.ang_map}°</span>
+                      <span className="form-addDz__ang">{dzList.ang_map}°</span>
                       <Input
                         className="form-addDz__input-range"
                         type="range"
@@ -345,7 +328,7 @@ const Table = ({
                         max={360}
                         min={0}
                         step={5}
-                        value={newRowData.ang_map || 0}
+                        value={dzList.ang_map || 0}
                         onChange={(e) => handleRotationChange(e.target.value)}
                         required
                       />
@@ -357,7 +340,7 @@ const Table = ({
                       <Input
                         className="form-addDz__input-ang"
                         type="text"
-                        value={newRowData.ang_map}
+                        value={dzList.ang_map}
                         onChange={(e) => handleRotationChange(e.target.value)}
                         required
                       />
@@ -365,7 +348,7 @@ const Table = ({
                   </div>}
                 </div>
                 <div className="form-addDz__group-flex">
-                  {!showSaveButton && markerImage[newRowData.num_pdr] && (
+                  {!showSaveButton && markerImage[dzList.num_pdr] && (
                     <button type="button" className="button-add-Dz" onClick={showDraggableDzMarker}>
                       Показати на карті
                     </button>
