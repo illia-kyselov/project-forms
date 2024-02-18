@@ -499,7 +499,6 @@ app.post("/dz", (req, res) => {
   const wktGeom = req.body.geom;
   const num_pdr = req.body.num_pdr;
   const num_sing = req.body.num_sing;
-  const id = req.body.id;
   const ang_map = req.body.ang_map;
 
   const query = `

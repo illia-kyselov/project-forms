@@ -42,6 +42,7 @@ const Table = ({
   dzList,
   setDzList,
   setInsertDzArray,
+  insertDzArray,
 }) => {
   const selectedRowRef = useRef(null);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -180,7 +181,7 @@ const Table = ({
     setShowSecondTable(false);
 
     const newInsertData = {
-      id: 'Новий знак',
+      id: `Новий знак №${insertDzArray.length + 1}`,
       coordinates: [draggableDzMarkerWKT[0] || 0, draggableDzMarkerWKT[1] || 0],
       num_pdr: dzList.num_pdr,
       ang_map: roundedAngMap,

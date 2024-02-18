@@ -281,7 +281,6 @@ function App({ user }) {
           date_work: date_work,
         })
       });
-
       if (!workResponse.ok) {
         throw new Error("Network response was not ok");
       }
@@ -308,15 +307,14 @@ function App({ user }) {
       setDataSubmitted(true);
 
       for (const insertData of insertDzArray) {
-        const lng = insertData.coordinates[0];
-        const lat = insertData.coordinates[1];
-
-        const wktMultiPoint = `MULTIPOINT(${lng} ${lat} 0)`;
+        const wktMultiPoint = `MULTIPOINT(${insertData.coordinates[0].toFixed(6)} ${insertData.coordinates[1].toFixed(6)} 0)`;
+        const { id, ...requestDataWithoutId } = insertData;
 
         const requestData = {
           geom: wktMultiPoint,
-          num_pdr: insertData.num_pdr,
-          ang_map: insertData.ang_map,
+          num_pdr: requestDataWithoutId.num_pdr,
+          num_sing: requestDataWithoutId.num_sing,
+          ang_map: requestDataWithoutId.ang_map,
         };
 
         const response = await fetch('http://localhost:3001/dz', {
@@ -456,6 +454,7 @@ function App({ user }) {
                 dzList={dzList}
                 setDzList={setDzList}
                 setInsertDzArray={setInsertDzArray}
+                insertDzArray={insertDzArray}
               />
             )}
             {showSecondTable && dataTable.length > 0 &&
