@@ -496,17 +496,22 @@ app.post("/odr_proekty_plg", (req, res) => {
 });
 
 app.post("/dz", (req, res) => {
-  const wktGeom = req.body.geom;
+  const coordinates = req.body.coordinates;
   const num_pdr = req.body.num_pdr;
-  const num_sing = req.body.num_sing;
   const ang_map = req.body.ang_map;
 
+  if (!Array.isArray(coordinates) || coordinates.length < 2) {
+    return res.status(400).send("Invalid coordinates");
+  }
+
+  const wktGeom = `MultiPoint(${coordinates[0]} ${coordinates[1]} 0)`;
+
   const query = `
-    INSERT INTO exploitation.dz (geom, num_pdr, num_sing, ang_map)
-    VALUES (ST_GeomFromText($1, 4326), $2, $3, $4)
+    INSERT INTO exploitation.dz (geom, num_pdr, ang_map)
+    VALUES (ST_GeomFromText($1, 4326), $2, $3)
   `;
 
-  const values = [wktGeom, num_pdr, num_sing, ang_map];
+  const values = [wktGeom, num_pdr, ang_map];
 
   client.query(query, values, (err, result) => {
     if (err) {

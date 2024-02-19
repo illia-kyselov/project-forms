@@ -91,9 +91,7 @@ const LeafletMap = ({
     acc[marker.id] = React.createRef();
     return acc;
   }, {});
-
-  console.log(markers);
-  
+  console.log(filteredMarkers);
   useEffect(() => {
     const fetchPolygons = async () => {
       try {

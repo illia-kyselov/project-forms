@@ -263,6 +263,8 @@ function App({ user }) {
     cleanedObjectidInput = null;
   }
 
+  console.log('insertDzArray', insertDzArray);
+
   const handleSendAllData = async () => {
     try {
       if (allElementsData.length === 0) {
@@ -306,33 +308,24 @@ function App({ user }) {
 
       setDataSubmitted(true);
 
-      for (const insertData of insertDzArray) {
-        const wktMultiPoint = `MULTIPOINT(${insertData.coordinates[0].toFixed(6)} ${insertData.coordinates[1].toFixed(6)} 0)`;
-        const { id, ...requestDataWithoutId } = insertData;
-
-        const requestData = {
-          geom: wktMultiPoint,
-          num_pdr: requestDataWithoutId.num_pdr,
-          num_sing: requestDataWithoutId.num_sing,
-          ang_map: requestDataWithoutId.ang_map,
-        };
-
-        const response = await fetch('http://localhost:3001/dz', {
-          method: 'POST',
+      for (const markerData of insertDzArray) {
+        const response = await fetch("http://localhost:3001/dz", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify(requestData),
+          body: JSON.stringify({
+            coordinates: markerData.coordinates,
+            num_pdr: parseInt(markerData.num_pdr),
+            ang_map: markerData.ang_map,
+          }),
         });
-
-        if (response.ok) {
-          NotificationService.showSuccessNotification('Дорожні знаки успішно додані!');
-          setInsertDzArray([]);
-        } else {
+      
+        if (!response.ok) {
           NotificationService.showWarningNotification('Будь ласка, спробуйте ще раз!');
         }
       }
-
+      
       for (const row of tableToInsert) {
         const elementsForTable = allElementsData.filter(element => element.tableId === row.uuid);
 
