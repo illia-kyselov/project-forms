@@ -16,7 +16,7 @@ import { v4 as uuidv4 } from 'uuid';
 import ModalMessage from "./components/ModalMessage/ModalMessage";
 
 function App({ user }) {
-  // const [showAddInfoForm, setShowAddInfoForm] = useState(false);
+  const [showAddInfoForm, setShowAddInfoForm] = useState(false);
   const [selectedPolygon, setSelectedPolygon] = useState(null);
   const [showAddElements, setShowAddElements] = useState(false);
   const [objectid, setObjectid] = useState("");
@@ -308,22 +308,39 @@ function App({ user }) {
 
       setDataSubmitted(true);
 
-      for (const markerData of insertDzArray) {
-        const response = await fetch("http://localhost:3001/dz", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            coordinates: markerData.coordinates,
-            num_pdr: parseInt(markerData.num_pdr),
-            ang_map: markerData.ang_map,
-          }),
-        });
+      // for (const markerData of insertDzArray) {
+      //   const response = await fetch("http://localhost:3001/dz", {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     body: JSON.stringify({
+      //       coordinates: markerData.coordinates,
+      //       num_pdr: parseInt(markerData.num_pdr),
+      //       ang_map: markerData.ang_map,
+      //     }),
+      //   });
       
-        if (!response.ok) {
-          NotificationService.showWarningNotification('Будь ласка, спробуйте ще раз!');
-        }
+      //   if (!response.ok) {
+      //     NotificationService.showWarningNotification('Будь ласка, спробуйте ще раз!');
+      //   }
+      // }
+
+      for (const markerData of insertDzArray) {
+        const wktMultiPoint = `MULTIPOINT(${markerData.coordinates[1].toFixed(6)} ${markerData.coordinates[0].toFixed(6)})`;
+        console.log(wktMultiPoint)
+        const response = await fetch("http://localhost:3001/dz", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                id: 555555555,
+                coordinates: wktMultiPoint,
+                num_pdr: parseInt(markerData.num_pdr),
+                ang_map: markerData.ang_map,
+              }),
+            });
       }
       
       for (const row of tableToInsert) {

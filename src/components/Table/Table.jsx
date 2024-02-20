@@ -180,14 +180,23 @@ const Table = ({
 
     setShowSecondTable(false);
 
-    const newInsertData = {
-      id: `Новий знак №${insertDzArray.length + 1}`,
-      coordinates: [draggableDzMarkerWKT[0] || 0, draggableDzMarkerWKT[1] || 0],
+    // const newInsertData = {
+    //   id: `Новий знак №${insertDzArray.length + 1}`,
+    //   coordinates: [draggableDzMarkerWKT[0] || 0, draggableDzMarkerWKT[1] || 0],
+    //   num_pdr: dzList.num_pdr,
+    //   ang_map: roundedAngMap,
+    // };
+
+    // setInsertDzArray(prevArray => [...prevArray, newInsertData]);
+
+    const newDzData = {
+      coordinates: [+draggableDzMarkerWKT[0].toFixed(9), +draggableDzMarkerWKT[1].toFixed(9)],
       num_pdr: dzList.num_pdr,
       ang_map: roundedAngMap,
-    };
-
-    setInsertDzArray(prevArray => [...prevArray, newInsertData]);
+      id: `Новий знак №${insertDzArray.length + 1}`,
+    }
+    console.log(newDzData)
+    setInsertDzArray((prev) => [...prev, newDzData]);
     setPushToDZCalled(true);
     hideForm(e);
     NotificationService.showSuccessNotification('Дорожній знак успішно доданий!');
