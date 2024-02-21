@@ -16,7 +16,7 @@ import { v4 as uuidv4 } from 'uuid';
 import ModalMessage from "./components/ModalMessage/ModalMessage";
 
 function App({ user }) {
-  const [showAddInfoForm, setShowAddInfoForm] = useState(false);
+  // const [showAddInfoForm, setShowAddInfoForm] = useState(false);
   const [selectedPolygon, setSelectedPolygon] = useState(null);
   const [showAddElements, setShowAddElements] = useState(false);
   const [objectid, setObjectid] = useState("");
@@ -61,11 +61,10 @@ function App({ user }) {
     element: '',
     quantity: ''
   });
-  const [dzList, setDzList] = useState({
+  const [newRowData, setNewRowData] = useState({
     num_pdr: "",
     ang_map: 0,
   });
-  const [insertDzArray, setInsertDzArray] = useState([]);
   const [formWorksData, setFormWorksData] = useState({
     type_work: "",
     is_doc: true,
@@ -76,6 +75,7 @@ function App({ user }) {
   });
   const [showUpdateElements, setShowUpdateElements] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [dzList, setDzList] = useState([]);
 
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
@@ -87,6 +87,7 @@ function App({ user }) {
   };
 
   const handleConfirmDelete = () => {
+
     handleCloseModal();
   };
 
@@ -262,9 +263,7 @@ function App({ user }) {
   if (isChecked === false) {
     cleanedObjectidInput = null;
   }
-
-  console.log('insertDzArray', insertDzArray);
-
+  console.log('dzList', dzList);
   const handleSendAllData = async () => {
     try {
       if (allElementsData.length === 0) {
@@ -283,6 +282,7 @@ function App({ user }) {
           date_work: date_work,
         })
       });
+
       if (!workResponse.ok) {
         throw new Error("Network response was not ok");
       }
@@ -308,41 +308,41 @@ function App({ user }) {
 
       setDataSubmitted(true);
 
-      // for (const markerData of insertDzArray) {
-      //   const response = await fetch("http://localhost:3001/dz", {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: JSON.stringify({
-      //       coordinates: markerData.coordinates,
-      //       num_pdr: parseInt(markerData.num_pdr),
-      //       ang_map: markerData.ang_map,
-      //     }),
-      //   });
-      
-      //   if (!response.ok) {
-      //     NotificationService.showWarningNotification('Будь ласка, спробуйте ще раз!');
-      //   }
-      // }
+      for (let i = 0; i < dzList.length; i++) {
+        const insertData = dzList[i];
+        const lng = insertData.coordinates[0];
+        const lat = insertData.coordinates[1];
+        const wktMultiPoint = `MULTIPOINT(${lng} ${lat} 0)`;
 
-      for (const markerData of insertDzArray) {
-        const wktMultiPoint = `MULTIPOINT(${markerData.coordinates[1].toFixed(6)} ${markerData.coordinates[0].toFixed(6)})`;
-        console.log(wktMultiPoint)
-        const response = await fetch("http://localhost:3001/dz", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                id: 555555555,
-                coordinates: wktMultiPoint,
-                num_pdr: parseInt(markerData.num_pdr),
-                ang_map: markerData.ang_map,
-              }),
-            });
+        const requestData = {
+          geom: wktMultiPoint,
+          num_pdr: insertData.num_pdr,
+          ang_map: insertData.ang_map,
+          num_sing: insertData.num_pdr,
+        };
+
+        const response = await fetch('http://localhost:3001/dz', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestData),
+        });
+
+        if (response.ok) {
+          const responseData = await response.json();
+          if (responseData.message === "Data successfully inserted into the database") {
+            dzList[i].id_disl_dz = responseData.id;
+            NotificationService.showSuccessNotification('Дорожній знак успішно доданий!');
+          } else {
+            NotificationService.showWarningNotification('Помилка при отриманні id_disl_dz від сервера!');
+          }
+        } else {
+          NotificationService.showWarningNotification('Будь ласка, спробуйте ще раз!');
+        }
       }
-      
+
+      console.log('tableToInsert', tableToInsert);
       for (const row of tableToInsert) {
         const elementsForTable = allElementsData.filter(element => element.tableId === row.uuid);
 
@@ -350,6 +350,7 @@ function App({ user }) {
           continue;
         }
         const dataToSend = { ...row, work_uuid: workId };
+        console.log('dataToSend', dataToSend);
 
         const response = await fetch("http://localhost:3001/expl_dz", {
           method: "POST",
@@ -408,8 +409,8 @@ function App({ user }) {
           isChecked={isChecked}
           rotationAngle={rotationAngle}
           setRotationAngle={setRotationAngle}
+          newRowData={newRowData}
           dzList={dzList}
-          insertDzArray={insertDzArray}
         />
         <div className="form-container">
           <FormAddWorks
@@ -461,10 +462,10 @@ function App({ user }) {
                 setAllElementsData={setAllElementsData}
                 setRotationAngle={setRotationAngle}
                 rotationAngle={rotationAngle}
-                dzList={dzList}
+                newRowData={newRowData}
+                setNewRowData={setNewRowData}
                 setDzList={setDzList}
-                setInsertDzArray={setInsertDzArray}
-                insertDzArray={insertDzArray}
+                dzList={dzList}
               />
             )}
             {showSecondTable && dataTable.length > 0 &&

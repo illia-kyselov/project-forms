@@ -47,7 +47,7 @@ const deleteRecordsByUuid = async (uuid) => {
       return;
     }
 
-    NotificationService.showSuccessNotification("Запис успішно видалений!");
+    NotificationService.showSuccessNotification("Дані успішно видалені");
     window.location.reload();
   } catch (error) {
     console.error("Error deleting record:", error);

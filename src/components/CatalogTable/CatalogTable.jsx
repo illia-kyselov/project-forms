@@ -14,7 +14,7 @@ import ArrowUp from '../../img/ArrowUp';
 import ModalMessage from '../ModalMessage/ModalMessage';
 
 
-const CatalogTable = React.memo(({ user }) => {
+const CatalogTable = ({ user }) => {
   const [catalogData, setCatalogData] = useState([]);
   const [sortOrder, setSortOrder] = useState({
     field: null,
@@ -347,6 +347,6 @@ const CatalogTable = React.memo(({ user }) => {
       />
     </div>
   );
-});
+};
 
 export default CatalogTable;

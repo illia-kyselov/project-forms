@@ -55,8 +55,8 @@ const LeafletMap = ({
   setFocusMarker,
   rotationAngle,
   setRotationAngle,
+  newRowData,
   dzList,
-  insertDzArray,
 }) => {
   const containerStyle = {
     height: "calc(96vh - 10px)",
@@ -91,7 +91,8 @@ const LeafletMap = ({
     acc[marker.id] = React.createRef();
     return acc;
   }, {});
-  console.log(filteredMarkers);
+
+
   useEffect(() => {
     const fetchPolygons = async () => {
       try {
@@ -130,6 +131,39 @@ const LeafletMap = ({
   }, []);
 
   useEffect(() => {
+    const fetchMarkers = async () => {
+      try {
+        setLoading(true);
+        const markersResponse = await fetch(
+          `http://localhost:3001/dz?minLat=${mapBounds._southWest[0]}&minLng=${mapBounds._southWest[1]}&maxLat=${mapBounds._northEast[0]}&maxLng=${mapBounds._northEast[1]}`
+        );
+        const markersData = await markersResponse.json();
+
+        const dzMarkers = markersData.map((marker) => ({
+          id: marker.id,
+          coordinates: marker.geom.coordinates[0],
+          num_pdr: marker.num_pdr,
+          ang_map: marker.ang_map,
+        }));
+
+        const allMarkers = [...dzMarkers, ...dzList];
+
+        setMarkers(allMarkers);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching markers data", error);
+        setLoading(false);
+      }
+    };
+
+    if (!prevMapBounds || !isEqual(prevMapBounds, mapBounds)) {
+      fetchMarkers();
+      setPrevMapBounds(mapBounds);
+      setPushToDZCalled(false);
+    }
+  }, [dzList, mapBounds, prevMapBounds, setMarkers, setPushToDZCalled]);
+
+  useEffect(() => {
     const focusedMarker = markers.find((marker) => marker.id === focusMarker);
     const markerRef = focusedMarker ? refs[focusedMarker.id] : null;
 
@@ -138,47 +172,6 @@ const LeafletMap = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focusMarker]);
-
-  const fetchMarkers = async () => {
-    try {
-      setLoading(true);
-      const markersResponse = await fetch(
-        `http://localhost:3001/dz?minLat=${mapBounds._southWest[0]}&minLng=${mapBounds._southWest[1]}&maxLat=${mapBounds._northEast[0]}&maxLng=${mapBounds._northEast[1]}`
-      );
-      const markersData = await markersResponse.json();
-
-      const dzMarkers = markersData.map((marker) => ({
-        id: marker.id,
-        coordinates: marker.geom.coordinates[0],
-        num_pdr: marker.num_pdr,
-        ang_map: marker.ang_map,
-      }));
-
-      const allMarkers = [...dzMarkers, ...insertDzArray];
-
-      setMarkers(allMarkers);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching markers data", error);
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (!prevMapBounds || !isEqual(prevMapBounds, mapBounds)) {
-      fetchMarkers();
-      setPrevMapBounds(mapBounds);
-      setPushToDZCalled(false);
-    }
-  }, [mapBounds, prevMapBounds, setMarkers, setPushToDZCalled, insertDzArray]);
-
-  useEffect(() => {
-    fetchMarkers();
-    if (insertDzArray.length > 0) {
-      const fakeEvent = { target: { openPopup: () => { } } };
-      handleClick(fakeEvent, selectedPolygon);
-    }
-  }, [insertDzArray, selectedPolygon]);
 
   const filterMarkersWithinPolygon = (polygonCoordinates) => {
     if (!markers || markers.length === 0) {
@@ -193,6 +186,7 @@ const LeafletMap = ({
       const point = L.latLng(marker.coordinates[1], marker.coordinates[0]);
       return isPointWithinPolygon(point, polygonCoordinates);
     });
+
     setFilteredMarkers(filtered);
     handleAddFromPolygon(filtered);
   };
@@ -229,8 +223,8 @@ const LeafletMap = ({
     setSelectedPolygonIdFromList(null);
 
     const handleAsyncClick = async () => {
-      const lat = e.latlng?.lat;
-      const lng = e.latlng?.lng;
+      const lat = e.latlng.lat;
+      const lng = e.latlng.lng;
 
       try {
         const response = await fetch(`http://localhost:3001/doc_plg/filteredPolygons/${lat}/${lng}`);
@@ -261,6 +255,8 @@ const LeafletMap = ({
   };
 
   const handleMarkerClick = (markerId) => {
+    // setSelectedPolygon(null);
+    // setSelectedPolygonIdFromList(null);
     if (buttonAddDocPressed) {
       setFocusMarker(markerId);
     }
@@ -321,6 +317,7 @@ const LeafletMap = ({
   };
 
   const wmsLayerUrl = 'http://192.168.1.3/cgi-bin/mapserv?map=/var/www/html/map/kyivcl.map';
+
   return (
     <div className="LeafletMapContainer ">
       <MapContainer
@@ -474,7 +471,7 @@ const LeafletMap = ({
             setDraggableDzMarkerWKT={setDraggableDzMarkerWKT}
             rotationAngle={rotationAngle}
             setRotationAngle={setRotationAngle}
-            dzList={dzList}
+            newRowData={newRowData}
           />
         )}
 
