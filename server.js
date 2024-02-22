@@ -719,6 +719,31 @@ app.delete("/elements/table/:uuid", (req, res) => {
   });
 });
 
+app.delete("/dz/:id", async (req, res) => {
+  const receivedId = req.params.id;
+
+  try {
+    const queryDelete = `
+      DELETE FROM exploitation.dz
+      WHERE id = $1;
+    `;
+
+    const valuesDelete = [receivedId];
+
+    const result = await client.query(queryDelete, valuesDelete);
+
+    if (result.rowCount > 0) {
+      res.json({ message: "Data successfully deleted from dz table" });
+    } else {
+      res.status(404).json({ message: "No matching record found for deletion" });
+    }
+  } catch (err) {
+    console.error("Error deleting data from dz", err);
+    res.status(500).send("Error deleting data from dz");
+  }
+});
+
+
 app.delete("/elements/:id_expl_dz", (req, res) => {
   const idExplDzToDelete = req.params.id_expl_dz;
 

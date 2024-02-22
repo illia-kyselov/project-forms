@@ -6,6 +6,7 @@ import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 import { deleteRecordsByUuid } from "../../api/deleteRecordByUuid";
 import ModalMessage from "../ModalMessage/ModalMessage";
+import { deleteRecordDZ } from "../../api/deleteRecordDZ";
 
 const FormAddWorks = ({
   objectid,
@@ -23,7 +24,8 @@ const FormAddWorks = ({
   dataSubmitted,
   formWorksData,
   setFormWorksData,
-  visibleButtonInsert
+  visibleButtonInsert,
+  dzRecordID
 }) => {
   const [options, setOptions] = useState([]);
   const [formObjectId, setFormObjectId] = useState("");
@@ -41,6 +43,7 @@ const FormAddWorks = ({
     if (uuidTable) {
       try {
         await deleteRecordsByUuid(uuidTable);
+        await deleteRecordDZ(dzRecordID);
       } catch (error) {
         console.error('Error deleting record:', error);
         return;

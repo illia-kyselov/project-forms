@@ -31,7 +31,7 @@ function App({ user }) {
   const [polygonTableRowClick, setPolygonTableRowClick] = useState([]);
   const [markerDzPosition, setMarkerDzPosition] = useState(null);
   const [draggableDzMarkerShow, setDraggableDzMarkerShow] = useState(false);
-  const [draggableDzMarkerWKT, setDraggableDzMarkerWKT] = useState(false);
+  const [draggableDzMarkerWKT, setDraggableDzMarkerWKT] = useState([]);
 
   const [idFormAddWorks, setIdFormAddWorks] = useState();
   const [dataSubmitted, setDataSubmitted] = useState(false);
@@ -75,7 +75,7 @@ function App({ user }) {
   const [showUpdateElements, setShowUpdateElements] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [dzList, setDzList] = useState([]);
-
+  const [dzRecordID, setDzRecordID] = useState(null);
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
   const emptyInputs = validateEmptyInputs(formData);
@@ -330,7 +330,7 @@ function App({ user }) {
           const responseDataDz = await responseDz.json();
           if (responseDataDz.message === "Data successfully inserted into the database") {
             dzList[i].id_disl_dz = responseDataDz.id;
-  
+            setDzRecordID(responseDataDz.id);
             for (const row of tableToInsert) {
               const elementsForTable = allElementsData.filter(element => element.tableId === row.uuid);
   
@@ -437,6 +437,7 @@ function App({ user }) {
             setFormWorksData={setFormWorksData}
             visibleButtonInsert={visibleButtonInsert}
             handleShowModal={handleShowModal}
+            dzRecordID={dzRecordID}
           />
           <div className="flex">
             {buttonAddDocPressed && (
