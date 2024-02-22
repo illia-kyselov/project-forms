@@ -285,7 +285,7 @@ const LeafletMap = ({
   };
 
   const wmsLayerUrl = 'http://192.168.1.3/cgi-bin/mapserv?map=/var/www/html/map/kyivcl.map';
-  
+
   return (
     <div className="LeafletMapContainer ">
       <MapContainer
@@ -404,7 +404,7 @@ const LeafletMap = ({
                   <Popup>{selectedPolygon.pro_name}</Popup>
                 </Polygon>
               )}
-              {filteredPolygons.map((polygon) => (
+              {!buttonAddDocPressed && filteredPolygons.map((polygon) => (
                 <Polygon
                   key={polygon.objectid}
                   positions={polygon.geom.coordinates}
