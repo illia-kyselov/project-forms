@@ -131,37 +131,54 @@ const LeafletMap = ({
   }, []);
 
   useEffect(() => {
-    const fetchMarkers = async () => {
-      try {
-        setLoading(true);
-        const markersResponse = await fetch(
-          `http://localhost:3001/dz?minLat=${mapBounds._southWest[0]}&minLng=${mapBounds._southWest[1]}&maxLat=${mapBounds._northEast[0]}&maxLng=${mapBounds._northEast[1]}`
-        );
-        const markersData = await markersResponse.json();
+    fetchMarkers();
+    if (dzList.length > 0) {
+      const fakeEvent = { target: { openPopup: () => { } } };
+      handleClick(fakeEvent, selectedPolygon);
+    }
+  }, [dzList, selectedPolygon]);
 
-        const dzMarkers = markersData.map((marker) => ({
-          id: marker.id,
-          coordinates: marker.geom.coordinates[0],
-          num_pdr: marker.num_pdr,
-          ang_map: marker.ang_map,
-        }));
+  const fetchMarkers = async () => {
+    try {
+      setLoading(true);
+      const markersResponse = await fetch(
+        `http://localhost:3001/dz?minLat=${mapBounds._southWest[0]}&minLng=${mapBounds._southWest[1]}&maxLat=${mapBounds._northEast[0]}&maxLng=${mapBounds._northEast[1]}`
+      );
+      const markersData = await markersResponse.json();
 
-        const allMarkers = [...dzMarkers, ...dzList];
+      const dzMarkers = markersData.map((marker) => ({
+        id: marker.id,
+        coordinates: marker.geom.coordinates[0],
+        num_pdr: marker.num_pdr,
+        ang_map: marker.ang_map,
+      }));
 
-        setMarkers(allMarkers);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching markers data", error);
-        setLoading(false);
-      }
-    };
+      const allMarkers = [...dzMarkers, ...dzList];
 
+      setMarkers(allMarkers);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching markers data", error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     if (!prevMapBounds || !isEqual(prevMapBounds, mapBounds)) {
       fetchMarkers();
       setPrevMapBounds(mapBounds);
       setPushToDZCalled(false);
     }
-  }, [dzList, mapBounds, prevMapBounds, setMarkers, setPushToDZCalled]);
+  }, [mapBounds, prevMapBounds, setMarkers, setPushToDZCalled, dzList]);
+
+  useEffect(() => {
+    fetchMarkers();
+    if (dzList.length > 0) {
+      const fakeEvent = { target: { openPopup: () => { } } };
+      handleClick(fakeEvent, selectedPolygon);
+    }
+  }, [dzList, selectedPolygon]);
+
 
   useEffect(() => {
     const focusedMarker = markers.find((marker) => marker.id === focusMarker);
@@ -223,8 +240,8 @@ const LeafletMap = ({
     setSelectedPolygonIdFromList(null);
 
     const handleAsyncClick = async () => {
-      const lat = e.latlng.lat;
-      const lng = e.latlng.lng;
+      const lat = e.latlng?.lat;
+      const lng = e.latlng?.lng;
 
       try {
         const response = await fetch(`http://localhost:3001/doc_plg/filteredPolygons/${lat}/${lng}`);

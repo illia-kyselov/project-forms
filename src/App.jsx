@@ -49,7 +49,6 @@ function App({ user }) {
   const [workToInsert, setWorkToInsert] = useState([]);
   const [tableToInsert, setTableToInsert] = useState([]);
   const [allElementsData, setAllElementsData] = useState([]);
-
   const [rotationAngle, setRotationAngle] = useState(0);
   const [visibleButtonInsert, setVisibleButtonInsert] = useState(true);
   const [formAddElementsData, setformAddElementsData] = useState({
@@ -263,7 +262,6 @@ function App({ user }) {
   if (isChecked === false) {
     cleanedObjectidInput = null;
   }
-  console.log('dzList', dzList);
   const handleSendAllData = async () => {
     try {
       if (allElementsData.length === 0) {
@@ -288,7 +286,6 @@ function App({ user }) {
       }
 
       const workData = await workResponse.json();
-
       const { id_wrk_tbl } = workData;
 
       setIdFormAddWorks(workData.id_wrk_tbl);
@@ -312,27 +309,38 @@ function App({ user }) {
         const insertData = dzList[i];
         const lng = insertData.coordinates[0];
         const lat = insertData.coordinates[1];
-        const wktMultiPoint = `MULTIPOINT(${lng} ${lat} 0)`;
-
+        const wktMultiPoint = `MULTIPOINT(${lat} ${lng} 0)`;
+  
         const requestData = {
           geom: wktMultiPoint,
           num_pdr: insertData.num_pdr,
           ang_map: insertData.ang_map,
           num_sing: insertData.num_pdr,
         };
-
-        const response = await fetch('http://localhost:3001/dz', {
+  
+        const responseDz = await fetch('http://localhost:3001/dz', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(requestData),
         });
-
-        if (response.ok) {
-          const responseData = await response.json();
-          if (responseData.message === "Data successfully inserted into the database") {
-            dzList[i].id_disl_dz = responseData.id;
+  
+        if (responseDz.ok) {
+          const responseDataDz = await responseDz.json();
+          if (responseDataDz.message === "Data successfully inserted into the database") {
+            dzList[i].id_disl_dz = responseDataDz.id;
+  
+            for (const row of tableToInsert) {
+              const elementsForTable = allElementsData.filter(element => element.tableId === row.uuid);
+  
+              for (const element of elementsForTable) {
+                if (element.uuid === dzList[i].uuid) {
+                  row.id_disl_dz = responseDataDz.id;
+                }
+              }
+            }
+  
             NotificationService.showSuccessNotification('Дорожній знак успішно доданий!');
           } else {
             NotificationService.showWarningNotification('Помилка при отриманні id_disl_dz від сервера!');
@@ -342,7 +350,6 @@ function App({ user }) {
         }
       }
 
-      console.log('tableToInsert', tableToInsert);
       for (const row of tableToInsert) {
         const elementsForTable = allElementsData.filter(element => element.tableId === row.uuid);
 
@@ -350,7 +357,6 @@ function App({ user }) {
           continue;
         }
         const dataToSend = { ...row, work_uuid: workId };
-        console.log('dataToSend', dataToSend);
 
         const response = await fetch("http://localhost:3001/expl_dz", {
           method: "POST",
@@ -373,7 +379,7 @@ function App({ user }) {
           },
           body: JSON.stringify({ ...element }),
         });
-
+        
         if (!response.ok) {
           NotificationService.showWarningNotification('Помилка під час надсилання даних елементів');
         }

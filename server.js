@@ -13,7 +13,7 @@ const client = new Client({
   user: "postgres",
   host: "localhost",
   database: "mydatabase",
-  password: "6006059a",
+  password: "postgres",
   port: 5432,
 });
 
@@ -504,6 +504,7 @@ app.post("/dz", (req, res) => {
   const query = `
     INSERT INTO exploitation.dz (geom, num_pdr, num_sing, ang_map)
     VALUES (ST_GeomFromText($1, 4326), $2, $3, $4)
+    RETURNING id;
   `;
 
   const values = [wktGeom, num_pdr, num_sing, ang_map];
@@ -513,7 +514,8 @@ app.post("/dz", (req, res) => {
       console.error("Error inserting data into the database", err);
       res.status(500).send("Error inserting data into the database");
     } else {
-      res.json({ message: "Data successfully inserted into the database" });
+      res.json({ message: "Data successfully inserted into the database",
+    id: result.rows[0].id });
     }
   });
 });
