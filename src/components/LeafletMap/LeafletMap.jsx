@@ -113,38 +113,42 @@ const LeafletMap = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const fetchMarkers = async () => {
+    try {
+      setLoading(true);
+      const markersResponse = await fetch(
+        `http://localhost:3001/dz?minLat=${mapBounds._southWest[0]}&minLng=${mapBounds._southWest[1]}&maxLat=${mapBounds._northEast[0]}&maxLng=${mapBounds._northEast[1]}`
+      );
+      const markersData = await markersResponse.json();
+
+      const dzMarkers = markersData.map((marker) => ({
+        id: marker.id,
+        coordinates: marker.geom.coordinates[0],
+        num_pdr: marker.num_pdr,
+        ang_map: marker.ang_map,
+      }));
+
+      const allMarkers = [...dzMarkers, ...dzList];
+
+      setMarkers(allMarkers);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching markers data", error);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchMarkers = async () => {
-      try {
-        setLoading(true);
-        const markersResponse = await fetch(
-          `http://localhost:3001/dz?minLat=${mapBounds._southWest[0]}&minLng=${mapBounds._southWest[1]}&maxLat=${mapBounds._northEast[0]}&maxLng=${mapBounds._northEast[1]}`
-        );
-        const markersData = await markersResponse.json();
-
-        const dzMarkers = markersData.map((marker) => ({
-          id: marker.id,
-          coordinates: marker.geom.coordinates[0],
-          num_pdr: marker.num_pdr,
-          ang_map: marker.ang_map,
-        }));
-
-        const allMarkers = [...dzMarkers, ...dzList];
-
-        setMarkers(allMarkers);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching markers data", error);
-        setLoading(false);
-      }
-    };
-
     if (!prevMapBounds || !isEqual(prevMapBounds, mapBounds)) {
       fetchMarkers();
       setPrevMapBounds(mapBounds);
       setPushToDZCalled(false);
     }
   }, [dzList, mapBounds, prevMapBounds, setMarkers, setPushToDZCalled]);
+
+  useEffect(() => {
+    fetchMarkers();
+  }, [dzList]);
 
   useEffect(() => {
     const focusedMarker = markers.find((marker) => marker.id === focusMarker);
