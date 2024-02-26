@@ -43,7 +43,9 @@ const FormAddWorks = ({
     if (uuidTable) {
       try {
         await deleteRecordsByUuid(uuidTable);
-        await deleteRecordDZ(dzRecordID);
+        for (const idToDelete of dzRecordID) {
+          await deleteRecordDZ(idToDelete);
+        }
       } catch (error) {
         console.error('Error deleting record:', error);
         return;

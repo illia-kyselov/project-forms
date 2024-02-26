@@ -75,7 +75,7 @@ function App({ user }) {
   const [showUpdateElements, setShowUpdateElements] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [dzList, setDzList] = useState([]);
-  const [dzRecordID, setDzRecordID] = useState(null);
+  const [dzRecordID, setDzRecordID] = useState([]);
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
   const emptyInputs = validateEmptyInputs(formData);
@@ -310,14 +310,14 @@ function App({ user }) {
         const lng = insertData.coordinates[0];
         const lat = insertData.coordinates[1];
         const wktMultiPoint = `MULTIPOINT(${lat} ${lng} 0)`;
-  
+
         const requestData = {
           geom: wktMultiPoint,
           num_pdr: insertData.num_pdr,
           ang_map: insertData.ang_map,
           num_sing: insertData.num_pdr,
         };
-  
+
         const responseDz = await fetch('http://localhost:3001/dz', {
           method: 'POST',
           headers: {
@@ -325,22 +325,22 @@ function App({ user }) {
           },
           body: JSON.stringify(requestData),
         });
-  
+
         if (responseDz.ok) {
           const responseDataDz = await responseDz.json();
           if (responseDataDz.message === "Data successfully inserted into the database") {
             dzList[i].id_disl_dz = responseDataDz.id;
-            setDzRecordID(responseDataDz.id);
+            setDzRecordID((prevDzRecordID) => [...prevDzRecordID, responseDataDz.id]);
             for (const row of tableToInsert) {
               const elementsForTable = allElementsData.filter(element => element.tableId === row.uuid);
-  
+
               for (const element of elementsForTable) {
                 if (element.uuid === dzList[i].uuid) {
                   row.id_disl_dz = responseDataDz.id;
                 }
               }
             }
-  
+
             NotificationService.showSuccessNotification('Дорожній знак успішно доданий!');
           } else {
             NotificationService.showWarningNotification('Помилка при отриманні id_disl_dz від сервера!');
@@ -379,7 +379,7 @@ function App({ user }) {
           },
           body: JSON.stringify({ ...element }),
         });
-        
+
         if (!response.ok) {
           NotificationService.showWarningNotification('Помилка під час надсилання даних елементів');
         }
