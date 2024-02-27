@@ -318,7 +318,15 @@ function App({ user }) {
           num_sing: insertData.num_pdr,
         };
 
-        const responseDz = await fetch('http://localhost:3001/dz', {
+        const filteredTableToInsert = tableToInsert.filter(row => row.id_disl_dz === insertData.id_disl_dz);
+        console.log('filteredTableToInsert', filteredTableToInsert)
+        let rowsWithMatchingUuid;
+        for (const filteredRow of filteredTableToInsert) {
+          rowsWithMatchingUuid = allElementsData.filter(row => row.tableId === filteredRow.uuid);
+          console.log('rowsWithMatchingUuid', rowsWithMatchingUuid);
+        }
+        if (rowsWithMatchingUuid.length > 0) {
+          const responseDz = await fetch('http://localhost:3001/dz', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -347,6 +355,7 @@ function App({ user }) {
           }
         } else {
           NotificationService.showWarningNotification('Будь ласка, спробуйте ще раз!');
+        }
         }
       }
 
