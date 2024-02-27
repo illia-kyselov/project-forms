@@ -317,10 +317,10 @@ const LeafletMap = ({
           </LayersControl.BaseLayer>
           <LayersControl.BaseLayer name="Dark">
             <TileLayer
-              url="http://192.168.1.5:3000/map/rtile/carto_2195091417431279120/ua/{z}/{x}/{y}.png"
+              url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.{ext}"
               minZoom={0}
-              maxZoom={18}
-              attribution='Map data: © СЛУЖБА ДИСЛОКАЦІЇ ТЗРДР '
+              maxZoom={20}
+              attribution='&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               ext="png"
             />
           </LayersControl.BaseLayer>
