@@ -426,6 +426,7 @@ app.get("/catalog/elements", (req, res) => {
     d.uuid as explDz_uuid,
     d.cdate as explDzDate,
     d.dz_form,
+    e.id_elmts,
     e.name_elmns,
     e.cnt_elmnt,
     e.uuid as element_uuid,
@@ -813,6 +814,28 @@ app.delete("/elements/:id_expl_dz", (req, res) => {
   const query = {
     text: "DELETE FROM exploitation.elements WHERE expl_dz_id IN (SELECT id_expl_dz FROM exploitation.expl_dz WHERE id_expl_dz = $1)",
     values: [idExplDzToDelete],
+  };
+
+  client.query(query, (err, result) => {
+    if (err) {
+      console.error("Error executing deletion query", err);
+      res.status(500).send("Error executing deletion query");
+    } else {
+      const deletedCount = result.rowCount;
+      res.json({
+        message: `${deletedCount} row(s) successfully deleted from elements`,
+        rows_deleted: deletedCount,
+      });
+    }
+  });
+});
+
+app.delete("/elements/:id_elmts", (req, res) => {
+  const idElmtsToDelete = req.params.id_elmts;
+
+  const query = {
+    text: "DELETE FROM exploitation.elements WHERE id_elmts = $1",
+    values: [idElmtsToDelete],
   };
 
   client.query(query, (err, result) => {

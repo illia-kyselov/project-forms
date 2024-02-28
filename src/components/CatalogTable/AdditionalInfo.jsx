@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import markerImage from '../../img';
 import ArrowDown from '../../img/ArrowDown';
 import ArrowUp from '../../img/ArrowUp';
+import ModalMessage from '../ModalMessage/ModalMessage';
 
 const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete }) => {
   const [selectedRowData, setSelectedRowData] = useState(null);
@@ -9,6 +10,10 @@ const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete }) => {
 
   const [arrowDownActiveInfo, setArrowDownActiveInfo] = useState(false);
   const [arrowUpActiveInfo, setArrowUpActiveInfo] = useState(true);
+
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [deleteConfirmationData, setDeleteConfirmationData] = useState(null);
+
 
   const handleRowClick = (expldz_uuid, index) => () => {
     const selectedData = dataList.find((data) => data.expldz_uuid === expldz_uuid);
@@ -40,6 +45,19 @@ const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete }) => {
     setArrowDownActiveInfo(false);
     setArrowUpActiveInfo(true);
   };
+
+  const handleDeleteConfirmation = async () => {
+    if (deleteConfirmationData) {
+      await handleDzDelete(
+        deleteConfirmationData.element_uuid,
+        deleteConfirmationData.length,
+        deleteConfirmationData.work_uuid
+      );
+      setShowDeleteConfirmation(false);
+      setDeleteConfirmationData(null);
+    }
+  };
+
 
   return (
     <div>
@@ -73,7 +91,14 @@ const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete }) => {
                   <td className='catalogTable__td'>
                     {<button
                       className="delete-icon"
-                      onClick={() => handleDzDelete(data.element_uuid, uniqueDataList.length, data.work_uuid)}
+                      onClick={() => {
+                        setDeleteConfirmationData({
+                          element_uuid: data.element_uuid,
+                          length: uniqueDataList.length,
+                          work_uuid: data.work_uuid
+                        });
+                        setShowDeleteConfirmation(true);
+                      }}
                     >
                       X
                     </button>}
@@ -111,6 +136,16 @@ const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete }) => {
           })}
         </tbody>
       </table>
+      <ModalMessage
+        title={uniqueDataList.length === 1 ? "Ви впевнені що хочете видалити запис?" : "Ви впевнені що хочете видалити цей ДЗ та елементи до нього?"}
+        butonText="Видалити запис"
+        isOpen={showDeleteConfirmation}
+        onConfirm={handleDeleteConfirmation}
+        onReject={() => {
+          setShowDeleteConfirmation(false);
+          setDeleteConfirmationData(null);
+        }}
+      />
     </div >
   );
 };
