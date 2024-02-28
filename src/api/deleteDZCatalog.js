@@ -1,7 +1,6 @@
 import NotificationService from "../services/NotificationService";
 
 const deleteDZCatalog = async (uuid, length, work_uuid) => {
-  console.log(length);
   try {
     const elementsResponse = await fetch(
       `http://localhost:3001/dz/elements/${uuid}`,
@@ -55,8 +54,6 @@ const deleteDZCatalog = async (uuid, length, work_uuid) => {
         return;
       }
     }
-
-    NotificationService.showSuccessNotification("Записи успішно видалені!");
   } catch (error) {
     console.error("Error deleting records:", error);
     NotificationService.showErrorNotification("Помилка при видаленні записів");
