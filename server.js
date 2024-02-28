@@ -13,7 +13,7 @@ const client = new Client({
   user: "postgres",
   host: "localhost",
   database: "mydatabase",
-  password: "postgres",
+  password: "6006059a",
   port: 5432,
 });
 
@@ -514,8 +514,10 @@ app.post("/dz", (req, res) => {
       console.error("Error inserting data into the database", err);
       res.status(500).send("Error inserting data into the database");
     } else {
-      res.json({ message: "Data successfully inserted into the database",
-    id: result.rows[0].id });
+      res.json({
+        message: "Data successfully inserted into the database",
+        id: result.rows[0].id,
+      });
     }
   });
 });
@@ -719,6 +721,66 @@ app.delete("/elements/table/:uuid", (req, res) => {
   });
 });
 
+app.delete("/dz/expl_dz/:uuid", (req, res) => {
+  const receivedUuid = req.params.uuid;
+
+  const queryDelete = `
+    DELETE FROM exploitation.expl_dz
+    WHERE uuid = $1
+  `;
+
+  const valuesDelete = [receivedUuid];
+
+  client.query(queryDelete, valuesDelete, (err, result) => {
+    if (err) {
+      console.error("Error deleting data from elements", err);
+      res.status(500).send("Error deleting data from elements");
+    } else {
+      res.json({ message: "Data successfully deleted from elements table" });
+    }
+  });
+});
+
+app.delete("/dz/elements/:uuid", (req, res) => {
+  const receivedUuid = req.params.uuid;
+
+  const queryDelete = `
+    DELETE FROM exploitation.elements
+    WHERE uuid = $1
+  `;
+
+  const valuesDelete = [receivedUuid];
+
+  client.query(queryDelete, valuesDelete, (err, result) => {
+    if (err) {
+      console.error("Error deleting data from elements", err);
+      res.status(500).send("Error deleting data from elements");
+    } else {
+      res.json({ message: "Data successfully deleted from elements table" });
+    }
+  });
+});
+
+app.delete("/dz/work_table/:work_uuid", (req, res) => {
+  const receivedWork_uuid = req.params.work_uuid;
+
+  const queryDelete = `
+    DELETE FROM exploitation.work_table
+    WHERE uuid = $1
+  `;
+
+  const valuesDelete = [receivedWork_uuid];
+
+  client.query(queryDelete, valuesDelete, (err, result) => {
+    if (err) {
+      console.error("Error deleting data from elements", err);
+      res.status(500).send("Error deleting data from elements");
+    } else {
+      res.json({ message: "Data successfully deleted from elements table" });
+    }
+  });
+});
+
 app.delete("/dz/:id", async (req, res) => {
   const receivedId = req.params.id;
 
@@ -735,14 +797,15 @@ app.delete("/dz/:id", async (req, res) => {
     if (result.rowCount > 0) {
       res.json({ message: "Data successfully deleted from dz table" });
     } else {
-      res.status(404).json({ message: "No matching record found for deletion" });
+      res
+        .status(404)
+        .json({ message: "No matching record found for deletion" });
     }
   } catch (err) {
     console.error("Error deleting data from dz", err);
     res.status(500).send("Error deleting data from dz");
   }
 });
-
 
 app.delete("/elements/:id_expl_dz", (req, res) => {
   const idExplDzToDelete = req.params.id_expl_dz;

@@ -12,6 +12,7 @@ import AdditionalInfo from './AdditionalInfo';
 import ArrowDown from '../../img/ArrowDown';
 import ArrowUp from '../../img/ArrowUp';
 import ModalMessage from '../ModalMessage/ModalMessage';
+import { deleteDZCatalog } from '../../api/deleteDZCatalog';
 
 
 const CatalogTable = React.memo(({ user }) => {
@@ -37,6 +38,10 @@ const CatalogTable = React.memo(({ user }) => {
     fetchDataFromDB();
     fetchOptions();
   }, [user]);
+
+  console.log('elementsCatalog', elementsCatalog);
+  console.log('catalogData', catalogData);
+
 
   const fetchDataFromDB = async () => {
     try {
@@ -78,12 +83,16 @@ const CatalogTable = React.memo(({ user }) => {
     }
   };
 
-
   const handleCancelRejected = () => {
     setShowCancelModal(false);
     setSelectedRowUuid(null);
   };
 
+  const handleDzDelete = async (uuid, length, work_uuid) => {
+    await deleteDZCatalog(uuid, length, work_uuid);
+    fetchDataFromDB();
+    handleRowClick(clickedRow);
+  }
 
   const formatDate = (originalDate) => {
     const dateObject = new Date(originalDate);
@@ -321,7 +330,11 @@ const CatalogTable = React.memo(({ user }) => {
                 {clickedRow && clickedRow.uuid === row.uuid && (
                   <tr>
                     <td colSpan="6">
-                      <AdditionalInfo dataList={elementsCatalog} formatDate={formatDate} />
+                      <AdditionalInfo
+                        dataList={elementsCatalog}
+                        formatDate={formatDate}
+                        handleDzDelete={handleDzDelete}
+                      />
                     </td>
                   </tr>
                 )}
