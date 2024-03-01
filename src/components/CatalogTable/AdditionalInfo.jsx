@@ -3,6 +3,7 @@ import markerImage from '../../img';
 import ArrowDown from '../../img/ArrowDown';
 import ArrowUp from '../../img/ArrowUp';
 import ModalMessage from '../ModalMessage/ModalMessage';
+import { deleteElementCatalog } from '../../api/deleteElementCatalog';
 
 const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete }) => {
   const [selectedRowData, setSelectedRowData] = useState(null);
@@ -114,16 +115,25 @@ const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete }) => {
                               <th className='catalogTable__th'>Назва елементу</th>
                               <th className='catalogTable__th'>Кількість елементів</th>
                               <th className='catalogTable__th'>Дата додавання</th>
-                              <th className='catalogTable__th'></th>
                             </tr>
                           </thead>
                           <tbody>
                             {filteredElementData.map((element, elementIndex) => (
-                              <tr key={elementIndex} className='catalogTable__tr' >
+                              element.element_uuid !== null 
+                              ? (<tr key={elementIndex} className='catalogTable__tr' >
                                 <td className='catalogTable__td'>{element.name_elmns}</td>
                                 <td className='catalogTable__td'>{element.cnt_elmnt}</td>
                                 <td className='catalogTable__td'>{formatDate(element.elementdate)}</td>
-                              </tr>
+                                <td className='catalogTable__td'>
+                                  {<button
+                                    className="delete-icon"
+                                    onClick={() => {deleteElementCatalog(element.element_uuid)}}
+                                  >
+                                    X
+                                  </button>}
+                                </td>
+                              </tr>)
+                              : 'Nema elmts'
                             ))}
                           </tbody>
                         </table>
