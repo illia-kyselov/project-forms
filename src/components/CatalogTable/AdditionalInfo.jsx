@@ -5,7 +5,7 @@ import ArrowUp from '../../img/ArrowUp';
 import ModalMessage from '../ModalMessage/ModalMessage';
 import { deleteElementCatalog } from '../../api/deleteElementCatalog';
 
-const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete }) => {
+const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete, handleElementDelete }) => {
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [clickedRow, setClickedRow] = useState(null);
 
@@ -117,25 +117,35 @@ const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete }) => {
                               <th className='catalogTable__th'>Дата додавання</th>
                             </tr>
                           </thead>
-                          <tbody>
-                            {filteredElementData.map((element, elementIndex) => (
-                              element.element_uuid !== null 
-                              ? (<tr key={elementIndex} className='catalogTable__tr' >
-                                <td className='catalogTable__td'>{element.name_elmns}</td>
-                                <td className='catalogTable__td'>{element.cnt_elmnt}</td>
-                                <td className='catalogTable__td'>{formatDate(element.elementdate)}</td>
-                                <td className='catalogTable__td'>
-                                  {<button
-                                    className="delete-icon"
-                                    onClick={() => {deleteElementCatalog(element.element_uuid)}}
-                                  >
-                                    X
-                                  </button>}
+                          {filteredElementData.length !== 0 && filteredElementData.some(element => element.element_uuid !== null) ? (
+                            <tbody>
+                              {filteredElementData
+                                .filter(element => element.element_uuid !== null)
+                                .map((element, elementIndex) => (
+                                  <tr key={elementIndex} className='catalogTable__tr'>
+                                    <td className='catalogTable__td'>{element.name_elmns}</td>
+                                    <td className='catalogTable__td'>{element.cnt_elmnt}</td>
+                                    <td className='catalogTable__td'>{formatDate(element.elementdate)}</td>
+                                    <td className='catalogTable__td'>
+                                      <button
+                                        className="delete-icon"
+                                        onClick={() => { handleElementDelete(element.element_uuid) }}
+                                      >
+                                        X
+                                      </button>
+                                    </td>
+                                  </tr>
+                                ))}
+                            </tbody>
+                          ) : (
+                            <tbody>
+                              <tr>
+                                <td colSpan="4" className='catalogTable__user'>
+                                  {'Елементів не знайдено!'}
                                 </td>
-                              </tr>)
-                              : 'Nema elmts'
-                            ))}
-                          </tbody>
+                              </tr>
+                            </tbody>
+                          )}
                         </table>
                       </td>
                     </tr>

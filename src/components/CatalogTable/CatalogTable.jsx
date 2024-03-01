@@ -13,6 +13,7 @@ import ArrowDown from '../../img/ArrowDown';
 import ArrowUp from '../../img/ArrowUp';
 import ModalMessage from '../ModalMessage/ModalMessage';
 import { deleteDZCatalog } from '../../api/deleteDZCatalog';
+import { deleteElementCatalog } from '../../api/deleteElementCatalog';
 
 
 const CatalogTable = React.memo(({ user }) => {
@@ -93,6 +94,13 @@ const CatalogTable = React.memo(({ user }) => {
     fetchDataFromDB();
     handleRowClick(clickedRow);
   }
+
+  const handleElementDelete = async (uuid) => {
+    await deleteElementCatalog(uuid);
+    fetchDataFromDB();
+    handleRowClick(clickedRow);
+  }
+
 
   const formatDate = (originalDate) => {
     const dateObject = new Date(originalDate);
@@ -334,6 +342,7 @@ const CatalogTable = React.memo(({ user }) => {
                         dataList={elementsCatalog}
                         formatDate={formatDate}
                         handleDzDelete={handleDzDelete}
+                        handleElementDelete={handleElementDelete}
                       />
                     </td>
                   </tr>
@@ -341,10 +350,11 @@ const CatalogTable = React.memo(({ user }) => {
               </React.Fragment>
             ))
           ) : (
-            <span className='catalogTable__user'>{user.length > 0 ? 'Нічого не знайдено' : "Користувач не залогінений"}</span>
+            <span className='catalogTable__user'>{user.length > 0 ? 'Операцій не знайдено' : "Користувач не залогінений"}</span>
           )}
         </tbody>
       </table>
+      
       {loading && (
         <div className={`loader-overlay ${loading ? 'show' : ''}`}>
           <BeatLoader color="#36d7b7" loading={true} size={50} />
