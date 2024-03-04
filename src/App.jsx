@@ -82,9 +82,6 @@ function App({ user }) {
   const handleCloseModal = () => setShowModal(false);
   const emptyInputs = validateEmptyInputs(formData);
   const hasEmptyInputs = emptyInputs.length > 0;
-  console.log('dataTable', dataTable)
-  console.log('dzlist', dzList)
-  console.log('allElementsData', allElementsData)
   const handleRowClick = (markerId) => {
     setFocusMarker(markerId);
   };
@@ -322,11 +319,9 @@ function App({ user }) {
         };
 
         const filteredTableToInsert = tableToInsert.filter(row => row.id_disl_dz === insertData.id_disl_dz);
-        console.log('filteredTableToInsert', filteredTableToInsert)
         let rowsWithMatchingUuid;
         for (const filteredRow of filteredTableToInsert) {
           rowsWithMatchingUuid = allElementsData.filter(row => row.tableId === filteredRow.uuid);
-          console.log('rowsWithMatchingUuid', rowsWithMatchingUuid);
         }
         if (rowsWithMatchingUuid.length > 0) {
           const responseDz = await fetch('http://localhost:3001/dz', {

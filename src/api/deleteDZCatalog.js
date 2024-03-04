@@ -1,7 +1,6 @@
 import NotificationService from "../services/NotificationService";
 
 const deleteDZCatalog = async (uuid, length, work_uuid, expldz_uuid) => {
-  console.log(uuid, length, work_uuid);
   try {
     if (uuid !== null && uuid !== undefined) { 
       const elementsResponse = await fetch(

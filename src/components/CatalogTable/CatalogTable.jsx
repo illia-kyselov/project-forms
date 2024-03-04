@@ -40,10 +40,6 @@ const CatalogTable = React.memo(({ user }) => {
     fetchOptions();
   }, [user]);
 
-  console.log('elementsCatalog', elementsCatalog);
-  console.log('catalogData', catalogData);
-
-
   const fetchDataFromDB = async () => {
     try {
       setLoading(true);

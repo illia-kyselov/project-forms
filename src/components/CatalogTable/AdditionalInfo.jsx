@@ -49,7 +49,6 @@ const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete, handleEleme
 
   const handleDeleteConfirmation = async () => {
     if (deleteConfirmationData) {
-      console.log(deleteConfirmationData.expldz_uuid)
       await handleDzDelete(
         deleteConfirmationData.element_uuid,
         deleteConfirmationData.length,
@@ -76,7 +75,6 @@ const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete, handleEleme
         </thead>
         <tbody>
           {uniqueDataList.map((data, index) => {
-            console.log('uniqueDataList', uniqueDataList)
             const { num_dz, dz_form, expldz_uuid, expldzdate } = data;
             const imagePath = markerImage[num_dz];
             const rowClassName = clickedRow === index ? 'clicked' : '';
