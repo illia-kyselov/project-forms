@@ -89,11 +89,11 @@ const CatalogTable = React.memo(({ user }) => {
     setSelectedRowUuid(null);
   };
 
-  const handleDzDelete = async (uuid, length, work_uuid) => {
-    await deleteDZCatalog(uuid, length, work_uuid);
+  const handleDzDelete = async (uuid, length, work_uuid, expldz_uuid) => {
+    await deleteDZCatalog(uuid, length, work_uuid, expldz_uuid || uuid);
     fetchDataFromDB();
     handleRowClick(clickedRow);
-  }
+  };  
 
   const handleElementDelete = async (uuid) => {
     await deleteElementCatalog(uuid);

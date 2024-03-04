@@ -5,6 +5,8 @@ import { validateEmptyInputs } from "../../helpers/validate-empty-inputs";
 import Input from "../Input/Input";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import markerImage from '../../img';
+import { v4 as uuidv4 } from 'uuid';
+
 
 const KeyCodesEnum = {
   ArrowUp: 38,
@@ -43,6 +45,7 @@ const Table = ({
   setNewRowData,
   setDzList,
   dzList,
+  setDataTable,
 }) => {
   const selectedRowRef = useRef(null);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -194,6 +197,7 @@ const Table = ({
       setDzList(prevArray => [...prevArray, newInsertData]);
       setPushToDZCalled(true);
       hideForm(e);
+      setDataTable((prevData) => [...prevData, { ...newInsertData, uuid: uuidv4() }]);
       NotificationService.showSuccessNotification('Дорожній знак успішно доданий!');
     } catch (error) {
       console.error('An error occurred while sending data to the server:', error);

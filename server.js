@@ -13,7 +13,7 @@ const client = new Client({
   user: "postgres",
   host: "localhost",
   database: "mydatabase",
-  password: "6006059a",
+  password: "postgres",
   port: 5432,
 });
 
@@ -852,15 +852,15 @@ app.delete("/elements/:id_elmts", (req, res) => {
   });
 });
 
-app.delete("/catalog/elements/:uuid", (req, res) => {
-  const receivedUuid = req.params.uuid;
+app.delete("/catalog/elements/:id_elmts", (req, res) => {
+  const receivedId_elmts = req.params.id_elmts;
 
   const queryDelete = `
     DELETE FROM exploitation.elements
-    WHERE uuid = $1
+    WHERE id_elmts = $1
   `;
 
-  const valuesDelete = [receivedUuid];
+  const valuesDelete = [receivedId_elmts];
 
   client.query(queryDelete, valuesDelete, (err, result) => {
     if (err) {

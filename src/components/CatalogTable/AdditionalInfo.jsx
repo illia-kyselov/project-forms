@@ -49,10 +49,12 @@ const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete, handleEleme
 
   const handleDeleteConfirmation = async () => {
     if (deleteConfirmationData) {
+      console.log(deleteConfirmationData.expldz_uuid)
       await handleDzDelete(
         deleteConfirmationData.element_uuid,
         deleteConfirmationData.length,
-        deleteConfirmationData.work_uuid
+        deleteConfirmationData.work_uuid,
+        deleteConfirmationData.expldz_uuid,
       );
       setShowDeleteConfirmation(false);
       setDeleteConfirmationData(null);
@@ -96,7 +98,8 @@ const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete, handleEleme
                         setDeleteConfirmationData({
                           element_uuid: data.element_uuid,
                           length: uniqueDataList.length,
-                          work_uuid: data.work_uuid
+                          work_uuid: data.work_uuid,
+                          expldz_uuid: data.expldz_uuid,
                         });
                         setShowDeleteConfirmation(true);
                       }}
@@ -115,6 +118,7 @@ const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete, handleEleme
                               <th className='catalogTable__th'>Назва елементу</th>
                               <th className='catalogTable__th'>Кількість елементів</th>
                               <th className='catalogTable__th'>Дата додавання</th>
+                              <th className='catalogTable__th'></th>
                             </tr>
                           </thead>
                           {filteredElementData.length !== 0 && filteredElementData.some(element => element.element_uuid !== null) ? (
@@ -129,7 +133,7 @@ const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete, handleEleme
                                     <td className='catalogTable__td'>
                                       <button
                                         className="delete-icon"
-                                        onClick={() => { handleElementDelete(element.element_uuid) }}
+                                        onClick={() => { handleElementDelete(element.id_elmts) }}
                                       >
                                         X
                                       </button>

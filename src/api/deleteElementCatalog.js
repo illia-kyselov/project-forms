@@ -1,9 +1,9 @@
 import NotificationService from "../services/NotificationService";
 
-const deleteElementCatalog = async (uuid) => {
+const deleteElementCatalog = async (id_elmts) => {
   try {
     const elementsResponse = await fetch(
-      `http://localhost:3001/catalog/elements/${uuid}`,
+      `http://localhost:3001/catalog/elements/${id_elmts}`,
       {
         method: "DELETE",
         headers: {

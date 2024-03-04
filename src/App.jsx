@@ -72,6 +72,8 @@ function App({ user }) {
     date_work: "",
     pers_work: "",
   });
+
+
   const [showUpdateElements, setShowUpdateElements] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [dzList, setDzList] = useState([]);
@@ -80,13 +82,14 @@ function App({ user }) {
   const handleCloseModal = () => setShowModal(false);
   const emptyInputs = validateEmptyInputs(formData);
   const hasEmptyInputs = emptyInputs.length > 0;
-
+  console.log('dataTable', dataTable)
+  console.log('dzlist', dzList)
+  console.log('allElementsData', allElementsData)
   const handleRowClick = (markerId) => {
     setFocusMarker(markerId);
   };
 
   const handleConfirmDelete = () => {
-
     handleCloseModal();
   };
 
@@ -482,6 +485,7 @@ function App({ user }) {
                 setNewRowData={setNewRowData}
                 setDzList={setDzList}
                 dzList={dzList}
+                setDataTable={setDataTable}
               />
             )}
             {showSecondTable && dataTable.length > 0 &&

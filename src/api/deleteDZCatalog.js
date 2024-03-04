@@ -1,26 +1,29 @@
 import NotificationService from "../services/NotificationService";
 
-const deleteDZCatalog = async (uuid, length, work_uuid) => {
+const deleteDZCatalog = async (uuid, length, work_uuid, expldz_uuid) => {
+  console.log(uuid, length, work_uuid);
   try {
-    const elementsResponse = await fetch(
-      `http://localhost:3001/dz/elements/${uuid}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (!elementsResponse.ok) {
-      NotificationService.showErrorNotification(
-        "Дані не видалені з таблиці elements"
+    if (uuid !== null && uuid !== undefined) { 
+      const elementsResponse = await fetch(
+        `http://localhost:3001/dz/elements/${uuid}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
-      return;
+
+      if (!elementsResponse.ok) {
+        NotificationService.showErrorNotification(
+          "Дані не видалені з таблиці elements"
+        );
+        return;
+      }
     }
 
     const explDzResponse = await fetch(
-      `http://localhost:3001/dz/expl_dz/${uuid}`,
+      `http://localhost:3001/dz/expl_dz/${uuid || expldz_uuid}`,
       {
         method: "DELETE",
         headers: {
@@ -61,3 +64,5 @@ const deleteDZCatalog = async (uuid, length, work_uuid) => {
 };
 
 export { deleteDZCatalog };
+
+
