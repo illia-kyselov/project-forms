@@ -12,9 +12,10 @@ import AdditionalInfo from './AdditionalInfo';
 import ArrowDown from '../../img/ArrowDown';
 import ArrowUp from '../../img/ArrowUp';
 import ModalMessage from '../ModalMessage/ModalMessage';
+
 import { deleteDZCatalog } from '../../api/deleteDZCatalog';
 import { deleteElementCatalog } from '../../api/deleteElementCatalog';
-
+import { updateElementsData } from '../../api/updateElementsData';
 
 const CatalogTable = React.memo(({ user }) => {
   const [catalogData, setCatalogData] = useState([]);
@@ -34,7 +35,11 @@ const CatalogTable = React.memo(({ user }) => {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [selectedRowUuid, setSelectedRowUuid] = useState(null);
 
+  const [editingElementRow, setEditingElementRow] = useState(null);
+  const [editedElementData, setEditedElementData] = useState({});
+  const [namesElements, setNamesElements] = useState([]);
 
+  
   useEffect(() => {
     fetchDataFromDB();
     fetchOptions();
@@ -52,6 +57,7 @@ const CatalogTable = React.memo(({ user }) => {
     }
   };
 
+
   const fetchOptions = async () => {
     try {
       const response = await fetch("http://localhost:3001/dict_work");
@@ -66,7 +72,6 @@ const CatalogTable = React.memo(({ user }) => {
     setSelectedRowUuid(rowUuid);
     setShowCancelModal(true);
   };
-
 
   const handleCancelConfirmed = async (rowUuid) => {
     try {
@@ -96,7 +101,6 @@ const CatalogTable = React.memo(({ user }) => {
     fetchDataFromDB();
     handleRowClick(clickedRow);
   }
-
 
   const formatDate = (originalDate) => {
     const dateObject = new Date(originalDate);
@@ -219,6 +223,21 @@ const CatalogTable = React.memo(({ user }) => {
     setArrowDownActive(false);
   };
 
+  const handleUpdateElements  = async () => {
+    try {
+      const updatePayload = {
+      element: editedElementData.name_elmns,
+      quantity: editedElementData.cnt_elmnt,
+      };
+      await updateElementsData(editedElementData.id_elmts, updatePayload);
+      setEditingElementRow(null);
+      setEditedElementData({});
+      handleRowClick(clickedRow);
+    } catch (error) {
+      console.error('Error updating data', error);
+    }
+  };
+
   return (
     <div className='catalogTable__container'>
       <label className='catalogTable__title'>{`Операції користувача `}
@@ -338,6 +357,11 @@ const CatalogTable = React.memo(({ user }) => {
                         formatDate={formatDate}
                         handleDzDelete={handleDzDelete}
                         handleElementDelete={handleElementDelete}
+                        editingElementRow={editingElementRow}
+                        editedElementData={editedElementData}
+                        setEditingElementRow={setEditingElementRow}
+                        setEditedElementData={setEditedElementData}
+                        handleUpdateElements={handleUpdateElements}    
                       />
                     </td>
                   </tr>

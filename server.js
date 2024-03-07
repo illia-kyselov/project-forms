@@ -13,7 +13,7 @@ const client = new Client({
   user: "postgres",
   host: "localhost",
   database: "mydatabase",
-  password: "6006059a",
+  password: "postgres",
   port: 5432,
 });
 
@@ -355,6 +355,23 @@ app.get("/dz_forms", (req, res) => {
         id: row.id,
         num_pdr_new: row.num_pdr_new,
         form_dz: row.form_dz,
+      }));
+      res.json(data);
+    }
+  });
+});
+
+app.get("/elementsNames", (req, res) => {
+  const query =
+    "SELECT id_elm, name_elm FROM exploitation.dict_elmnts";
+  client.query(query, (err, result) => {
+    if (err) {
+      console.error("Error executing query", err);
+      res.status(500).send("Error executing query");
+    } else {
+      const data = result.rows.map((row) => ({
+        id_elm: row.id_elm,
+        name_elm: row.name_elm,
       }));
       res.json(data);
     }
@@ -929,6 +946,28 @@ app.put("/work_table/:uuid", (req, res) => {
           message: `Record with uuid ${idToUpdate} not found or could not be updated.`,
         });
       }
+    }
+  });
+});
+
+app.put("/catalog/elements/:id", (req, res) => {
+  const elementId = req.params.id;
+  const { element, quantity } = req.body;
+
+  const query = `
+    UPDATE exploitation.elements 
+    SET name_elmns = $1, cnt_elmnt = $2
+    WHERE id_elmts = $3
+  `;
+
+  const values = [element, quantity, elementId];
+
+  client.query(query, values, (err, result) => {
+    if (err) {
+      console.error("Error updating data in the database", err);
+      res.status(500).send("Error updating data in the database");
+    } else {
+      res.json({ message: "Data successfully updated in the database" });
     }
   });
 });

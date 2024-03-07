@@ -1,9 +1,9 @@
 import NotificationService from "../services/NotificationService";
 
-const updateElementsData = async (uuid, updatedData) => {
+const updateElementsData = async (id, updatedData) => {
   try {
     const elementsResponse = await fetch(
-      `http://localhost:3001/elements/${uuid}`,
+      `http://localhost:3001/catalog/elements/${id}`,
       {
         method: "PUT",
         headers: {

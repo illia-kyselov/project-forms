@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import markerImage from '../../img';
 import ArrowDown from '../../img/ArrowDown';
 import ArrowUp from '../../img/ArrowUp';
@@ -8,7 +8,17 @@ import CheckSVG from '../../img/CheckSVG';
 import CloseSVG from '../../img/CloseSVG';
 import { updateElementsData } from '../../api/updateElementsData';
 
-const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete, handleElementDelete }) => {
+const AdditionalInfo = ({
+   dataList = [], 
+   formatDate, 
+   handleDzDelete, 
+   handleElementDelete,
+   editingElementRow,
+   editedElementData,
+   setEditingElementRow,
+   setEditedElementData,
+   handleUpdateElements,
+  }) => {
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [clickedRow, setClickedRow] = useState(null);
 
@@ -17,10 +27,22 @@ const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete, handleEleme
 
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [deleteConfirmationData, setDeleteConfirmationData] = useState(null);
+  const [namesElements, setNamesElements] = useState([]);
 
-  const [editingElementRow, setEditingElementRow] = useState(null);
-  const [editedElementData, setEditedElementData] = useState({});
-
+  const fetchNamesElements = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/elementsNames");
+      const data = await response.json();
+      setNamesElements(data);
+    } catch (error) {
+      console.error("Error fetching data", error);
+    }
+  };
+  
+  useEffect(() => {
+    fetchNamesElements();
+  }, []);
+  
   const handleRowClick = (expldz_uuid, index) => () => {
     const selectedData = dataList.find((data) => data.expldz_uuid === expldz_uuid);
     setSelectedRowData(selectedData);
@@ -36,8 +58,6 @@ const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete, handleEleme
       d.expldz_uuid === data.expldz_uuid
     )
   );
-
-  console.log('uniqueDataList', uniqueDataList);
 
   const filteredElementData = dataList.filter(data =>
     data.work_uuid === (selectedRowData && selectedRowData.work_uuid) &&
@@ -67,30 +87,39 @@ const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete, handleEleme
     }
   };
 
-  const handleDoubleClick = (row) => {
-    if (!editingElementRow || editingElementRow === row.uuid) {
-      setEditingElementRow(row.uuid);
-      setEditedElementData({ ...row });
+  const handleDoubleClick = async (element) => {
+    if (!editingElementRow || editingElementRow === element.id_elmts) {
+      setEditingElementRow(element.id_elmts);
+  
+      await fetchNamesElements();
+  
+      setEditedElementData({ ...element });
     } else {
-      setEditingElementRow(row.uuid);
-      setEditedElementData({ ...row });
+      setEditingElementRow(element.id_elmts);
+      setEditedElementData({ ...element });
     }
   };
+  
 
   const handleCancelEdit = () => {
     setEditingElementRow(null);
     setEditedElementData({});
   };
 
-  const handleUpdate = async () => {
-    try {
-      await updateElementsData(editedElementData.uuid, editedElementData)
-      setEditingElementRow(null);
-      setEditedElementData({});
-    } catch (error) {
-      console.error('Error updating data', error);
-    }
-  };
+  // const handleUpdate = async () => {
+  //   try {
+  //     const updatePayload = {
+  //     element: editedElementData.name_elmns,
+  //     quantity: editedElementData.cnt_elmnt,
+  //     };
+  //     await updateElementsData(editedElementData.id_elmts, updatePayload);
+  //     setEditingElementRow(null);
+  //     setEditedElementData({});
+  //     handleRowClickUpdate(clickedRow);
+  //   } catch (error) {
+  //     console.error('Error updating data', error);
+  //   }
+  // };
 
   return (
     <div>
@@ -106,7 +135,7 @@ const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete, handleEleme
         </thead>
         <tbody>
           {uniqueDataList.map((data, index) => {
-            const { num_dz, dz_form, expldz_uuid, expldzdate } = data;
+            const { num_dz, dz_form, expldz_uuid, expldzdate, id_elmts } = data;
             const imagePath = markerImage[num_dz];
             const rowClassName = clickedRow === index ? 'clicked' : '';
             return (
@@ -157,20 +186,31 @@ const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete, handleEleme
                                 .map((element, elementIndex) => (
                                   <tr key={elementIndex} className='catalogTable__tr'>
                                     <td className='catalogTable__td' onDoubleClick={() => handleDoubleClick(element)}>
-                                      {editingElementRow === element.uuid ? (
-                                        <input
-                                          type="text"
-                                          className='catalogTable__input'
-                                          value={editedElementData.name_elmns}
+                                    {editingElementRow === element.id_elmts && namesElements && namesElements.length > 0 ? (
+                                        <select
+                                          className="catalogTable__select"
                                           onChange={(e) => setEditedElementData({ ...editedElementData, name_elmns: e.target.value })}
-                                        />
-                                      ) : element.name_elmns}
-                                    </td>
+                                          value={editedElementData.name_elmns || ''}
+                                          style={{ cursor: 'pointer' }}
+                                        >
+                                          {namesElements.map((option) => (
+                                            <option
+                                              key={option.id_elm}
+                                              value={option.name_elm}
+                                              className="catalogTable__option"
+                                            >
+                                              {option.name_elm}
+                                            </option>
+                                          ))}
+                                        </select>
+                                    ) : element.name_elmns}
+                                  </td>
+
                                     <td
                                       className='catalogTable__td'
                                       onDoubleClick={() => handleDoubleClick(element)}
                                     >
-                                      {editingElementRow === element.uuid ? (
+                                      {editingElementRow === element.id_elmts ? (
                                         <input
                                           type="text"
                                           className='catalogTable__input'
@@ -186,9 +226,9 @@ const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete, handleEleme
                                       {formatDate(element.elementdate)}
                                     </td>
                                     <td className='catalogTable__td'>
-                                      {editingElementRow === element.uuid ? (
+                                      {editingElementRow === element.id_elmts ? (
                                         <>
-                                          <CheckSVG onClick={() => handleUpdate()}></CheckSVG>
+                                          <CheckSVG onClick={() => handleUpdateElements()}></CheckSVG>
                                           <CloseSVG onClick={() => handleCancelEdit()}></CloseSVG>
                                         </>
                                       ) : (
