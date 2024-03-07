@@ -146,7 +146,6 @@ const CatalogTable = React.memo(({ user }) => {
     }
   };
 
-
   const handleRowClick = async (row) => {
     try {
       const response = await fetch(`http://localhost:3001/catalog/elements?uuid=${row.uuid}`);

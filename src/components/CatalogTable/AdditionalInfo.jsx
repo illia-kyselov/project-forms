@@ -4,6 +4,9 @@ import ArrowDown from '../../img/ArrowDown';
 import ArrowUp from '../../img/ArrowUp';
 import ModalMessage from '../ModalMessage/ModalMessage';
 import { deleteElementCatalog } from '../../api/deleteElementCatalog';
+import CheckSVG from '../../img/CheckSVG';
+import CloseSVG from '../../img/CloseSVG';
+import { updateElementsData } from '../../api/updateElementsData';
 
 const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete, handleElementDelete }) => {
   const [selectedRowData, setSelectedRowData] = useState(null);
@@ -15,6 +18,8 @@ const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete, handleEleme
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [deleteConfirmationData, setDeleteConfirmationData] = useState(null);
 
+  const [editingElementRow, setEditingElementRow] = useState(null);
+  const [editedElementData, setEditedElementData] = useState({});
 
   const handleRowClick = (expldz_uuid, index) => () => {
     const selectedData = dataList.find((data) => data.expldz_uuid === expldz_uuid);
@@ -31,6 +36,8 @@ const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete, handleEleme
       d.expldz_uuid === data.expldz_uuid
     )
   );
+
+  console.log('uniqueDataList', uniqueDataList);
 
   const filteredElementData = dataList.filter(data =>
     data.work_uuid === (selectedRowData && selectedRowData.work_uuid) &&
@@ -60,6 +67,30 @@ const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete, handleEleme
     }
   };
 
+  const handleDoubleClick = (row) => {
+    if (!editingElementRow || editingElementRow === row.uuid) {
+      setEditingElementRow(row.uuid);
+      setEditedElementData({ ...row });
+    } else {
+      setEditingElementRow(row.uuid);
+      setEditedElementData({ ...row });
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingElementRow(null);
+    setEditedElementData({});
+  };
+
+  const handleUpdate = async () => {
+    try {
+      await updateElementsData(editedElementData.uuid, editedElementData)
+      setEditingElementRow(null);
+      setEditedElementData({});
+    } catch (error) {
+      console.error('Error updating data', error);
+    }
+  };
 
   return (
     <div>
@@ -85,10 +116,10 @@ const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete, handleEleme
                   <td className='catalogTable__td' onClick={handleRowClick(expldz_uuid, index)}>{num_dz}</td>
                   <td className='catalogTable__td' onClick={handleRowClick(expldz_uuid, index)}>{dz_form}</td>
                   <td className='catalogTable__td' onClick={handleRowClick(expldz_uuid, index)}>{formatDate(expldzdate)}</td>
-                  <td className='catalogTable__td'>
+                  {/* <td className='catalogTable__td'>
                     {<ArrowDown onClick={handleArrowDownClick} arrowDownActiveInfo={arrowDownActiveInfo} />}
                     {<ArrowUp onClick={handleArrowUpClick} arrowUpActiveInfo={arrowUpActiveInfo} />}
-                  </td>
+                  </td> */}
                   <td className='catalogTable__td'>
                     {<button
                       className="delete-icon"
@@ -125,16 +156,51 @@ const AdditionalInfo = ({ dataList = [], formatDate, handleDzDelete, handleEleme
                                 .filter(element => element.element_uuid !== null)
                                 .map((element, elementIndex) => (
                                   <tr key={elementIndex} className='catalogTable__tr'>
-                                    <td className='catalogTable__td'>{element.name_elmns}</td>
-                                    <td className='catalogTable__td'>{element.cnt_elmnt}</td>
-                                    <td className='catalogTable__td'>{formatDate(element.elementdate)}</td>
+                                    <td className='catalogTable__td' onDoubleClick={() => handleDoubleClick(element)}>
+                                      {editingElementRow === element.uuid ? (
+                                        <input
+                                          type="text"
+                                          className='catalogTable__input'
+                                          value={editedElementData.name_elmns}
+                                          onChange={(e) => setEditedElementData({ ...editedElementData, name_elmns: e.target.value })}
+                                        />
+                                      ) : element.name_elmns}
+                                    </td>
+                                    <td
+                                      className='catalogTable__td'
+                                      onDoubleClick={() => handleDoubleClick(element)}
+                                    >
+                                      {editingElementRow === element.uuid ? (
+                                        <input
+                                          type="text"
+                                          className='catalogTable__input'
+                                          value={editedElementData.cnt_elmnt}
+                                          onChange={(e) => setEditedElementData({ ...editedElementData, cnt_elmnt: e.target.value })}
+                                        />
+                                      ) : element.cnt_elmnt}
+                                    </td>
+                                    <td
+                                      className='catalogTable__td'
+                                      onDoubleClick={() => handleDoubleClick(element)}
+                                    >
+                                      {formatDate(element.elementdate)}
+                                    </td>
                                     <td className='catalogTable__td'>
-                                      <button
-                                        className="delete-icon"
-                                        onClick={() => { handleElementDelete(element.id_elmts) }}
-                                      >
-                                        X
-                                      </button>
+                                      {editingElementRow === element.uuid ? (
+                                        <>
+                                          <CheckSVG onClick={() => handleUpdate()}></CheckSVG>
+                                          <CloseSVG onClick={() => handleCancelEdit()}></CloseSVG>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <button
+                                            className="delete-icon"
+                                            onClick={() => { handleElementDelete(element.id_elmts) }}
+                                          >
+                                            X
+                                          </button>
+                                        </>
+                                      )}
                                     </td>
                                   </tr>
                                 ))}
