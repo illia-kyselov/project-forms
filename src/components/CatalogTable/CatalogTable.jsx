@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './styles.scss';
+import ReactPaginate from 'react-paginate';
 
 import { deleteRecordsByUuid } from '../../api/deleteRecordByUuid';
 import { updateRecordByUuid } from '../../api/updateRecordByUuid';
@@ -25,8 +26,6 @@ const CatalogTable = React.memo(({ user }) => {
   });
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
-  // const [editingRow, setEditingRow] = useState(null);
-  // const [editedData, setEditedData] = useState({});
   const [options, setOptions] = useState([]);
   const [elementsCatalog, setElementsCatalog] = useState(null);
   const [clickedRow, setClickedRow] = useState(null);
@@ -37,7 +36,9 @@ const CatalogTable = React.memo(({ user }) => {
 
   const [editingElementRow, setEditingElementRow] = useState(null);
   const [editedElementData, setEditedElementData] = useState({});
-  const [namesElements, setNamesElements] = useState([]);
+
+  const [currentPage, setCurrentPage] = useState(0);
+  const [dataPerPage] = useState(10);
 
   
   useEffect(() => {
