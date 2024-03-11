@@ -13,21 +13,22 @@
 
   &__input,
   &__select {
-    background-color: rgba(255, 167, 181, 0.3);
+    background-color: #3e8a0bb7;
     display: inline-flex;
     flex-wrap: nowrap;
     box-sizing: border-box;
-    border: 1px solid rgb(252, 20, 55);
+    border: 2px solid #326d0c;
     border-radius: 5px;
     font-size: 1em;
     padding: .5em;
     min-width: 100px;
     max-width: 500px;
+    color: #fff;
   }
 
   &__option:checked {
     color: #fff;
-    background-color: #fd7373;
+    background-color: #38750eb2;
   }
 
   &__title {

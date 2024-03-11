@@ -50,7 +50,7 @@ const LeafletMap = ({
   dzList,
 }) => {
   const containerStyle = {
-    height: "calc(96vh - 10px)",
+    height: "calc(100vh - 40px)",
     position: 'relative',
   };
   const center = {

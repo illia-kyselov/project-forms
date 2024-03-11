@@ -25,8 +25,8 @@ const CatalogTable = React.memo(({ user }) => {
   });
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
-  const [editingRow, setEditingRow] = useState(null);
-  const [editedData, setEditedData] = useState({});
+  // const [editingRow, setEditingRow] = useState(null);
+  // const [editedData, setEditedData] = useState({});
   const [options, setOptions] = useState([]);
   const [elementsCatalog, setElementsCatalog] = useState(null);
   const [clickedRow, setClickedRow] = useState(null);
@@ -122,32 +122,6 @@ const CatalogTable = React.memo(({ user }) => {
 
   const handleSearch = (query) => {
     setSearchQuery(query);
-  };
-
-  const handleDoubleClick = (row) => {
-    if (!editingRow || editingRow === row.uuid) {
-      setEditingRow(row.uuid);
-      setEditedData({ ...row });
-    } else {
-      setEditingRow(row.uuid);
-      setEditedData({ ...row });
-    }
-  };
-
-  const handleCancelEdit = () => {
-    setEditingRow(null);
-    setEditedData({});
-  };
-
-  const handleUpdate = async () => {
-    try {
-      await updateRecordByUuid(editedData.uuid, editedData);
-      setEditingRow(null);
-      setEditedData({});
-      fetchDataFromDB();
-    } catch (error) {
-      console.error('Error updating data', error);
-    }
   };
 
   const handleRowClick = async (row) => {
@@ -285,47 +259,21 @@ const CatalogTable = React.memo(({ user }) => {
               <React.Fragment key={index}>
                 <tr
                   key={index}
-                  className={`catalogTable__tr ${editingRow === row.uuid ? 'editing' : ''} ${clickedRow && clickedRow.uuid === row.uuid ? 'clicked' : ''}`}
+                  className={`catalogTable__tr ${clickedRow && clickedRow.uuid === row.uuid ? 'clicked' : ''}`}
                 >
-                  <td className='catalogTable__td' onClick={() => handleRowClick(row)} onDoubleClick={() => handleDoubleClick(row)}>{editingRow === row.uuid ? (
-
-                    <input
-                      type="text"
-                      value={editedData.address}
-                      className='catalogTable__input'
-                      onChange={(e) => setEditedData({ ...editedData, address: e.target.value })}
-                    />
-                  ) : row.address}</td>
-                  <td className='catalogTable__td' onClick={() => handleRowClick(row)} onDoubleClick={() => handleDoubleClick(row)}>{row.id_doc ? row.id_doc : 'Не документ'}</td>
-                  <td className='catalogTable__td' onClick={() => handleRowClick(row)} onDoubleClick={() => handleDoubleClick(row)}>{editingRow === row.uuid ? (
-                    <select
-                      className="catalogTable__select"
-                      name="type_work"
-                      onChange={(e) => setEditedData({ ...editedData, type_work: e.target.value })}
-                      value={editedData.type_work || ''}
-                      style={{ cursor: 'pointer' }}
-                    >
-                      {options.map((option) => (
-                        <option
-                          key={option}
-                          value={option}
-                          className="catalogTable__option"
-                        >
-                          {option}
-                        </option>
-                      ))}
-                    </select>
-                  ) : row.type_work}</td>
-                  <td className='catalogTable__td' onClick={() => handleRowClick(row)} onDoubleClick={() => handleDoubleClick(row)}>{editingRow === row.uuid ? (
-                    <input
-                      type="text"
-                      className='catalogTable__input'
-                      value={formatDate(editedData.cdate)}
-                      onChange={(e) => setEditedData({ ...editedData, cdate: e.target.value })}
-                    />
-                  ) : formatDate(row.cdate)}</td>
+                  <td className='catalogTable__td' onClick={() => handleRowClick(row)}>
+                    {row.address}
+                  </td>
+                  <td className='catalogTable__td' onClick={() => handleRowClick(row)}>
+                    {row.id_doc ? row.id_doc : 'Не документ'}
+                    </td>
+                  <td className='catalogTable__td' onClick={() => handleRowClick(row)}>
+                    {row.type_work}
+                  </td>
+                  <td className='catalogTable__td' onClick={() => handleRowClick(row)}>
+                    {formatDate(row.cdate)}
+                    </td>
                   <td className='catalogTable__td catalogTable__td-edit'>
-
                     <ArrowDown
                       onClick={() => handleArrowDownClickCatalog(row)}
                       arrowDownActive={arrowDownActive}
@@ -337,16 +285,7 @@ const CatalogTable = React.memo(({ user }) => {
                       />}
                   </td>
                   <td className='catalogTable__td catalogTable__td-edit'>
-                    {editingRow === row.uuid ? (
-                      <>
-                        <CheckSVG onClick={() => handleUpdate()}></CheckSVG>
-                        <CloseSVG onClick={() => handleCancelEdit()}></CloseSVG>
-                      </>
-                    ) : (
-                      <>
-                        <DeleteSVG onClick={() => handleDeleteClick(row.uuid)} />
-                      </>
-                    )}
+                    <DeleteSVG onClick={() => handleDeleteClick(row.uuid)} />   
                   </td>
                 </tr>
                 {clickedRow && clickedRow.uuid === row.uuid && (
