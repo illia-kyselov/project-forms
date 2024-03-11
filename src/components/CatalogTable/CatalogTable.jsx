@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './styles.scss';
 import ReactPaginate from 'react-paginate';
-
+import SweetPagination from "sweetpagination";
 import { deleteRecordsByUuid } from '../../api/deleteRecordByUuid';
 import { updateRecordByUuid } from '../../api/updateRecordByUuid';
 
@@ -38,9 +38,8 @@ const CatalogTable = React.memo(({ user }) => {
   const [editedElementData, setEditedElementData] = useState({});
 
   const [currentPage, setCurrentPage] = useState(0);
-  const [dataPerPage] = useState(10);
-
-  
+  const dataPerPage = 10;
+  const [currentPageData, setCurrentPageData] = useState(new Array(2).fill());
   useEffect(() => {
     fetchDataFromDB();
     fetchOptions();
@@ -58,7 +57,7 @@ const CatalogTable = React.memo(({ user }) => {
     }
   };
 
-
+console.log(catalogData)
   const fetchOptions = async () => {
     try {
       const response = await fetch("http://localhost:3001/dict_work");
@@ -138,7 +137,7 @@ const CatalogTable = React.memo(({ user }) => {
     }
   }
 
-  const filteredData = catalogData.filter((row) => {
+  const filteredData = currentPageData.filter((row) => {
     const lowerCaseQuery = searchQuery.toLowerCase();
 
     return Object.entries(row).some(([key, value]) => {
@@ -212,6 +211,15 @@ const CatalogTable = React.memo(({ user }) => {
       console.error('Error updating data', error);
     }
   };
+
+  const handlePageChange = (selectedPage) => {
+    setCurrentPage(selectedPage.selected);
+  };
+
+  const pageCount = Math.ceil(catalogData.length / dataPerPage);
+
+  const offset = currentPage * dataPerPage;
+  const currentData = catalogData.slice(offset, offset + dataPerPage);
 
   return (
     <div className='catalogTable__container'>
@@ -313,7 +321,12 @@ const CatalogTable = React.memo(({ user }) => {
           )}
         </tbody>
       </table>
-      
+      <SweetPagination
+        currentPageData={setCurrentPageData}
+        dataPerPage={15}
+        getData={catalogData}
+        navigation={true}
+      />
       {loading && (
         <div className={`loader-overlay ${loading ? 'show' : ''}`}>
           <BeatLoader color="#36d7b7" loading={true} size={50} />
