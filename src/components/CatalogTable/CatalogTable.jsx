@@ -39,7 +39,8 @@ const CatalogTable = React.memo(({ user }) => {
 
   const [currentPage, setCurrentPage] = useState(0);
   const dataPerPage = 10;
-  const [currentPageData, setCurrentPageData] = useState(new Array(2).fill());
+  const [currentPageData, setCurrentPageData] = useState([]);
+
   useEffect(() => {
     fetchDataFromDB();
     fetchOptions();
