@@ -27,8 +27,13 @@ const AdditionalInfo = ({
 
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [deleteConfirmationData, setDeleteConfirmationData] = useState(null);
-  const [namesElements, setNamesElements] = useState([]);
 
+  const [namesElements, setNamesElements] = useState([]);
+  const [showUpdateConfirmation, setShowUpdateConfirmation] = useState(false);
+
+  const [showDeleteElementConfirmation, setShowDeleteElementConfirmation] = useState(false);
+  const [deleteElementConfirmationData, setDeleteElementConfirmationData] = useState(null);
+  
   const fetchNamesElements = async () => {
     try {
       const response = await fetch("http://localhost:3001/elementsNames");
@@ -64,15 +69,15 @@ const AdditionalInfo = ({
     data.element_uuid === (selectedRowData && selectedRowData.element_uuid)
   );
 
-  const handleArrowUpClick = () => {
-    setArrowUpActiveInfo(false);
-    setArrowDownActiveInfo(true);
-  };
+  // const handleArrowUpClick = () => {
+  //   setArrowUpActiveInfo(false);
+  //   setArrowDownActiveInfo(true);
+  // };
 
-  const handleArrowDownClick = () => {
-    setArrowDownActiveInfo(false);
-    setArrowUpActiveInfo(true);
-  };
+  // const handleArrowDownClick = () => {
+  //   setArrowDownActiveInfo(false);
+  //   setArrowUpActiveInfo(true);
+  // };
 
   const handleDeleteConfirmation = async () => {
     if (deleteConfirmationData) {
@@ -85,6 +90,19 @@ const AdditionalInfo = ({
       setShowDeleteConfirmation(false);
       setDeleteConfirmationData(null);
     }
+  };
+
+  const handleDeleteElementConfirmation = async () => {
+    if (deleteElementConfirmationData) {
+      await handleElementDelete(deleteElementConfirmationData);
+      setShowDeleteElementConfirmation(false);
+      setDeleteElementConfirmationData(null);
+    }
+  };
+
+  const handleUpdateConfirmation = async () => {
+      await handleUpdateElements();
+      setShowUpdateConfirmation(false);
   };
 
   const handleDoubleClick = async (element) => {
@@ -228,14 +246,22 @@ const AdditionalInfo = ({
                                     <td className='catalogTable__td'>
                                       {editingElementRow === element.id_elmts ? (
                                         <>
-                                          <CheckSVG onClick={() => handleUpdateElements()}></CheckSVG>
+                                          <CheckSVG 
+                                            onClick={() => {
+                                              setShowUpdateConfirmation(true);
+                                            }}
+                                          >
+                                          </CheckSVG>
                                           <CloseSVG onClick={() => handleCancelEdit()}></CloseSVG>
                                         </>
                                       ) : (
                                         <>
                                           <button
                                             className="delete-icon"
-                                            onClick={() => { handleElementDelete(element.id_elmts) }}
+                                            onClick={() => {
+                                              setDeleteElementConfirmationData(element.id_elmts);
+                                              setShowDeleteElementConfirmation(true);
+                                            }}
                                           >
                                             X
                                           </button>
@@ -265,13 +291,33 @@ const AdditionalInfo = ({
         </tbody>
       </table>
       <ModalMessage
-        title={uniqueDataList.length === 1 ? "Ви впевнені що хочете видалити запис?" : "Ви впевнені що хочете видалити цей ДЗ та елементи до нього?"}
+        title={uniqueDataList.length === 1 ? "Ви впевнені що хочете видалити запис?" : "Ви впевнені що хочете видалити ДЗ та елементи до нього?"}
         butonText="Видалити запис"
         isOpen={showDeleteConfirmation}
         onConfirm={handleDeleteConfirmation}
         onReject={() => {
           setShowDeleteConfirmation(false);
           setDeleteConfirmationData(null);
+        }}
+      />
+
+      <ModalMessage
+        title={'Ви впевнені що хочете оновити данні елементів?'}
+        butonText="Оновити"
+        isOpen={showUpdateConfirmation}
+        onConfirm={() => handleUpdateConfirmation()}
+        onReject={() => {
+          setShowUpdateConfirmation(false);
+        }}
+      />
+
+      <ModalMessage
+        title={'Ви впевнені що хочете видалити елемент?'}
+        butonText="Видалити елемент"
+        isOpen={showDeleteElementConfirmation}
+        onConfirm={() => handleDeleteElementConfirmation()}
+        onReject={() => {
+          setShowDeleteElementConfirmation(false);
         }}
       />
     </div >
