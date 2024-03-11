@@ -212,15 +212,6 @@ console.log(catalogData)
     }
   };
 
-  const handlePageChange = (selectedPage) => {
-    setCurrentPage(selectedPage.selected);
-  };
-
-  const pageCount = Math.ceil(catalogData.length / dataPerPage);
-
-  const offset = currentPage * dataPerPage;
-  const currentData = catalogData.slice(offset, offset + dataPerPage);
-
   return (
     <div className='catalogTable__container'>
       <label className='catalogTable__title'>{`Операції користувача `}
@@ -323,7 +314,7 @@ console.log(catalogData)
       </table>
       <SweetPagination
         currentPageData={setCurrentPageData}
-        dataPerPage={15}
+        dataPerPage={12}
         getData={catalogData}
         navigation={true}
       />
