@@ -623,6 +623,26 @@ app.post("/elements", (req, res) => {
   });
 });
 
+app.post("/catalog/elements/:uuid", async (req, res) => {
+  const { uuid } = req.params;
+  const { element, quantity } = req.body;
+
+  const query = `
+    INSERT INTO exploitation.elements (uuid, name_elmns, cnt_elmnt)
+    VALUES ($1, $2, $3)
+  `;
+
+  const values = [uuid, element, quantity];
+
+  try {
+    const result = await pool.query(query, values);
+    res.json({ message: "Data successfully inserted into database" });
+  } catch (err) {
+    console.error("Error inserting data into database", err);
+    res.status(500).send("Error inserting data into database");
+  }
+});
+
 //delete
 
 app.delete("/elements/:uuid", (req, res) => {

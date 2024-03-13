@@ -7,6 +7,9 @@ import { deleteElementCatalog } from '../../api/deleteElementCatalog';
 import CheckSVG from '../../img/CheckSVG';
 import CloseSVG from '../../img/CloseSVG';
 import { updateElementsData } from '../../api/updateElementsData';
+import AddIcon from '../../img/AddIcon';
+import FormAddElements from '../FormAddElements/FormAddElements';
+import CatalogAddElements from '../CatalogAddElements/CatalogAddElements';
 
 const AdditionalInfo = ({
    dataList = [], 
@@ -33,7 +36,8 @@ const AdditionalInfo = ({
 
   const [showDeleteElementConfirmation, setShowDeleteElementConfirmation] = useState(false);
   const [deleteElementConfirmationData, setDeleteElementConfirmationData] = useState(null);
-  
+  const [showAddElementsForm, setShowElementsForm] = useState(false);
+ 
   const fetchNamesElements = async () => {
     try {
       const response = await fetch("http://localhost:3001/elementsNames");
@@ -108,9 +112,7 @@ const AdditionalInfo = ({
   const handleDoubleClick = async (element) => {
     if (!editingElementRow || editingElementRow === element.id_elmts) {
       setEditingElementRow(element.id_elmts);
-  
       await fetchNamesElements();
-  
       setEditedElementData({ ...element });
     } else {
       setEditingElementRow(element.id_elmts);
@@ -139,6 +141,17 @@ const AdditionalInfo = ({
   //   }
   // };
 
+  const handleShowElementsForm = (event) => {
+    event.stopPropagation();
+    setShowElementsForm(true);
+  }
+
+  const handleHIdeElementsForm = (event) => {
+    event.stopPropagation();
+    setShowElementsForm(false);
+  }
+
+  console.log('selectedRowData', selectedRowData);
   return (
     <div>
       <table className='catalogTable catalogTable_Additional'>
@@ -194,7 +207,11 @@ const AdditionalInfo = ({
                               <th className='catalogTable__th'>Назва елементу</th>
                               <th className='catalogTable__th'>Кількість елементів</th>
                               <th className='catalogTable__th'>Дата додавання</th>
-                              <th className='catalogTable__th'></th>
+                              <th className='catalogTable__th'>
+                                <div className="iconContainer">
+                                  <AddIcon onClick={handleShowElementsForm}/>
+                                </div>
+                              </th>
                             </tr>
                           </thead>
                           {filteredElementData.length !== 0 && filteredElementData.some(element => element.element_uuid !== null) ? (
@@ -223,7 +240,6 @@ const AdditionalInfo = ({
                                         </select>
                                     ) : element.name_elmns}
                                   </td>
-
                                     <td
                                       className='catalogTable__td'
                                       onDoubleClick={() => handleDoubleClick(element)}
@@ -233,6 +249,7 @@ const AdditionalInfo = ({
                                           type="text"
                                           className='catalogTable__input'
                                           value={editedElementData.cnt_elmnt}
+                                          pattern="[1-9][0-9]*"
                                           onChange={(e) => setEditedElementData({ ...editedElementData, cnt_elmnt: e.target.value })}
                                         />
                                       ) : element.cnt_elmnt}
@@ -290,6 +307,8 @@ const AdditionalInfo = ({
           })}
         </tbody>
       </table>
+      {showAddElementsForm && <CatalogAddElements handleHIdeElementsForm={handleHIdeElementsForm} selectedRowData={selectedRowData} />}
+      
       <ModalMessage
         title={uniqueDataList.length === 1 ? "Ви впевнені що хочете видалити запис?" : "Ви впевнені що хочете видалити ДЗ та елементи до нього?"}
         butonText="Видалити запис"

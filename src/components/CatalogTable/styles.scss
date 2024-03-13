@@ -93,3 +93,24 @@
 .sweetPagination .paginationUL .pageItem .activeButton {
   background-color: #326d0c !important;
 }
+
+.addIcon {
+  fill: #326d0c;
+  transition: all linear 0.3s;
+
+
+  &:hover {
+    scale: 1.1;
+    fill: #275309;
+  }
+
+  &:active {
+    fill: #1f3b0c;
+  }
+}
+
+.iconContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
