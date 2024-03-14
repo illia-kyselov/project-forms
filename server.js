@@ -635,7 +635,7 @@ app.post("/catalog/elements/:uuid", async (req, res) => {
   const values = [uuid, element, quantity];
 
   try {
-    const result = await pool.query(query, values);
+    const result = await client.query(query, values);
     res.json({ message: "Data successfully inserted into database" });
   } catch (err) {
     console.error("Error inserting data into database", err);

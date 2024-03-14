@@ -151,7 +151,6 @@ const AdditionalInfo = ({
     setShowElementsForm(false);
   }
 
-  console.log('selectedRowData', selectedRowData);
   return (
     <div>
       <table className='catalogTable catalogTable_Additional'>
@@ -307,7 +306,13 @@ const AdditionalInfo = ({
           })}
         </tbody>
       </table>
-      {showAddElementsForm && <CatalogAddElements handleHIdeElementsForm={handleHIdeElementsForm} selectedRowData={selectedRowData} />}
+      {showAddElementsForm && 
+        <CatalogAddElements 
+          handleHIdeElementsForm={handleHIdeElementsForm} 
+          selectedRowData={selectedRowData}
+          setShowElementsForm={setShowElementsForm}
+        />
+      }
       
       <ModalMessage
         title={uniqueDataList.length === 1 ? "Ви впевнені що хочете видалити запис?" : "Ви впевнені що хочете видалити ДЗ та елементи до нього?"}

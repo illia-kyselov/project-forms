@@ -314,10 +314,10 @@ console.log(catalogData)
         </tbody>
       </table>
       <SweetPagination
+        navigation={true}
         currentPageData={setCurrentPageData}
         dataPerPage={12}
         getData={catalogData}
-        navigation={true}
       />
       {loading && (
         <div className={`loader-overlay ${loading ? 'show' : ''}`}>

@@ -1,12 +1,15 @@
 import NotificationService from "../services/NotificationService";
 
-const addCatalogElement = async (data) => {
+const addCatalogElement = async (uuid, newElement) => {
   try {
     const addResponse = await fetch(
-      `http://localhost:3001/catalog/elements/${data.uuid}`,
+      `http://localhost:3001/catalog/elements/${uuid}`,
       {
         method: "POST",
-        data: data,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newElement),
       }
     );
 

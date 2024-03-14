@@ -8,10 +8,10 @@ import { addCatalogElement } from "../../api/addCatalogElement";
 const CatalogAddElements = ({
   handleHIdeElementsForm,
   selectedRowData,
+  setShowElementsForm,
 }) => {
   const [elements, setElements] = useState([]);
   const [catalogFormAddElementData, setCatalogFormAddElementData] = useState({
-    rowNumber: selectedRowData.element_uuid,
     element: "",
     quantity: 0,
   });
@@ -31,8 +31,10 @@ const CatalogAddElements = ({
     }));
   };
 
-  const handleSubmitAddForm = async () => {
-    await addCatalogElement(catalogFormAddElementData);
+  const handleSubmitAddForm = async (e) => {
+    e.preventDefault();
+    await addCatalogElement(selectedRowData.element_uuid, catalogFormAddElementData);
+    setShowElementsForm(false);
   }
 
   const fetchData = async () => {
@@ -55,6 +57,7 @@ const CatalogAddElements = ({
             <select
               className={`form__input form__input-select`}
               name="element"
+              onChange={handleChange}
             >
               <option value="" selected hidden>Оберіть елемент</option>
               {elements.map((element) => (
