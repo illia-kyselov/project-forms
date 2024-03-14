@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './styles.scss';
-import ReactPaginate from 'react-paginate';
 import SweetPagination from "sweetpagination";
 import { deleteRecordsByUuid } from '../../api/deleteRecordByUuid';
-import { updateRecordByUuid } from '../../api/updateRecordByUuid';
 
 import { BeatLoader } from 'react-spinners';
 import DeleteSVG from '../../img/delete_icon';
-import CloseSVG from '../../img/CloseSVG';
-import CheckSVG from '../../img/CheckSVG';
 import AdditionalInfo from './AdditionalInfo';
 import ArrowDown from '../../img/ArrowDown';
 import ArrowUp from '../../img/ArrowUp';
@@ -58,7 +54,6 @@ const CatalogTable = React.memo(({ user }) => {
     }
   };
 
-console.log(catalogData)
   const fetchOptions = async () => {
     try {
       const response = await fetch("http://localhost:3001/dict_work");
@@ -95,7 +90,7 @@ console.log(catalogData)
     await deleteDZCatalog(uuid, length, work_uuid, expldz_uuid || uuid);
     fetchDataFromDB();
     handleRowClick(clickedRow);
-  };  
+  };
 
   const handleElementDelete = async (uuid) => {
     await deleteElementCatalog(uuid);
@@ -129,6 +124,7 @@ console.log(catalogData)
     try {
       const response = await fetch(`http://localhost:3001/catalog/elements?uuid=${row.uuid}`);
       const data = await response.json();
+
       setElementsCatalog(data);
       setClickedRow(row);
       setArrowUpActive(true);
@@ -301,7 +297,9 @@ console.log(catalogData)
                         editedElementData={editedElementData}
                         setEditingElementRow={setEditingElementRow}
                         setEditedElementData={setEditedElementData}
-                        handleUpdateElements={handleUpdateElements}    
+                        handleUpdateElements={handleUpdateElements}
+                        setElementsCatalog={setElementsCatalog}
+                        clickedRowDZ={clickedRow}
                       />
                     </td>
                   </tr>
@@ -309,15 +307,19 @@ console.log(catalogData)
               </React.Fragment>
             ))
           ) : (
-            <span className='catalogTable__user'>{user.length > 0 ? 'Операцій не знайдено' : "Користувач не залогінений"}</span>
+            <tr>
+              <td colSpan="6">
+                <span className='catalogTable__user'>{user.length > 0 ? 'Операцій не знайдено' : "Користувач не залогінений"}</span>
+              </td>
+            </tr>
           )}
         </tbody>
       </table>
       <SweetPagination
-        navigation={true}
         currentPageData={setCurrentPageData}
         dataPerPage={12}
         getData={catalogData}
+        navigation={true}
       />
       {loading && (
         <div className={`loader-overlay ${loading ? 'show' : ''}`}>

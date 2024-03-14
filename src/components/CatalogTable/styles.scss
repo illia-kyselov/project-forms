@@ -45,6 +45,7 @@
     outline: none;
   }
 
+
   &__th {
     background-color: #f2f2f2;
 
@@ -68,7 +69,7 @@
   &__td {
     cursor: pointer;
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 8px 1px 8px 1px;
     text-align: left;
   }
 

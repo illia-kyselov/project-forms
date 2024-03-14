@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import DraggablePopup from "../DraggablePopup/DraggablePopup";
-import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import Input from "../Input/Input";
 import { addCatalogElement } from "../../api/addCatalogElement";
 
@@ -9,6 +8,8 @@ const CatalogAddElements = ({
   handleHIdeElementsForm,
   selectedRowData,
   setShowElementsForm,
+  setElementsCatalog,
+  clickedRowDZ
 }) => {
   const [elements, setElements] = useState([]);
   const [catalogFormAddElementData, setCatalogFormAddElementData] = useState({
@@ -31,10 +32,21 @@ const CatalogAddElements = ({
     }));
   };
 
+  const handleRowClick = async (uuid) => {
+    try {
+      const response = await fetch(`http://localhost:3001/catalog/elements?uuid=${uuid}`);
+      const data = await response.json();
+      setElementsCatalog(data);
+    } catch (error) {
+      console.error('Error updating data', error);
+    }
+  }
+
   const handleSubmitAddForm = async (e) => {
     e.preventDefault();
     await addCatalogElement(selectedRowData.element_uuid, catalogFormAddElementData);
     setShowElementsForm(false);
+    handleRowClick(clickedRowDZ.uuid);
   }
 
   const fetchData = async () => {
@@ -57,15 +69,15 @@ const CatalogAddElements = ({
             <select
               className={`form__input form__input-select`}
               name="element"
+              defaultValue={catalogFormAddElementData.element || ''}
               onChange={handleChange}
             >
-              <option value="" selected hidden>Оберіть елемент</option>
+              <option value="" hidden>Оберіть елемент</option>
               {elements.map((element) => (
                 <option
                   key={element}
                   value={element}
                   className="form__input-option"
-                  onChange={handleChange}
                 >
                   {element}
                 </option>

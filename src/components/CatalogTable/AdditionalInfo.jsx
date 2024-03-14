@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import markerImage from '../../img';
-import ArrowDown from '../../img/ArrowDown';
-import ArrowUp from '../../img/ArrowUp';
 import ModalMessage from '../ModalMessage/ModalMessage';
-import { deleteElementCatalog } from '../../api/deleteElementCatalog';
 import CheckSVG from '../../img/CheckSVG';
 import CloseSVG from '../../img/CloseSVG';
-import { updateElementsData } from '../../api/updateElementsData';
 import AddIcon from '../../img/AddIcon';
-import FormAddElements from '../FormAddElements/FormAddElements';
 import CatalogAddElements from '../CatalogAddElements/CatalogAddElements';
 
 const AdditionalInfo = ({
@@ -21,6 +16,8 @@ const AdditionalInfo = ({
    setEditingElementRow,
    setEditedElementData,
    handleUpdateElements,
+   setElementsCatalog,
+   clickedRowDZ,
   }) => {
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [clickedRow, setClickedRow] = useState(null);
@@ -73,16 +70,6 @@ const AdditionalInfo = ({
     data.element_uuid === (selectedRowData && selectedRowData.element_uuid)
   );
 
-  // const handleArrowUpClick = () => {
-  //   setArrowUpActiveInfo(false);
-  //   setArrowDownActiveInfo(true);
-  // };
-
-  // const handleArrowDownClick = () => {
-  //   setArrowDownActiveInfo(false);
-  //   setArrowUpActiveInfo(true);
-  // };
-
   const handleDeleteConfirmation = async () => {
     if (deleteConfirmationData) {
       await handleDzDelete(
@@ -126,21 +113,6 @@ const AdditionalInfo = ({
     setEditedElementData({});
   };
 
-  // const handleUpdate = async () => {
-  //   try {
-  //     const updatePayload = {
-  //     element: editedElementData.name_elmns,
-  //     quantity: editedElementData.cnt_elmnt,
-  //     };
-  //     await updateElementsData(editedElementData.id_elmts, updatePayload);
-  //     setEditingElementRow(null);
-  //     setEditedElementData({});
-  //     handleRowClickUpdate(clickedRow);
-  //   } catch (error) {
-  //     console.error('Error updating data', error);
-  //   }
-  // };
-
   const handleShowElementsForm = (event) => {
     event.stopPropagation();
     setShowElementsForm(true);
@@ -165,7 +137,7 @@ const AdditionalInfo = ({
         </thead>
         <tbody>
           {uniqueDataList.map((data, index) => {
-            const { num_dz, dz_form, expldz_uuid, expldzdate, id_elmts } = data;
+            const { num_dz, dz_form, expldz_uuid, expldzdate } = data;
             const imagePath = markerImage[num_dz];
             const rowClassName = clickedRow === index ? 'clicked' : '';
             return (
@@ -175,10 +147,6 @@ const AdditionalInfo = ({
                   <td className='catalogTable__td' onClick={handleRowClick(expldz_uuid, index)}>{num_dz}</td>
                   <td className='catalogTable__td' onClick={handleRowClick(expldz_uuid, index)}>{dz_form}</td>
                   <td className='catalogTable__td' onClick={handleRowClick(expldz_uuid, index)}>{formatDate(expldzdate)}</td>
-                  {/* <td className='catalogTable__td'>
-                    {<ArrowDown onClick={handleArrowDownClick} arrowDownActiveInfo={arrowDownActiveInfo} />}
-                    {<ArrowUp onClick={handleArrowUpClick} arrowUpActiveInfo={arrowUpActiveInfo} />}
-                  </td> */}
                   <td className='catalogTable__td'>
                     {<button
                       className="delete-icon"
@@ -309,10 +277,11 @@ const AdditionalInfo = ({
       {showAddElementsForm && 
         <CatalogAddElements 
           handleHIdeElementsForm={handleHIdeElementsForm} 
-          selectedRowData={selectedRowData}
+          selectedRowData={selectedRowData} 
           setShowElementsForm={setShowElementsForm}
-        />
-      }
+          setElementsCatalog={setElementsCatalog}
+          clickedRowDZ={clickedRowDZ}
+        />}
       
       <ModalMessage
         title={uniqueDataList.length === 1 ? "Ви впевнені що хочете видалити запис?" : "Ви впевнені що хочете видалити ДЗ та елементи до нього?"}
