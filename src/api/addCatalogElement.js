@@ -17,9 +17,6 @@ const addCatalogElement = async (uuid, newElement) => {
       NotificationService.showErrorNotification("Error adding element record");
       return;
     }
-
-    const result = await addResponse.json();
-    NotificationService.showSuccessNotification("Record added successfully", result);
   } catch (error) {
     console.error("Error add record:", error);
   }

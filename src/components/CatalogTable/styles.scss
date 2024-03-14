@@ -13,7 +13,6 @@
 
   &__input,
   &__select {
-    background-color: #3e8a0bb7;
     display: inline-flex;
     flex-wrap: nowrap;
     box-sizing: border-box;
@@ -23,7 +22,6 @@
     padding: .5em;
     min-width: 100px;
     max-width: 500px;
-    color: #fff;
   }
 
   &__option:checked {

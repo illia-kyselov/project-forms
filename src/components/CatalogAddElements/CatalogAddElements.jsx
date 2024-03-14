@@ -8,7 +8,7 @@ const CatalogAddElements = ({
   selectedRowData,
   setShowElementsForm,
   setElementsCatalog,
-  clickedRowDZ
+  clickedRowDZ,
 }) => {
   const [elements, setElements] = useState([]);
   const [catalogFormAddElementData, setCatalogFormAddElementData] = useState({
@@ -43,7 +43,7 @@ const CatalogAddElements = ({
 
   const handleSubmitAddForm = async (e) => {
     e.preventDefault();
-    await addCatalogElement(selectedRowData.element_uuid, catalogFormAddElementData);
+    await addCatalogElement(selectedRowData.expldz_uuid, catalogFormAddElementData);
     setShowElementsForm(false);
     handleRowClick(clickedRowDZ.uuid);
   }
@@ -93,6 +93,7 @@ const CatalogAddElements = ({
               min="1"
               pattern="[1-9][0-9]*"
               errorMessage={"Введіть кількість елементів"}
+              placeholder={'Введіть кількість елементів'}
             />
           </div>
           <div className="form__button-container">

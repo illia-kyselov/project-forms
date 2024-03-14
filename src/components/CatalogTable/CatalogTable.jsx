@@ -268,7 +268,9 @@ const CatalogTable = React.memo(({ user }) => {
                       />}
                   </td>
                   <td className='catalogTable__td catalogTable__td-edit'>
-                    <DeleteSVG onClick={() => handleDeleteClick(row.uuid)} />   
+                  <div className="iconContainer">
+                      <DeleteSVG onClick={() => handleDeleteClick(row.uuid)} />   
+                  </div>
                   </td>
                 </tr>
                 {clickedRow && clickedRow.uuid === row.uuid && (

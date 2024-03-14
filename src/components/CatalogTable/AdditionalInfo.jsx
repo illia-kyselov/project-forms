@@ -21,7 +21,6 @@ const AdditionalInfo = ({
   }) => {
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [clickedRow, setClickedRow] = useState(null);
-
   const [arrowUpActiveInfo, setArrowUpActiveInfo] = useState(true);
 
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
@@ -51,22 +50,28 @@ const AdditionalInfo = ({
   const handleRowClick = (expldz_uuid, index) => () => {
     const selectedData = dataList.find((data) => data.expldz_uuid === expldz_uuid);
     setSelectedRowData(selectedData);
-    setClickedRow(index);
+    if (index) {
+      setClickedRow(index);
+    }
     setArrowUpActiveInfo(true);
   };
+  
 
-  const uniqueDataList = dataList.filter((data, index, self) =>
-    index === self.findIndex((d) =>
-      d.work_uuid === data.work_uuid &&
-      d.element_uuid === data.element_uuid &&
-      d.expldz_uuid === data.expldz_uuid
+  const uniqueDataList = Array.isArray(dataList)
+  ? dataList.filter((data, index, self) =>
+      index === self.findIndex((d) =>
+        d.work_uuid === data.work_uuid &&
+        d.element_uuid === data.element_uuid &&
+        d.expldz_uuid === data.expldz_uuid
+      ))
+  : [];
+
+  const filteredElementData = Array.isArray(dataList)
+  ? dataList.filter(data =>
+      data.work_uuid === (selectedRowData && selectedRowData.work_uuid) &&
+      data.element_uuid === (selectedRowData && selectedRowData.element_uuid)
     )
-  );
-
-  const filteredElementData = dataList.filter(data =>
-    data.work_uuid === (selectedRowData && selectedRowData.work_uuid) &&
-    data.element_uuid === (selectedRowData && selectedRowData.element_uuid)
-  );
+  : [];
 
   const handleDeleteConfirmation = async () => {
     if (deleteConfirmationData) {
@@ -104,7 +109,6 @@ const AdditionalInfo = ({
       setEditedElementData({ ...element });
     }
   };
-  
 
   const handleCancelEdit = () => {
     setEditingElementRow(null);
