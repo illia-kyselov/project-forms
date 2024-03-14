@@ -22,7 +22,6 @@ const CatalogTable = React.memo(({ user }) => {
   });
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
-  const [options, setOptions] = useState([]);
   const [elementsCatalog, setElementsCatalog] = useState(null);
   const [clickedRow, setClickedRow] = useState(null);
   const [arrowDownActive, setArrowDownActive] = useState(true);
@@ -33,14 +32,7 @@ const CatalogTable = React.memo(({ user }) => {
   const [editingElementRow, setEditingElementRow] = useState(null);
   const [editedElementData, setEditedElementData] = useState({});
 
-  const [currentPage, setCurrentPage] = useState(0);
-  const dataPerPage = 10;
   const [currentPageData, setCurrentPageData] = useState([]);
-
-  useEffect(() => {
-    fetchDataFromDB();
-    fetchOptions();
-  }, [user]);
 
   const fetchDataFromDB = async () => {
     try {
@@ -54,15 +46,10 @@ const CatalogTable = React.memo(({ user }) => {
     }
   };
 
-  const fetchOptions = async () => {
-    try {
-      const response = await fetch("http://localhost:3001/dict_work");
-      const data = await response.json();
-      setOptions(data);
-    } catch (error) {
-      console.error("Error fetching data", error);
-    }
-  };
+  useEffect(() => {
+    fetchDataFromDB();
+    // eslint-disable-next-line
+  }, [user]);
 
   const handleDeleteClick = (rowUuid) => {
     setSelectedRowUuid(rowUuid);
@@ -136,35 +123,34 @@ const CatalogTable = React.memo(({ user }) => {
 
   const filteredData = currentPageData.filter((row) => {
     const lowerCaseQuery = searchQuery.toLowerCase();
-
+  
     return Object.entries(row).some(([key, value]) => {
       const lowerCaseValue = value ? value.toString().toLowerCase() : '';
-
+  
       switch (key) {
         case 'cdate':
           if (!isNaN(new Date(value).getTime())) {
             const formattedDate = formatDate(value);
             return formattedDate.includes(lowerCaseQuery);
           }
-          break;
-
+          return false;
+  
         case 'is_doc':
           return lowerCaseQuery === '' || (lowerCaseQuery === '+' && value) || (lowerCaseQuery === '-' && !value);
-
+  
         case 'address':
-          return lowerCaseValue.includes(lowerCaseQuery) || lowerCaseQuery === '';
-
         case 'type_work':
-          return lowerCaseValue.includes(lowerCaseQuery);
-
+          return lowerCaseValue.includes(lowerCaseQuery) || lowerCaseQuery === '';
+  
         case 'id_doc':
           return lowerCaseValue.includes(lowerCaseQuery) || lowerCaseQuery === 'не документ';
-
+  
         default:
           return false;
       }
     });
   });
+  
 
   const sortedData = filteredData.slice().sort((a, b) => {
     const aValue = sortOrder.field ? a[sortOrder.field] : null;

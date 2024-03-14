@@ -22,7 +22,6 @@ const AdditionalInfo = ({
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [clickedRow, setClickedRow] = useState(null);
 
-  const [arrowDownActiveInfo, setArrowDownActiveInfo] = useState(false);
   const [arrowUpActiveInfo, setArrowUpActiveInfo] = useState(true);
 
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
@@ -53,7 +52,6 @@ const AdditionalInfo = ({
     const selectedData = dataList.find((data) => data.expldz_uuid === expldz_uuid);
     setSelectedRowData(selectedData);
     setClickedRow(index);
-    setArrowDownActiveInfo(false);
     setArrowUpActiveInfo(true);
   };
 
