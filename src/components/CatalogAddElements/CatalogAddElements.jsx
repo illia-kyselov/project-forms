@@ -3,7 +3,6 @@ import DraggablePopup from "../DraggablePopup/DraggablePopup";
 import Input from "../Input/Input";
 import { addCatalogElement } from "../../api/addCatalogElement";
 
-
 const CatalogAddElements = ({
   handleHIdeElementsForm,
   selectedRowData,

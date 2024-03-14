@@ -62,7 +62,7 @@ const FormAddElements = ({
               onChange={handleChange}
               min="1"
               pattern="[1-9][0-9]*"
-              errorMessage={"Введіть кількість елементів"}
+              errorMessage={"Введіть правильну кількість елементів"}
               hasError={invalidInputs.includes("quantity")}
             />
           </div>
