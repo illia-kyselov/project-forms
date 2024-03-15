@@ -9,6 +9,7 @@ const CatalogAddElements = ({
   setShowElementsForm,
   setElementsCatalog,
   clickedRowDZ,
+  setFilteredElementData,
 }) => {
   const [elements, setElements] = useState([]);
   const [catalogFormAddElementData, setCatalogFormAddElementData] = useState({
@@ -36,6 +37,7 @@ const CatalogAddElements = ({
       const response = await fetch(`http://localhost:3001/catalog/elements?uuid=${uuid}`);
       const data = await response.json();
       setElementsCatalog(data);
+      setFilteredElementData(data);
     } catch (error) {
       console.error('Error updating data', error);
     }

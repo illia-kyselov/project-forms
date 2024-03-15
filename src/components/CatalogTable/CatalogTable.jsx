@@ -107,6 +107,16 @@ const CatalogTable = React.memo(({ user }) => {
     setSearchQuery(query);
   };
 
+  const handleElementsAddClick = async (uuid) => {
+    try {
+      const response = await fetch(`http://localhost:3001/catalog/elements?uuid=${uuid}`);
+      const data = await response.json();
+      setElementsCatalog(data);
+    } catch (error) {
+      console.error('Error updating data', error);
+    }
+  }
+
   const handleRowClick = async (row) => {
     try {
       const response = await fetch(`http://localhost:3001/catalog/elements?uuid=${row.uuid}`);
@@ -288,6 +298,7 @@ const CatalogTable = React.memo(({ user }) => {
                         handleUpdateElements={handleUpdateElements}
                         setElementsCatalog={setElementsCatalog}
                         clickedRowDZ={clickedRow}
+                        handleElementsAddClick={handleElementsAddClick}
                       />
                     </td>
                   </tr>

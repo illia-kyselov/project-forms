@@ -7,18 +7,18 @@ import AddIcon from '../../img/AddIcon';
 import CatalogAddElements from '../CatalogAddElements/CatalogAddElements';
 
 const AdditionalInfo = ({
-   dataList = [], 
-   formatDate, 
-   handleDzDelete, 
-   handleElementDelete,
-   editingElementRow,
-   editedElementData,
-   setEditingElementRow,
-   setEditedElementData,
-   handleUpdateElements,
-   setElementsCatalog,
-   clickedRowDZ,
-  }) => {
+  dataList = [],
+  formatDate,
+  handleDzDelete,
+  handleElementDelete,
+  editingElementRow,
+  editedElementData,
+  setEditingElementRow,
+  setEditedElementData,
+  handleUpdateElements,
+  setElementsCatalog,
+  clickedRowDZ,
+}) => {
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [clickedRow, setClickedRow] = useState(null);
   const [arrowUpActiveInfo, setArrowUpActiveInfo] = useState(true);
@@ -32,7 +32,8 @@ const AdditionalInfo = ({
   const [showDeleteElementConfirmation, setShowDeleteElementConfirmation] = useState(false);
   const [deleteElementConfirmationData, setDeleteElementConfirmationData] = useState(null);
   const [showAddElementsForm, setShowElementsForm] = useState(false);
- 
+  const [filteredElementData, setFilteredElementData] = useState([]);
+
   const fetchNamesElements = async () => {
     try {
       const response = await fetch("http://localhost:3001/elementsNames");
@@ -42,36 +43,40 @@ const AdditionalInfo = ({
       console.error("Error fetching data", error);
     }
   };
-  
+
   useEffect(() => {
     fetchNamesElements();
   }, []);
-  
+
   const handleRowClick = (expldz_uuid, index) => () => {
     const selectedData = dataList.find((data) => data.expldz_uuid === expldz_uuid);
     setSelectedRowData(selectedData);
-    if (index) {
+    if (index !== null) {
       setClickedRow(index);
     }
     setArrowUpActiveInfo(true);
   };
-  
+
 
   const uniqueDataList = Array.isArray(dataList)
-  ? dataList.filter((data, index, self) =>
+    ? dataList.filter((data, index, self) =>
       index === self.findIndex((d) =>
         d.work_uuid === data.work_uuid &&
         d.element_uuid === data.element_uuid &&
         d.expldz_uuid === data.expldz_uuid
       ))
-  : [];
+    : [];
 
-  const filteredElementData = Array.isArray(dataList)
-  ? dataList.filter(data =>
-      data.work_uuid === (selectedRowData && selectedRowData.work_uuid) &&
-      data.element_uuid === (selectedRowData && selectedRowData.element_uuid)
-    )
-  : [];
+  // const filteredElementData = Array.isArray(dataList)
+  // ? dataList.filter(data =>
+  //     data.work_uuid === (selectedRowData && selectedRowData.work_uuid) &&
+  //     data.element_uuid === (selectedRowData && selectedRowData.element_uuid)
+  //   )
+  // : [];
+
+  useEffect(() => {
+    setFilteredElementData(dataList);
+  }, [dataList]);
 
   const handleDeleteConfirmation = async () => {
     if (deleteConfirmationData) {
@@ -95,8 +100,8 @@ const AdditionalInfo = ({
   };
 
   const handleUpdateConfirmation = async () => {
-      await handleUpdateElements();
-      setShowUpdateConfirmation(false);
+    await handleUpdateElements();
+    setShowUpdateConfirmation(false);
   };
 
   const handleDoubleClick = async (element) => {
@@ -178,7 +183,7 @@ const AdditionalInfo = ({
                               <th className='catalogTable__th'>Дата додавання</th>
                               <th className='catalogTable__th'>
                                 <div className="iconContainer">
-                                  <AddIcon onClick={handleShowElementsForm}/>
+                                  <AddIcon onClick={handleShowElementsForm} />
                                 </div>
                               </th>
                             </tr>
@@ -190,7 +195,7 @@ const AdditionalInfo = ({
                                 .map((element, elementIndex) => (
                                   <tr key={elementIndex} className='catalogTable__tr'>
                                     <td className='catalogTable__td' onDoubleClick={() => handleDoubleClick(element)}>
-                                    {editingElementRow === element.id_elmts && namesElements && namesElements.length > 0 ? (
+                                      {editingElementRow === element.id_elmts && namesElements && namesElements.length > 0 ? (
                                         <select
                                           className="catalogTable__select"
                                           onChange={(e) => setEditedElementData({ ...editedElementData, name_elmns: e.target.value })}
@@ -207,8 +212,8 @@ const AdditionalInfo = ({
                                             </option>
                                           ))}
                                         </select>
-                                    ) : element.name_elmns}
-                                  </td>
+                                      ) : element.name_elmns}
+                                    </td>
                                     <td
                                       className='catalogTable__td'
                                       onDoubleClick={() => handleDoubleClick(element)}
@@ -232,7 +237,7 @@ const AdditionalInfo = ({
                                     <td className='catalogTable__td'>
                                       {editingElementRow === element.id_elmts ? (
                                         <>
-                                          <CheckSVG 
+                                          <CheckSVG
                                             onClick={() => {
                                               setShowUpdateConfirmation(true);
                                             }}
@@ -276,15 +281,17 @@ const AdditionalInfo = ({
           })}
         </tbody>
       </table>
-      {showAddElementsForm && 
-        <CatalogAddElements 
-          handleHIdeElementsForm={handleHIdeElementsForm} 
-          selectedRowData={selectedRowData} 
+      {showAddElementsForm &&
+        <CatalogAddElements
+          handleHIdeElementsForm={handleHIdeElementsForm}
+          selectedRowData={selectedRowData}
           setShowElementsForm={setShowElementsForm}
           setElementsCatalog={setElementsCatalog}
           clickedRowDZ={clickedRowDZ}
+          handleRowClick={handleRowClick}
+          setFilteredElementData={setFilteredElementData}
         />}
-      
+
       <ModalMessage
         title={uniqueDataList.length === 1 ? "Ви впевнені що хочете видалити запис?" : "Ви впевнені що хочете видалити ДЗ та елементи до нього?"}
         butonText="Видалити запис"
