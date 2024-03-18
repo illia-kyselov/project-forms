@@ -123,10 +123,10 @@ const CatalogTable = React.memo(({ user }) => {
 
   const filteredData = currentPageData.filter((row) => {
     const lowerCaseQuery = searchQuery.toLowerCase();
-  
+
     return Object.entries(row).some(([key, value]) => {
       const lowerCaseValue = value ? value.toString().toLowerCase() : '';
-  
+
       switch (key) {
         case 'cdate':
           if (!isNaN(new Date(value).getTime())) {
@@ -134,23 +134,23 @@ const CatalogTable = React.memo(({ user }) => {
             return formattedDate.includes(lowerCaseQuery);
           }
           return false;
-  
+
         case 'is_doc':
           return lowerCaseQuery === '' || (lowerCaseQuery === '+' && value) || (lowerCaseQuery === '-' && !value);
-  
+
         case 'address':
         case 'type_work':
           return lowerCaseValue.includes(lowerCaseQuery) || lowerCaseQuery === '';
-  
+
         case 'id_doc':
           return lowerCaseValue.includes(lowerCaseQuery) || lowerCaseQuery === 'не документ';
-  
+
         default:
           return false;
       }
     });
   });
-  
+
 
   const sortedData = filteredData.slice().sort((a, b) => {
     const aValue = sortOrder.field ? a[sortOrder.field] : null;
@@ -180,11 +180,11 @@ const CatalogTable = React.memo(({ user }) => {
     setArrowDownActive(false);
   };
 
-  const handleUpdateElements  = async () => {
+  const handleUpdateElements = async () => {
     try {
       const updatePayload = {
-      element: editedElementData.name_elmns,
-      quantity: editedElementData.cnt_elmnt,
+        element: editedElementData.name_elmns,
+        quantity: editedElementData.cnt_elmnt,
       };
       await updateElementsData(editedElementData.id_elmts, updatePayload);
       setEditingElementRow(null);
@@ -245,17 +245,19 @@ const CatalogTable = React.memo(({ user }) => {
                   className={`catalogTable__tr ${clickedRow && clickedRow.uuid === row.uuid ? 'clicked' : ''}`}
                 >
                   <td className='catalogTable__td' onClick={() => handleRowClick(row)}>
-                    {row.address}
+                    <div className="catalogTable__td-title">
+                      {row.address}
+                    </div>
                   </td>
                   <td className='catalogTable__td' onClick={() => handleRowClick(row)}>
-                    {row.id_doc ? row.id_doc : 'Не документ'}
-                    </td>
-                  <td className='catalogTable__td' onClick={() => handleRowClick(row)}>
-                    {row.type_work}
+                  <div className="catalogTable__td-title">{row.id_doc ? row.id_doc : 'Не документ'}</div>
                   </td>
                   <td className='catalogTable__td' onClick={() => handleRowClick(row)}>
-                    {formatDate(row.cdate)}
-                    </td>
+                  <div className="catalogTable__td-title">{row.type_work}</div>
+                  </td>
+                  <td className='catalogTable__td' onClick={() => handleRowClick(row)}>
+                  <div className="catalogTable__td-title">{formatDate(row.cdate)}</div>
+                  </td>
                   <td className='catalogTable__td catalogTable__td-edit'>
                     <ArrowDown
                       onClick={() => handleArrowDownClickCatalog(row)}
@@ -268,9 +270,9 @@ const CatalogTable = React.memo(({ user }) => {
                       />}
                   </td>
                   <td className='catalogTable__td catalogTable__td-edit'>
-                  <div className="iconContainer">
-                      <DeleteSVG onClick={() => handleDeleteClick(row.uuid)} />   
-                  </div>
+                    <div className="iconContainer">
+                      <DeleteSVG onClick={() => handleDeleteClick(row.uuid)} />
+                    </div>
                   </td>
                 </tr>
                 {clickedRow && clickedRow.uuid === row.uuid && (

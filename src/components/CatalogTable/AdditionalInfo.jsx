@@ -67,13 +67,6 @@ const AdditionalInfo = ({
       ))
     : [];
 
-  // const filteredElementData = Array.isArray(dataList)
-  // ? dataList.filter(data =>
-  //     data.work_uuid === (selectedRowData && selectedRowData.work_uuid) &&
-  //     data.element_uuid === (selectedRowData && selectedRowData.element_uuid)
-  //   )
-  // : [];
-
   useEffect(() => {
     setFilteredElementData(dataList);
   }, [dataList]);
@@ -150,25 +143,29 @@ const AdditionalInfo = ({
             return (
               <React.Fragment key={index}>
                 <tr className={`catalogTable__tr ${rowClassName}`}>
-                  <td className='catalogTable__td' onClick={handleRowClick(expldz_uuid, index)}>{imagePath && <img src={imagePath} alt={`photoDz-${index}`} style={{ width: '30px' }} />}</td>
+                  <td className='catalogTable__td' onClick={handleRowClick(expldz_uuid, index)}>
+                    <div className="catalogTable__td-title">{imagePath && <img src={imagePath} alt={`photoDz-${index}`} style={{ width: '30px' }} />}</div>
+                  </td>
                   <td className='catalogTable__td' onClick={handleRowClick(expldz_uuid, index)}>{num_dz}</td>
                   <td className='catalogTable__td' onClick={handleRowClick(expldz_uuid, index)}>{dz_form}</td>
                   <td className='catalogTable__td' onClick={handleRowClick(expldz_uuid, index)}>{formatDate(expldzdate)}</td>
                   <td className='catalogTable__td'>
-                    {<button
-                      className="delete-icon"
-                      onClick={() => {
-                        setDeleteConfirmationData({
-                          element_uuid: data.element_uuid,
-                          length: uniqueDataList.length,
-                          work_uuid: data.work_uuid,
-                          expldz_uuid: data.expldz_uuid,
-                        });
-                        setShowDeleteConfirmation(true);
-                      }}
-                    >
-                      X
-                    </button>}
+                    <div className="iconContainer">
+                      {<button
+                        className="delete-icon"
+                        onClick={() => {
+                          setDeleteConfirmationData({
+                            element_uuid: data.element_uuid,
+                            length: uniqueDataList.length,
+                            work_uuid: data.work_uuid,
+                            expldz_uuid: data.expldz_uuid,
+                          });
+                          setShowDeleteConfirmation(true);
+                        }}
+                      >
+                        X
+                      </button>}
+                    </div>
                   </td>
                 </tr>
                 {
@@ -226,7 +223,8 @@ const AdditionalInfo = ({
                                           pattern="[1-9][0-9]*"
                                           onChange={(e) => setEditedElementData({ ...editedElementData, cnt_elmnt: e.target.value })}
                                         />
-                                      ) : element.cnt_elmnt}
+                                      ) :
+                                        element.cnt_elmnt}
                                     </td>
                                     <td
                                       className='catalogTable__td'
@@ -247,15 +245,17 @@ const AdditionalInfo = ({
                                         </>
                                       ) : (
                                         <>
-                                          <button
-                                            className="delete-icon"
-                                            onClick={() => {
-                                              setDeleteElementConfirmationData(element.id_elmts);
-                                              setShowDeleteElementConfirmation(true);
-                                            }}
-                                          >
-                                            X
-                                          </button>
+                                          <div className="iconContainer">
+                                            <button
+                                              className="delete-icon"
+                                              onClick={() => {
+                                                setDeleteElementConfirmationData(element.id_elmts);
+                                                setShowDeleteElementConfirmation(true);
+                                              }}
+                                            >
+                                              X
+                                            </button>
+                                          </div>
                                         </>
                                       )}
                                     </td>
