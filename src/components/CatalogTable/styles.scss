@@ -10,6 +10,22 @@
     margin-left: 20px;
     width: calc(100% - 20px);
   }
+  &__tr {
+    color: #232023;
+  }
+
+  .catalogTable__td-logo:first-child{
+    width: 30px;
+    padding: 1px 2px;
+  }
+
+  &__input {
+    width: 40px;
+  }
+
+  &__select {
+    width: 300px;
+  }
 
   &__input,
   &__select {
@@ -20,8 +36,8 @@
     border-radius: 5px;
     font-size: 1em;
     padding: .5em;
-    min-width: 100px;
-    max-width: 500px;
+    // min-width: 50px;
+    // max-width: 200px;
   }
 
   &__option:checked {
@@ -68,7 +84,7 @@
     cursor: pointer;
     border: 1px solid #ddd;
     padding: 8px 1px 8px 1px;
-    text-align: left;
+    text-align: center;
   }
 
   &__user {

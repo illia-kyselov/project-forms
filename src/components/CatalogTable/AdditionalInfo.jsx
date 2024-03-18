@@ -143,8 +143,8 @@ const AdditionalInfo = ({
             return (
               <React.Fragment key={index}>
                 <tr className={`catalogTable__tr ${rowClassName}`}>
-                  <td className='catalogTable__td' onClick={handleRowClick(expldz_uuid, index)}>
-                    <div className="catalogTable__td-title">{imagePath && <img src={imagePath} alt={`photoDz-${index}`} style={{ width: '30px' }} />}</div>
+                  <td className='catalogTable__td catalogTable__td-logo' onClick={handleRowClick(expldz_uuid, index)}>
+                    {imagePath && <img src={imagePath} alt={`photoDz-${index}`} style={{ width: '30px', height: '30px'}} />}
                   </td>
                   <td className='catalogTable__td' onClick={handleRowClick(expldz_uuid, index)}>{num_dz}</td>
                   <td className='catalogTable__td' onClick={handleRowClick(expldz_uuid, index)}>{dz_form}</td>

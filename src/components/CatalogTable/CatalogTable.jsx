@@ -195,6 +195,8 @@ const CatalogTable = React.memo(({ user }) => {
     }
   };
 
+  console.log('clickedRow', clickedRow)
+  console.log('sortedData', sortedData)
   return (
     <div className='catalogTable__container'>
       <label className='catalogTable__title'>{`Операції користувача `}
