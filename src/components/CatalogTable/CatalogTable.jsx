@@ -48,7 +48,6 @@ const CatalogTable = React.memo(({ user }) => {
 
   useEffect(() => {
     fetchDataFromDB();
-    // eslint-disable-next-line
   }, [user]);
 
   const handleDeleteClick = (rowUuid) => {
@@ -181,6 +180,15 @@ const CatalogTable = React.memo(({ user }) => {
   };
 
   const handleUpdateElements = async () => {
+    if (
+      editedElementData.name_elmns === elementsCatalog.find(data => data.id_elmts === editedElementData.id_elmts)?.name_elmns &&
+      editedElementData.cnt_elmnt === elementsCatalog.find(data => data.id_elmts === editedElementData.id_elmts)?.cnt_elmnt
+    ) {
+      setEditingElementRow(null);
+      setEditedElementData({});
+      handleRowClick(clickedRow);
+      return;
+    }
     try {
       const updatePayload = {
         element: editedElementData.name_elmns,
@@ -195,8 +203,6 @@ const CatalogTable = React.memo(({ user }) => {
     }
   };
 
-  console.log('clickedRow', clickedRow)
-  console.log('sortedData', sortedData)
   return (
     <div className='catalogTable__container'>
       <label className='catalogTable__title'>{`Операції користувача `}
@@ -244,7 +250,7 @@ const CatalogTable = React.memo(({ user }) => {
               <React.Fragment key={index}>
                 <tr
                   key={index}
-                  className={`catalogTable__tr ${clickedRow && clickedRow.uuid === row.uuid ? 'clicked' : ''}`}
+                  className={`catalogTable__tr ${clickedRow && clickedRow.id_wrk_tbl === row.id_wrk_tbl ? 'clicked' : ''}`}
                 >
                   <td className='catalogTable__td' onClick={() => handleRowClick(row)}>
                     <div className="catalogTable__td-title">

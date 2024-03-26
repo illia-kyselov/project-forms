@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef } from "react";
 import NotificationService from "../../services/NotificationService";
 import { validateEmptyInputs } from "../../helpers/validate-empty-inputs";

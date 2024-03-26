@@ -16,6 +16,7 @@ const CatalogAddElements = ({
     element: "",
     quantity: 0,
   });
+  const [invalidInputs, setInvalidInputs] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -23,6 +24,8 @@ const CatalogAddElements = ({
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    setInvalidInputs((prevInvalidInputs) => prevInvalidInputs.filter((input) => input !== name));
+  
     setCatalogFormAddElementData((prevFormData) => ({
       ...prevFormData,
       [name]:
@@ -31,6 +34,7 @@ const CatalogAddElements = ({
           : value,
     }));
   };
+  
 
   const handleRowClick = async (uuid) => {
     try {
@@ -45,10 +49,25 @@ const CatalogAddElements = ({
 
   const handleSubmitAddForm = async (e) => {
     e.preventDefault();
+    
+    if (!catalogFormAddElementData.element || catalogFormAddElementData.quantity === 0) {
+      setInvalidInputs(['element', 'quantity']);
+      return;
+    }
+    
+    if (!/^[1-9][0-9]*$/.test(catalogFormAddElementData.quantity)) {
+      setInvalidInputs(['quantity']);
+      return;
+    }
+    
+    setInvalidInputs([]);
+    
     await addCatalogElement(selectedRowData.expldz_uuid, catalogFormAddElementData);
     setShowElementsForm(false);
     handleRowClick(clickedRowDZ.uuid);
-  }
+  };
+  
+  
 
   const fetchData = async () => {
     try {
@@ -68,7 +87,7 @@ const CatalogAddElements = ({
           <div className="form__group">
             <label className="form-input_title">Елемент</label>
             <select
-              className={`form__input form__input-select`}
+              className={`form__input form__input-select ${invalidInputs.includes("element") ? "has-error" : ""}`}
               name="element"
               defaultValue={catalogFormAddElementData.element || ''}
               onChange={handleChange}
@@ -84,19 +103,25 @@ const CatalogAddElements = ({
                 </option>
               ))}
             </select>
+            {invalidInputs.includes("element") && (
+                <div className="error">Оберіть елемент зі списку</div>
+              )}
           </div>
           <div className="form__group">
             <label className="form-input_title">Кількість елементів</label>
             <Input
               type="number"
               name="quantity"
-              className={`form__input`}
+              className={`form__input ${invalidInputs.includes("quantity") ? "has-error" : ""}`}
               onChange={handleChange}
               min="1"
               pattern="[1-9][0-9]*"
               errorMessage={"Введіть кількість елементів"}
               placeholder={'Введіть кількість елементів'}
             />
+            {invalidInputs.includes("quantity") && (
+              <div className="error">Введіть правильну кількість елементів</div>
+            )}
           </div>
           <div className="form__button-container">
             <button className="form__button" onClick={handleSubmitAddForm}>

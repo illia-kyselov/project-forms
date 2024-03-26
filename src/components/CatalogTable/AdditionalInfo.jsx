@@ -5,6 +5,7 @@ import CheckSVG from '../../img/CheckSVG';
 import CloseSVG from '../../img/CloseSVG';
 import AddIcon from '../../img/AddIcon';
 import CatalogAddElements from '../CatalogAddElements/CatalogAddElements';
+import NotificationService from "../../services/NotificationService";
 
 const AdditionalInfo = ({
   dataList = [],
@@ -219,9 +220,16 @@ const AdditionalInfo = ({
                                         <input
                                           type="text"
                                           className='catalogTable__input'
-                                          value={editedElementData.cnt_elmnt}
+                                          value={editedElementData.cnt_elmnt || ''}
                                           pattern="[1-9][0-9]*"
-                                          onChange={(e) => setEditedElementData({ ...editedElementData, cnt_elmnt: e.target.value })}
+                                          onChange={(e) => {
+                                            const newValue = e.target.value;
+                                            if (/^[1-9][0-9]*$/.test(newValue)) {
+                                              setEditedElementData({ ...editedElementData, cnt_elmnt: newValue });
+                                            } else {
+                                              NotificationService.showWarningNotification('Будь ласка введіть коректне число!');
+                                            }
+                                          }}
                                         />
                                       ) :
                                         element.cnt_elmnt}
@@ -235,9 +243,13 @@ const AdditionalInfo = ({
                                     <td className='catalogTable__td'>
                                       {editingElementRow === element.id_elmts ? (
                                         <>
-                                          <CheckSVG
+                                           <CheckSVG
                                             onClick={() => {
-                                              setShowUpdateConfirmation(true);
+                                              if (editedElementData.name_elmns !== element.name_elmns || editedElementData.cnt_elmnt !== element.cnt_elmnt) {
+                                                setShowUpdateConfirmation(true);
+                                              }  else {
+                                                handleUpdateElements();
+                                              }
                                             }}
                                           >
                                           </CheckSVG>
