@@ -35,7 +35,6 @@ const CatalogAddElements = ({
     }));
   };
   
-
   const handleRowClick = async (uuid) => {
     try {
       const response = await fetch(`http://localhost:3001/catalog/elements?uuid=${uuid}`);
@@ -50,24 +49,26 @@ const CatalogAddElements = ({
   const handleSubmitAddForm = async (e) => {
     e.preventDefault();
     
-    if (!catalogFormAddElementData.element || catalogFormAddElementData.quantity === 0) {
-      setInvalidInputs(['element', 'quantity']);
-      return;
+    const newInvalidInputs = [];
+    
+    if (!catalogFormAddElementData.element) {
+      newInvalidInputs.push('element');
     }
     
-    if (!/^[1-9][0-9]*$/.test(catalogFormAddElementData.quantity)) {
-      setInvalidInputs(['quantity']);
-      return;
+    if (catalogFormAddElementData.quantity === 0 || !/^[1-9][0-9]*$/.test(catalogFormAddElementData.quantity)) {
+      newInvalidInputs.push('quantity');
     }
     
-    setInvalidInputs([]);
+    setInvalidInputs(newInvalidInputs);
+    
+    if (newInvalidInputs.length > 0) {
+      return;
+    }
     
     await addCatalogElement(selectedRowData.expldz_uuid, catalogFormAddElementData);
     setShowElementsForm(false);
     handleRowClick(clickedRowDZ.uuid);
   };
-  
-  
 
   const fetchData = async () => {
     try {

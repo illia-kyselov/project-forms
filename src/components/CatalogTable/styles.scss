@@ -9,9 +9,35 @@
   &_Additional {
     margin-left: 20px;
     width: calc(100% - 20px);
+    padding: 0;
+
+    &-info {
+      border-right: 2px solid #838383;
+      border-left: 2px solid #838383;
+      border-bottom: 2px solid #838383;
+    }
   }
+
+  &-additionalInfo {
+    padding: 0;
+  }
+
   &__tr {
     color: #232023;
+
+    &-header {
+      border-top: 2px solid #838383;
+    }
+
+    &.clicked {
+      border-right: 2px solid #838383;
+      border-left: 2px solid #838383;
+      border-bottom: 2px solid #838383;
+
+      & + .catalogTable__tr {
+        border: 1px solid black;
+      }
+    }
   }
 
   .catalogTable__td-logo:first-child{
@@ -21,10 +47,12 @@
 
   &__input {
     width: 40px;
+    text-align: center;
   }
 
   &__select {
     width: 300px;
+    text-align: center;
   }
 
   &__input,
@@ -102,7 +130,7 @@
 }
 
 .clicked {
-  background-color: #d3d3d3;
+  background-color: #dddcdc !important;
 }
 
 .sweetPagination .paginationUL .pageItem .activeButton {

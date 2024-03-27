@@ -250,7 +250,7 @@ const CatalogTable = React.memo(({ user }) => {
               <React.Fragment key={index}>
                 <tr
                   key={index}
-                  className={`catalogTable__tr ${clickedRow && clickedRow.id_wrk_tbl === row.id_wrk_tbl ? 'clicked' : ''}`}
+                  className={`catalogTable__tr ${clickedRow && clickedRow.id_wrk_tbl === row.id_wrk_tbl && arrowUpActive ? 'clicked catalogTable__tr-header' : ''}`}
                 >
                   <td className='catalogTable__td' onClick={() => handleRowClick(row)}>
                     <div className="catalogTable__td-title">
@@ -285,7 +285,7 @@ const CatalogTable = React.memo(({ user }) => {
                 </tr>
                 {clickedRow && clickedRow.uuid === row.uuid && (
                   <tr>
-                    <td colSpan="6">
+                    <td colSpan="6" className='catalogTable-additionalInfo'>
                       <AdditionalInfo
                         dataList={elementsCatalog}
                         formatDate={formatDate}

@@ -128,7 +128,7 @@ const AdditionalInfo = ({
     <div>
       <table className='catalogTable catalogTable_Additional'>
         <thead>
-          <tr className='catalogTable__tr'>
+          <tr className={`catalogTable__tr ${clickedRow === null ? '' : 'clicked'}`}>
             <th className='catalogTable__th'>Умовний знак</th>
             <th className='catalogTable__th'>Номер знаку</th>
             <th className='catalogTable__th'>Форма знаку</th>
@@ -171,9 +171,9 @@ const AdditionalInfo = ({
                 </tr>
                 {
                   selectedRowData && selectedRowData.expldz_uuid === expldz_uuid && arrowUpActiveInfo && (
-                    <tr>
+                    <tr className='catalogTable__additional'>
                       <td colSpan="4">
-                        <table className='catalogTable catalogTable_Additional' >
+                        <table className='catalogTable catalogTable_Additional catalogTable_Additional-info'>
                           <thead>
                             <tr className='catalogTable__tr'>
                               <th className='catalogTable__th'>Назва елементу</th>
