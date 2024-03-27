@@ -8,7 +8,7 @@
 
   &_Additional {
     margin-left: 20px;
-    width: calc(100% - 20px);
+    width: calc(100% - 19px);
     padding: 0;
 
     &-info {
@@ -51,7 +51,7 @@
   }
 
   &__select {
-    width: 300px;
+    width: auto;
     text-align: center;
   }
 
@@ -64,8 +64,13 @@
     border-radius: 5px;
     font-size: 1em;
     padding: .5em;
+    transition: all linear 0.1s;
     // min-width: 50px;
     // max-width: 200px;
+
+    &:focus {
+      border: 2px solid #387a0b;
+    }
   }
 
   &__option:checked {

@@ -172,7 +172,7 @@ const AdditionalInfo = ({
                 {
                   selectedRowData && selectedRowData.expldz_uuid === expldz_uuid && arrowUpActiveInfo && (
                     <tr className='catalogTable__additional'>
-                      <td colSpan="4">
+                      <td colSpan="4" style={{padding: '0'}}>
                         <table className='catalogTable catalogTable_Additional catalogTable_Additional-info'>
                           <thead>
                             <tr className='catalogTable__tr'>

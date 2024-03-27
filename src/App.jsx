@@ -73,7 +73,6 @@ function App({ user }) {
     pers_work: "",
   });
 
-
   const [showUpdateElements, setShowUpdateElements] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [dzList, setDzList] = useState([]);
@@ -94,7 +93,6 @@ function App({ user }) {
     e.preventDefault();
     setShowAddElements(true);
   };
-
 
   const handleRemoveElements = (e) => {
     e.preventDefault();
